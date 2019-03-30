@@ -1,5 +1,7 @@
 const discord = require("discord.js");
 
+const prefix = "cad";
+
 const defaultUser = {
     "id": "",
     "wins":0,
@@ -17,6 +19,12 @@ client.on('ready', () => {
     client.user.setActivity(`${client.guilds.size} guilds insult eachother | help`, {url:"https://www.twitch.tv/ironfacebuster", type:"WATCHING"});
 });
 
-
+client.on('message', async message => {
+    if(message.author.bot)
+        return;
+        
+    if(message.content.split(prefix.length)[0].toLowerCase().trim() == prefix)
+      message.reply("haha you're gay).");
+});
 
 client.login(process.env.TOKEN);
