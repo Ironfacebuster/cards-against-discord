@@ -8,6 +8,8 @@ const defaultUser = {
     "xp":0
 }
 
+const client = new discord.Client();
+
 client.on('ready', () => {
     console.log("Bot ready.");
     //client.user.setActivity("Working on things... DO NOT ATTEMPT TO USE.");
