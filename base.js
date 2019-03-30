@@ -27,7 +27,7 @@ client.on('message', async message => {
 
     p = t[0]
 
-    message.channel.send (t);
+    message.channel.send (t[0] + "\r\n" + t[1]);
 
     if(p == prefix)
       message.reply("haha you're gay).");
