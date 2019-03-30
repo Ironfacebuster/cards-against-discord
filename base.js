@@ -14,7 +14,7 @@ client.on('ready', () => {
     console.log("Bot ready.");
     //client.user.setActivity("Working on things... DO NOT ATTEMPT TO USE.");
     client.user.seta
-    client.user.setActivity(`{client.guilds.size} guilds insult eachother | help`, "WATCHING");
+    client.user.setActivity(`${client.guilds.size} guilds insult eachother | help`, {url:"https://www.twitch.tv/ironfacebuster", type:"WATCHING"});
 });
 
 
