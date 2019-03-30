@@ -22,8 +22,14 @@ client.on('ready', () => {
 client.on('message', async message => {
     if(message.author.bot)
         return;
-        
-    if(message.content.split(prefix.length)[0].toLowerCase().trim() == prefix)
+
+    var t = message.content.toLowerCase().split(prefix.length);
+
+    p = t[0]
+
+    message.channel.send (t);
+
+    if(p == prefix)
       message.reply("haha you're gay).");
 });
 
