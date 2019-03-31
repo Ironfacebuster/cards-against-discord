@@ -85,17 +85,17 @@ function stats (_m) {
         "fields": [
           {
             "name": "Wins",
-            "value": wins,
+            "value": wins.toString(),
             "inline":true
           },
           {
             "name": "Losses",
-            "value": losses,
+            "value": losses.toString(),
             "inline":true
           },
           {
             "name": "W/L Ratio",
-            "value": wl,
+            "value": wl.toString(),
             "inline":true
           },
           {
