@@ -28,7 +28,7 @@ client.on('message', async message => {
     
     var command = message.content.toLowerCase().split(' ')[0].replace('cad', '');
 
-    var args = message.content.toLowerCase().replace('cad', '').split(' ');
+    var args = message.content.toLowerCase().trim().replace('cad', '').split(' ');
 
     message.channel.send ("COMMAND: " + command);
     message.channel.send("ARGS:" + args)
