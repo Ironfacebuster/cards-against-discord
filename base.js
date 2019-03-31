@@ -55,11 +55,6 @@ client.on('message', async message => {
 });
 
 function randomCard (_c, _m) {
-    if(_m.author.id == "209063671316480002") {
-        _m.reply("sorry, I didn't understand that command. Please try again.");
-        return;
-    }
-
     if (_c == "black")
         _m.channel.send ("`" + blackCards._cards[Math.floor(Math.random() * blackCards._cards.length)].content + "`");
     else if (_c == "white")
@@ -67,10 +62,12 @@ function randomCard (_c, _m) {
 }
 
 function stats (_m) {
+    /*
     if(_m.author.id == "209063671316480002") {
         _m.reply("sorry, I didn't understand that command. Please try again.");
         return;
     }
+    */
 
     var author = _m.author;
 
