@@ -48,10 +48,13 @@ client.on('message', async message => {
 
     var args = mess.trim().replace(prefix, '').split(' ').slice(1);
 
-    if(command == "randomcard") {
+    if (command == "randomcard") {
         randomCard(args[0], message);
     } else if (command == "stats")
         stats(message);
+    else if (command == "credits")
+        credits(message);
+
 });
 
 function randomCard (_c, _m) {
@@ -119,6 +122,10 @@ function stats (_m) {
   }};
 
     _m.channel.send(embed);
+}
+
+function credits (_m){
+    _m.channel.send("Main development: Sonny (Assistance: Pappy)")
 }
 
 function trimSpaces(string){
