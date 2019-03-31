@@ -22,9 +22,6 @@ function loadCards() {
         console.log("CARDS LOADED SUCCESSFULLY");
     else 
         console.log("CARDS NOT LOADED!");
-
-    console.log(blackCards)
-    console.log(whiteCards)
 }
 
 const client = new discord.Client();
@@ -60,7 +57,7 @@ client.on('message', async message => {
 
 function randomCard (_c, _m) {
     if (_c == "black")
-        _m.channel.send (blackCards._cards[Math.floor(Math.random() * blackCards._cards.length)].content);
+        _m.channel.send ("`" + blackCards._cards[Math.floor(Math.random() * blackCards._cards.length)].content + "`");
     else if (_c == "white")
         _m.channel.send (whiteCards._cards[Math.floor(Math.random() * whiteCards._cards.length)].content)
 }
