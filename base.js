@@ -66,20 +66,27 @@ function randomCard (_c, _m) {
 }
 
 function stats (_m) {
+    var author = _m.author;
+
+    if(_m.mentions.users.first() && !_m.mentions.users.first().bot)
+        author = _m.mentions.users.first();
+
     const wins = Math.round(Math.random()*100);
     const losses = Math.round(Math.random()*100);
     const wl = Math.floor((wins/losses)*100)/100;
 
+    var color = Math.floor(Math.random()*16777215);
+
     var embed = { embed: {
-        "color": 7557769,
+        "color": color,
         "footer": {
           "text": "Cards Against Discord"
         },
         "thumbnail": {
-          "url": _m.author.displayAvatarURL.toString()
+          "url": author.displayAvatarURL.toString()
         },
         "author": {
-          "name": `${_m.author.username}'s stats`
+          "name": `${author.username}'s stats`
         },
         "fields": [
           {
