@@ -25,9 +25,9 @@ client.on('message', async message => {
 
     var t = message.content.toLowerCase().split(prefix);
 
-    p = t[0]
+    var command = message.content.toLowerCase().split(' ')[0];
 
-    message.channel.send (t[0] + "\r\n" + t[1]);
+    message.channel.send (command);
 
     if(p == prefix)
       message.reply("haha you're gay).");
