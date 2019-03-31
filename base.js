@@ -1,6 +1,13 @@
 const discord = require("discord.js");
+const fs = require('fs');
 
 const prefix = "cad ";
+
+const blackLocation = "CARDS/BLACK_CARDS.json"
+const whiteLocation = "CARDS/WHITE_CARDS.json"
+
+const blackCards = JSON.parse(fs.readFileSync(blackLocation, 'utf8'));
+const whiteCards = JSON.parse(fs.readFileSync(whiteLocation, 'utf8'));
 
 const defaultUser = {
     "id": "",
@@ -10,12 +17,21 @@ const defaultUser = {
     "xp":0
 }
 
+function loadCards() {
+    if(blackCards != null && whiteCards != null)
+        console.log("CARDS LOADED SUCCESSFULLY");
+    else 
+        console.log("CARDS NOT LOADED!");
+}
+
 const client = new discord.Client();
 
 client.on('ready', () => {
     console.log("Bot ready.");
     //client.user.setActivity("Working on things... DO NOT ATTEMPT TO USE.");
     client.user.setActivity(`${client.guilds.size} guilds insult eachother | cad help`, {url:"https://www.twitch.tv/ironfacebuster", type:"WATCHING"});
+
+    loadCards();
 });
 
 client.on('message', async message => {
@@ -34,6 +50,10 @@ client.on('message', async message => {
     message.channel.send ("COMMAND: " + command);
     message.channel.send("ARGS:" + args)
 });
+
+function randomCard (_c, _m) {
+
+}
 
 function trimSpaces(string){
 	s = string;
