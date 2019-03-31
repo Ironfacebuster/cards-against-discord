@@ -23,7 +23,7 @@ client.on('message', async message => {
     if(message.author.bot)
         return;
 
-    var t = message.content.toLowerCase().split(prefix.length);
+    var t = message.content.toLowerCase().split(prefix);
 
     p = t[0]
 
