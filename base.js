@@ -23,14 +23,14 @@ client.on('message', async message => {
     if(message.author.bot)
         return;
 
+    if(!message.content.indexOf(prefix)) 
+        return;
+    
     var t = message.content.toLowerCase().split(prefix);
 
     var command = message.content.toLowerCase().split(' ')[0];
 
     message.channel.send (command);
-
-    if(p == prefix)
-      message.reply("haha you're gay).");
 });
 
 client.login(process.env.TOKEN);
