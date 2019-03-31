@@ -54,7 +54,8 @@ client.on('message', async message => {
 
     if(command == "randomcard") {
         randomCard(args[0], message);
-    }
+    } else if (command == "stats")
+      stats(message);
 });
 
 function randomCard (_c, _m) {
