@@ -1,6 +1,6 @@
 const discord = require("discord.js");
 
-const prefix = "cad";
+const prefix = "cad ";
 
 const defaultUser = {
     "id": "",
@@ -26,11 +26,12 @@ client.on('message', async message => {
     if(message.content.indexOf(prefix)) 
         return;
     
-    var t = message.content.toLowerCase().split(prefix);
+    var command = message.content.toLowerCase().split(' ')[0].replace('cad', '');
 
-    var command = message.content.toLowerCase().split(' ')[0];
+    var args = message.content.toLowerCase().replace('cad', '').split(' ');
 
-    message.channel.send (command);
+    message.channel.send ("COMMAND: " + command);
+    message.channel.send("ARGS:" + )
 });
 
 client.login(process.env.TOKEN);
