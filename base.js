@@ -48,11 +48,14 @@ client.on('message', async message => {
     var args = mess.trim().replace(prefix, '').split(' ').slice(1);
 
     message.channel.send ("COMMAND: " + command);
-    message.channel.send("ARGS:" + args)
+    message.channel.send ("ARGS:" + args)
 });
 
 function randomCard (_c, _m) {
-
+    if (c == "black")
+        _m.channel.send (blackCards._cards[Math.floor(Math.random() * blackCards._cards.length)]);
+    else if (c == "white")
+        _m.channel.send (whiteCards._cards[Math.floor(Math.random() * whiteCards._cards.length)])
 }
 
 function trimSpaces(string){
