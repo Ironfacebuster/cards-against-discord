@@ -56,9 +56,9 @@ client.on('message', async message => {
 });
 
 function randomCard (_c, _m) {
-    if (c == "black")
+    if (_c == "black")
         _m.channel.send (blackCards._cards[Math.floor(Math.random() * blackCards._cards.length)]);
-    else if (c == "white")
+    else if (_c == "white")
         _m.channel.send (whiteCards._cards[Math.floor(Math.random() * whiteCards._cards.length)])
 }
 
