@@ -15,19 +15,21 @@ const client = new discord.Client();
 client.on('ready', () => {
     console.log("Bot ready.");
     //client.user.setActivity("Working on things... DO NOT ATTEMPT TO USE.");
-    client.user.setActivity(`${client.guilds.size} guilds insult eachother | help`, {url:"https://www.twitch.tv/ironfacebuster", type:"WATCHING"});
+    client.user.setActivity(`${client.guilds.size} guilds insult eachother | cad help`, {url:"https://www.twitch.tv/ironfacebuster", type:"WATCHING"});
 });
 
 client.on('message', async message => {
+    const mess = message.content.toLowerCase();
+
     if(message.author.bot)
         return;
 
-    if(message.content.indexOf(prefix)) 
+    if(mess.indexOf(prefix)) 
         return;
     
-    var command = message.content.toLowerCase().trim().replace(prefix, '').split(' ')[0];
+    var command = mess.trim().replace(prefix, '').split(' ')[0];
 
-    var args = message.content.toLowerCase().trim().replace(prefix, '').split(' ').slice(1);
+    var args = mess.trim().replace(prefix, '').split(' ').slice(1);
 
     message.channel.send ("COMMAND: " + command);
     message.channel.send("ARGS:" + args)
