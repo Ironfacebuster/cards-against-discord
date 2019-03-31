@@ -25,9 +25,9 @@ client.on('message', async message => {
     if(message.content.indexOf(prefix)) 
         return;
     
-    var command = message.content.toLowerCase().split(' ')[0].replace(prefix, '');
+    var command = message.content.toLowerCase().trim().replace(prefix, '').split(' ')[0];
 
-    var args = message.content.toLowerCase().trim().replace(prefix, '').split(' ');
+    var args = message.content.toLowerCase().trim().replace(prefix, '').split(' ').slice(1);
 
     message.channel.send ("COMMAND: " + command);
     message.channel.send("ARGS:" + args)
