@@ -29,10 +29,14 @@ const client = new discord.Client();
 client.on('ready', () => {
     console.log("Bot ready.");
     //client.user.setActivity("Working on things... DO NOT ATTEMPT TO USE.");
-    client.user.setActivity(`${client.guilds.size} guilds insult eachother | cad help`, {url:"https://www.twitch.tv/ironfacebuster", type:"WATCHING"});
+    client.user.setActivity(`${client.guilds.size} guilds insult each other | cad help`, {url:"https://www.twitch.tv/ironfacebuster", type:"WATCHING"});
 
     loadCards();
 });
+
+client.on('guildCreate', () => {
+    client.user.setActivity(`${client.guilds.size} guilds insult each other | cad help`, {url:"https://www.twitch.tv/ironfacebuster", type:"WATCHING"});
+})
 
 client.on('message', async message => {
     const mess = message.content.toLowerCase();
