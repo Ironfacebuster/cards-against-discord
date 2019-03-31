@@ -31,7 +31,7 @@ client.on('message', async message => {
     var args = message.content.toLowerCase().replace('cad', '').split(' ');
 
     message.channel.send ("COMMAND: " + command);
-    message.channel.send("ARGS:" + )
+    message.channel.send("ARGS:" + args)
 });
 
 client.login(process.env.TOKEN);
