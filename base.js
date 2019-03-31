@@ -47,8 +47,10 @@ client.on('message', async message => {
 
     var args = mess.trim().replace(prefix, '').split(' ').slice(1);
 
+    /*
     message.channel.send ("COMMAND: " + command);
     message.channel.send ("ARGS:" + args)
+    */
 
     if(command == "randomcard") {
         randomCard(args[0], message);
