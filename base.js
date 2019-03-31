@@ -73,11 +73,11 @@ function stats (_m) {
     var embed = { embed: {
         "color": 7557769,
         "footer": {
-          "icon_url": "https://github.com/Ironfacebuster/cards-against-discord/blob/master/large.png",
+          "icon_url": client.user.defaultAvatarURL.toString(),
           "text": "Cards Against Discord"
         },
         "thumbnail": {
-          "url": _m.author.username.displayAvatarURL
+          "url": _m.author.username.displayAvatarURL.toString()
         },
         "author": {
           "name": `${_m.author.username}'s stats`
