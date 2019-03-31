@@ -64,6 +64,52 @@ function randomCard (_c, _m) {
         _m.channel.send (whiteCards._cards[Math.floor(Math.random() * whiteCards._cards.length)].content)
 }
 
+function stats (_m) {
+    const wins = Math.round(Math.random*100);
+    const losses = Math.round(Math.random*100);
+    const wl = wins/losses;
+
+    var embed = {
+          "color": 7557769,
+          "footer": {
+            "icon_url": "https://github.com/Ironfacebuster/cards-against-discord/blob/master/large.png",
+            "text": "Cards Against Discord"
+          },
+          "thumbnail": {
+            "url": `${_m.author.username.displayAvatarURL}`
+          },
+          "author": {
+            "name": `${_m.author.username}'s stats`
+          },
+          "fields": [
+            {
+              "name": "Wins",
+              "value": `${wins}`,
+              "inline":true
+            },
+            {
+              "name": "Losses",
+              "value": `${losses}`,
+              "inline":true
+            },
+            {
+              "name": "W/L Ratio",
+              "value": `${wl}`,
+              "inline":true
+            },
+            {
+              "name": "XP",
+              "value":"0/sonnygay"
+            }, 
+            {
+              "name": "Level",
+              "value":"1"
+            }
+          ]
+    };
+    _m.channel.send(embed);
+}
+
 function trimSpaces(string){
 	s = string;
 	s = s.replace(/(^\s*)|(\s*$)/gi,"");
