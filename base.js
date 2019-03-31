@@ -73,7 +73,6 @@ function stats (_m) {
     var embed = { embed: {
         "color": 7557769,
         "footer": {
-          "icon_url": client.user.defaultAvatarURL.toString(),
           "text": "Cards Against Discord"
         },
         "thumbnail": {
