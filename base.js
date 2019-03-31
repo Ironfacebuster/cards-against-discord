@@ -70,44 +70,45 @@ function stats (_m) {
     const losses = Math.round(Math.random*100);
     const wl = wins/losses;
 
-    var embed = {
-          "color": 7557769,
-          "footer": {
-            "icon_url": "https://github.com/Ironfacebuster/cards-against-discord/blob/master/large.png",
-            "text": "Cards Against Discord"
+    var embed = { embed: {
+        "color": 7557769,
+        "footer": {
+          "icon_url": "https://github.com/Ironfacebuster/cards-against-discord/blob/master/large.png",
+          "text": "Cards Against Discord"
+        },
+        "thumbnail": {
+          "url": `${_m.author.username.displayAvatarURL}`
+        },
+        "author": {
+          "name": `${_m.author.username}'s stats`
+        },
+        "fields": [
+          {
+            "name": "Wins",
+            "value": `${wins}`,
+            "inline":true
           },
-          "thumbnail": {
-            "url": `${_m.author.username.displayAvatarURL}`
+          {
+            "name": "Losses",
+            "value": `${losses}`,
+            "inline":true
           },
-          "author": {
-            "name": `${_m.author.username}'s stats`
+          {
+            "name": "W/L Ratio",
+            "value": `${wl}`,
+            "inline":true
           },
-          "fields": [
-            {
-              "name": "Wins",
-              "value": `${wins}`,
-              "inline":true
-            },
-            {
-              "name": "Losses",
-              "value": `${losses}`,
-              "inline":true
-            },
-            {
-              "name": "W/L Ratio",
-              "value": `${wl}`,
-              "inline":true
-            },
-            {
-              "name": "XP",
-              "value":"0/sonnygay"
-            }, 
-            {
-              "name": "Level",
-              "value":"1"
-            }
-          ]
-    };
+          {
+            "name": "XP",
+            "value":"0/sonnygay"
+          }, 
+          {
+            "name": "Level",
+            "value":"1"
+          }
+        ]
+  }};
+
     _m.channel.send(embed);
 }
 
