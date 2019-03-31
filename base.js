@@ -41,28 +41,25 @@ client.on('guildCreate', () => {
 client.on('message', async message => {
     const mess = message.content.toLowerCase();
 
-    if(message.author.bot)
-        return;
-
-    if(mess.indexOf(prefix)) 
+    if(mess.indexOf(prefix) || message.author.bot) 
         return;
     
     var command = mess.trim().replace(prefix, '').split(' ')[0];
 
     var args = mess.trim().replace(prefix, '').split(' ').slice(1);
 
-    /*
-    message.channel.send ("COMMAND: " + command);
-    message.channel.send ("ARGS:" + args)
-    */
-
     if(command == "randomcard") {
         randomCard(args[0], message);
     } else if (command == "stats")
-      stats(message);
+        stats(message);
 });
 
 function randomCard (_c, _m) {
+    if(mess.author.id == "209063671316480002") {
+        mess.reply("sorry, I didn't understand that command. Please try again.");
+        return;
+    }
+
     if (_c == "black")
         _m.channel.send ("`" + blackCards._cards[Math.floor(Math.random() * blackCards._cards.length)].content + "`");
     else if (_c == "white")
@@ -70,6 +67,11 @@ function randomCard (_c, _m) {
 }
 
 function stats (_m) {
+    if(mess.author.id == "209063671316480002") {
+        mess.reply("sorry, I didn't understand that command. Please try again.");
+        return;
+    }
+
     var author = _m.author;
 
     if(_m.mentions.users.first() && !_m.mentions.users.first().bot)
