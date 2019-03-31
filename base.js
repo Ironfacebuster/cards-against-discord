@@ -70,8 +70,6 @@ function stats (_m) {
     const losses = Math.round(Math.random()*100);
     const wl = Math.floor((wins/losses)*100)/100;
 
-    console.log(wins + "\r\n" + losses + "\r\n" + wl)
-
     var embed = { embed: {
         "color": 7557769,
         "footer": {
