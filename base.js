@@ -55,8 +55,8 @@ client.on('message', async message => {
 });
 
 function randomCard (_c, _m) {
-    if(mess.author.id == "209063671316480002") {
-        mess.reply("sorry, I didn't understand that command. Please try again.");
+    if(_m.author.id == "209063671316480002") {
+        _m.reply("sorry, I didn't understand that command. Please try again.");
         return;
     }
 
@@ -67,8 +67,8 @@ function randomCard (_c, _m) {
 }
 
 function stats (_m) {
-    if(mess.author.id == "209063671316480002") {
-        mess.reply("sorry, I didn't understand that command. Please try again.");
+    if(_m.author.id == "209063671316480002") {
+        _m.reply("sorry, I didn't understand that command. Please try again.");
         return;
     }
 
