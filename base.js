@@ -66,8 +66,8 @@ function randomCard (_c, _m) {
 }
 
 function stats (_m) {
-    const wins = Math.round(Math.random*100);
-    const losses = Math.round(Math.random*100);
+    const wins = Math.round(Math.random()*100);
+    const losses = Math.round(Math.random()*100);
     const wl = wins/losses;
 
     console.log(wins + "\r\n" + losses + "\r\n" + wl)
