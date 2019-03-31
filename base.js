@@ -22,6 +22,9 @@ function loadCards() {
         console.log("CARDS LOADED SUCCESSFULLY");
     else 
         console.log("CARDS NOT LOADED!");
+
+    console.log(blackCards)
+    console.log(whiteCards)
 }
 
 const client = new discord.Client();
