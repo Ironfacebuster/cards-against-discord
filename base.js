@@ -77,7 +77,7 @@ function stats (_m) {
           "text": "Cards Against Discord"
         },
         "thumbnail": {
-          "url": _m.author.username.displayAvatarURL.toString()
+          "url": _m.author.displayAvatarURL.toString()
         },
         "author": {
           "name": `${_m.author.username}'s stats`
