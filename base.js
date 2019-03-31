@@ -49,6 +49,10 @@ client.on('message', async message => {
 
     message.channel.send ("COMMAND: " + command);
     message.channel.send ("ARGS:" + args)
+
+    if(command == "randomcard") {
+        randomCard(args[0], message);
+    }
 });
 
 function randomCard (_c, _m) {
