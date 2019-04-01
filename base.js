@@ -190,20 +190,14 @@ function join_room (_roomcode, _author, _message) {
     if(_exists != null) {
         _message.reply("You're already in a game.");
     } else {
-        const _room = -1;
-
-        for(var i = 0; i < currentRooms.length; i++){
-            if(currentRooms[i].room_code == _roomcode) {
-                _room = i;
-            }
-        }
+        const _room = currentRooms.findIndex(function (_room) { return _room.room_code == _roomcode});
 
         if(_room != -1) {
             var _player = create_player();
             _player.id = _author.id;
             currentRooms[_room].members.push(_player);
             _message.reply("Room joined.");
-            _message.channel.send("`" + JSON.stringify(currentRooms) + "`");
+            //_message.channel.send("`" + JSON.stringify(currentRooms) + "`");
         } else {
             _message.reply("Room not found.");
         }
