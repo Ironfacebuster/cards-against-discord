@@ -196,7 +196,7 @@ function join_room (_roomcode, _author, _message) {
 
         if(_room.length != -1) {
             var _player = create_player();
-            _player.id = _author.id;
+            _player._id = _author.id;
             currentRooms[_room].members.push(_player);
             _message.reply("Room joined.");
             //_message.channel.send("`" + JSON.stringify(currentRooms) + "`");
