@@ -190,7 +190,9 @@ function join_room (_roomcode, _author, _message) {
     if(_exists != null) {
         _message.reply("You're already in a game.");
     } else {
-        const _room = currentRooms.findIndex(checkRooms(_room, _roomcode));
+        const _room = currentRooms.findIndex(function checkRooms (_room) {
+            return _room.room_code == _roomcode;
+        });
 
         _message.replace(_room.toString());
 
@@ -206,9 +208,7 @@ function join_room (_roomcode, _author, _message) {
     }
 }
 
-function checkRooms (_room, _code) {
-    return _room.room_code == _code;
-}
+
 
 function generateRC (_count) {
 
