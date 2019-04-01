@@ -194,7 +194,7 @@ function join_room (_roomcode, _author, _message) {
             return _room.room_code == _roomcode;
         });
 
-        _message.replace(_room.toString());
+        _message.reply(_room.toString());
 
         if(_room >= 0) {
             var _player = create_player();
