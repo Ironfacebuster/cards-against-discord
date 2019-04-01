@@ -190,13 +190,11 @@ function join_room (_roomcode, _author, _message) {
     if(_exists != null) {
         _message.reply("You're already in a game.");
     } else {
-        const _room = currentRooms.findIndex(function checkRooms (_room) {
-            return _room.room_code == _roomcode;
-        });
+        const _room = currentRooms.findIndex(_room => _room.room_code == _roomcode);
 
         _message.reply(_room.toString());
 
-        if(_room >= 0) {
+        if(_room.length > 0) {
             var _player = create_player();
             _player.id = _author.id;
             currentRooms[_room].members.push(_player);
