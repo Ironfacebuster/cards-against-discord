@@ -188,16 +188,22 @@ function join_room (_roomcode, _author, _message) {
     if(_exists != null) {
         _message.reply("You're already in a game.");
     } else {
-        const _room = currentRooms.findIndex (function(room_code) { return room_code == _roomcode});
+        const _room = -1;
+
+        for(var i = 0; i < currentRooms.length; i++){
+            if(currentRooms[i].room_code == _roomcode) {
+                _room = i;
+            }
+        }
 
         if(_room != -1) {
             var _player = create_player();
             _player.id = _author.id;
             currentRooms[_room].members.push(_player);
-            _message.reply("room joined.");
+            _message.reply("Room joined.");
             _message.channel.send("`" + currentRooms[_room].toString() + "`");
         } else {
-            _message.reply("room not found.");
+            _message.reply("Room not found.");
         }
     }
 }
