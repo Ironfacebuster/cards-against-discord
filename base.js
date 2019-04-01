@@ -190,7 +190,7 @@ function join_room (_roomcode, _author, _message) {
     if(_exists != null) {
         _message.reply("You're already in a game.");
     } else {
-        const _room = currentRooms.findIndex(_room => _room.room_code == _roomcode);
+        const _room = currentRooms.findIndex(_room => _room.room_code == _roomcode.toString());
 
         _message.reply(_room.toString());
 
