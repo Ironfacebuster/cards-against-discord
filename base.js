@@ -179,14 +179,14 @@ function createRoom (_author, _message) {
     //add creator to room
 
     currentRooms.push(_new);
-    _message.reply ("room created with code `" + _new.room_code + "`");
+    _message.reply ("Room created with code `" + _new.room_code + "`");
 }
 
 function join_room (_roomcode, _author, _message) {
     const _exists = currentRooms.find(function (_id)  {return _id == _author.id});
 
-    if(exists != null) {
-        _message.reply("you're already in a game.");
+    if(_exists != null) {
+        _message.reply("You're already in a game.");
     } else {
         const _room = currentRooms.findIndex (function(room_code) { return room_code == _roomcode});
 
