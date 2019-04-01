@@ -9,6 +9,8 @@ const whiteLocation = "CARDS/WHITE_CARDS.json"
 const blackCards = JSON.parse(fs.readFileSync(blackLocation, 'utf8'));
 const whiteCards = JSON.parse(fs.readFileSync(whiteLocation, 'utf8'));
 
+var currentRooms = [];
+
 const defaultUser = {
     "id": "",
     "wins":0,
@@ -36,7 +38,7 @@ client.on('ready', () => {
 
 client.on('guildCreate', () => {
     client.user.setActivity(`${client.guilds.size} guilds insult each other | cad help`, {url:"https://www.twitch.tv/ironfacebuster", type:"WATCHING"});
-})
+});
 
 client.on('message', async message => {
     const mess = message.content.toLowerCase();
@@ -48,12 +50,19 @@ client.on('message', async message => {
 
     var args = mess.trim().replace(prefix, '').split(' ').slice(1);
 
-    if(command == "randomcard") {
-        randomCard(args[0], message);
-    } else if (command == "stats")
-        stats(message);
-    else if (command == "credits")
-        credits(message);
+    if(message.channel.type == "dm") {
+        if(command == "create")
+            createRoom(message.author, message);
+        if(command == "join") 
+            join_room(args[0], message.author, message);
+    } else {
+        if(command == "randomcard") {
+            randomCard(args[0], message);
+        } else if (command == "stats")
+            stats(message);
+        else if (command == "credits")
+            credits(message);
+    }
 });
 
 async function randomCard (_c, _m) {
@@ -159,6 +168,76 @@ function trimSpaces(string){
 	s = s.replace(/[ ]{2,}/gi," ");
 	s = s.replace(/\n /,"\n");
 	return s;
+}
+
+function createRoom (_author, _message) {
+    var _new = create_room();
+
+    _new.room_code = generateRC(4);
+    _new.stage = -1;
+    
+    //add creator to room
+
+    currentRooms.push(_new);
+    _message.reply ("room created with code `" + _new.room_code + "`");
+}
+
+function join_room (_roomcode, _author, _message) {
+    const _exists = currentRooms.members.find(function (_id)  {return _id == _author.id});
+
+    if(exists != null) {
+        _message.reply("you're already in a game.");
+    } else {
+        const _room = currentRooms.findIndex (function(room_code) { return room_code == _roomcode});
+
+        if(_room != -1) {
+            var _player = create_player();
+            _player.id = _author.id;
+            currentRooms[_room].members.push(_player);
+            _message.reply("room joined.");
+            _message.channel.send("`" + currentRooms[_room].toString() + "`");
+        } else {
+            _message.reply("room not found.");
+        }
+    }
+}
+
+function generateRC (_count) {
+
+     //count is proportional  to room count
+    var gen = new Array(_count);
+
+    const letters = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+    for(var i = 0; i < _count; i++){
+        const randLet = letters.charAt(Math.round(Math.random()*letters.length)).toString();
+        gen.push(randLet);
+    }
+
+    const code = gen.join('');
+
+    return code.toString();
+}
+
+function create_room () {
+    return {
+        "room_code": "",
+        "members": [],
+        //stage == -1 not started
+        //stage == 0 players picking white cards
+        //stage == 1 czar picking card
+        //stage == 2 shift czar
+        //stage == 3 game finished
+        "stage": -1
+   };
+}
+
+function create_player () {
+    return {
+        "_id": "",
+        "_cards": [],
+        "_points":0
+    };
 }
 
 client.login(process.env.TOKEN);
