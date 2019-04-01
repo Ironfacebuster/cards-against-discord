@@ -196,7 +196,7 @@ function join_room (_roomcode, _author, _message) {
     if(_exists != null) {
         _message.reply("You're already in a game.");
     } else {
-        var _room = currentRooms.findIndex(r => r.room_code == _roomcode.toString());
+        var _room = currentRooms.findIndex(r => r.room_code == _roomcode);
 
         _message.reply(_room.toString());
 
@@ -215,9 +215,9 @@ function join_room (_roomcode, _author, _message) {
 function generateRC (_count) {
 
      //count is proportional  to room count
-    var gen = new Array(_count);
+    var gen = [];
 
-    const letters = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    const letters = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNPQRSTUVWXYZ"
 
     for(var i = 0; i < _count; i++){
         const randLet = letters.charAt(Math.round(Math.random()*letters.length)).toString();
