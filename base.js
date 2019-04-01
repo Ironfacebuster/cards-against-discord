@@ -173,7 +173,7 @@ function trimSpaces(string){
 function createRoom (_author, _message) {
     var _new = create_room();
 
-    _new.room_code = generateRC(4);
+    _new.room_code = generateRC(3);
     _new.stage = -1;
     
     //add creator to room
