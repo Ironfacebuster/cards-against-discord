@@ -183,7 +183,7 @@ function createRoom (_author, _message) {
 }
 
 function join_room (_roomcode, _author, _message) {
-    const _exists = currentRooms.members.find(function (_id)  {return _id == _author.id});
+    const _exists = currentRooms.find(function (_id)  {return _id == _author.id});
 
     if(exists != null) {
         _message.reply("you're already in a game.");
