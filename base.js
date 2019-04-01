@@ -185,7 +185,7 @@ function createRoom (_author, _message) {
 function join_room (_roomcode, _author, _message) {
     const _exists = currentRooms.find(function (_id)  {return _id == _author.id});
 
-    _message.channel.send("`" + currentRooms + "`");
+    _message.channel.send("`" + JSON.stringify(currentRooms) + "`");
 
     if(_exists != null) {
         _message.reply("You're already in a game.");
@@ -203,7 +203,7 @@ function join_room (_roomcode, _author, _message) {
             _player.id = _author.id;
             currentRooms[_room].members.push(_player);
             _message.reply("Room joined.");
-            _message.channel.send("`" + currentRooms[_room].toString() + "`");
+            _message.channel.send("`" + JSON.stringify(currentRooms) + "`");
         } else {
             _message.reply("Room not found.");
         }
