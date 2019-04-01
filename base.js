@@ -48,23 +48,20 @@ client.on('message', async message => {
 
     var args = mess.trim().replace(prefix, '').split(' ').slice(1);
 
-    if (command == "randomcard") {
+    if(command == "randomcard") {
         randomCard(args[0], message);
     } else if (command == "stats")
         stats(message);
-    else if (command == "credits")
-        credits(message);
-
 });
 
-function randomCard (_c, _m) {
+async function randomCard (_c, _m) {
     if (_c == "black")
         _m.channel.send ("`" + blackCards._cards[Math.floor(Math.random() * blackCards._cards.length)].content + "`");
     else if (_c == "white")
         _m.channel.send (whiteCards._cards[Math.floor(Math.random() * whiteCards._cards.length)].content)
 }
 
-function stats (_m) {
+async function stats (_m) {
     /*
     if(_m.author.id == "209063671316480002") {
         _m.reply("sorry, I didn't understand that command. Please try again.");
@@ -119,13 +116,39 @@ function stats (_m) {
             "value":"1"
           }
         ]
-  }};
+    }};
 
     _m.channel.send(embed);
 }
 
-function credits (_m){
-    _m.channel.send("Main development: Sonny (Assistance: Pappy)")
+function credits (_m) {
+    const _em = {
+        "embed": {
+          "color": 2551,
+          "footer": {
+            "text": "bottom text"
+          },
+          "author": {
+            "name": "Cards Against Discord Credits"
+          },
+          "fields": [
+            {
+              "name": "Art/Coding",
+              "value": "Yer Good Ol' Loli Grandpappy#8486"
+            },
+            {
+              "name": "Base Cards",
+              "value": "Thank you to everyone who worked on the **[CAH Card Spreadsheet](https://docs.google.com/spreadsheets/d/1lsy7lIwBe-DWOi2PALZPf5DgXHx9MEvKfRw1GaWQkzg/edit)**"
+            },
+            {
+              "name": "Original Idea",
+              "value": "Thanks to the original creators of [**Cards Against Humanity**](https://cardsagainsthumanity.com/)"
+            }
+          ]
+        }
+    }
+
+    _m.author.send(_em);
 }
 
 function trimSpaces(string){
