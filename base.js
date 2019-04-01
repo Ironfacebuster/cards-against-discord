@@ -183,14 +183,20 @@ function createRoom (_author, _message) {
 }
 
 function join_room (_roomcode, _author, _message) {
-    const _exists = currentRooms.find(function (_id)  {return _id == _author.id});
+    //const _exists = currentRooms.find(_r => );
+
+    var _exists;
+
+    for(var i = 0; i < currentRooms.length; i++){
+        _exists = currentRooms[i].members.find(_m => _m._id == _author.id);
+    }
 
     _message.channel.send("`" + JSON.stringify(currentRooms) + "`");
 
     if(_exists != null) {
         _message.reply("You're already in a game.");
     } else {
-        const _room = currentRooms.findIndex(_room => _room.room_code == _roomcode.toString());
+        var _room = currentRooms.findIndex(r => r.room_code == _roomcode.toString());
 
         _message.reply(_room.toString());
 
@@ -205,8 +211,6 @@ function join_room (_roomcode, _author, _message) {
         }
     }
 }
-
-
 
 function generateRC (_count) {
 
