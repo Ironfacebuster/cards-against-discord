@@ -222,6 +222,11 @@ function join_room (_roomcode, _author, _message) {
             var _player = create_player();
             _player._id = _author.id;
             currentRooms[_room].members.push(_player);
+            for(var g = 0; g < currentRooms[_room].members.length; g++){
+                if(currentRooms[_room].members[g]._id != _author.id) {
+                    client.fetchUser(currentRooms[_room].members[g]._id).send(`${_author.username} joined your game.`);
+                }
+            }
             _message.reply("Room joined.");
             //_message.channel.send("`" + JSON.stringify(currentRooms) + "`");
         } else {
@@ -245,6 +250,11 @@ async function leave_room (_author, _message) {
         currentRooms[_roomindex].members[_mem] = currentRooms[_roomindex].members[currentRooms[_roomindex].members.length-1];
         currentRooms[_roomindex].members[currentRooms[_roomindex].members.length-1] = _temp;
         currentRooms[_roomindex].members.pop();
+        for(var g = 0; g < currentRooms[_roomindex].members.length; g++){
+            if(currentRooms[_roomindex].members[g]._id != _author.id) {
+                client.fetchUser(currentRooms[_roomindex].members[g]._id).send(`${_author.username} left your game.`);
+            }
+        }
         _message.reply("Room left.");
     }
 }
