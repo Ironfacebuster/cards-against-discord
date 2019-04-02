@@ -279,6 +279,7 @@ function create_room () {
 }
 
 async function clean_up () {
+    var _cleaned = 0;
     if(currentRooms.length != 0) {
         for(var _t = 0; _t < currentRooms.length; _t++) {
             if(currentRooms[_t].idle >= 24) {
@@ -287,12 +288,16 @@ async function clean_up () {
                 currentRooms[_t] = _next;
                 currentRooms[currentRooms.length-1] = _cur;
                 currentRooms.pop();
+                _cleaned = _cleaned+1;
             }
             if(currentRooms[_t].members.length == 0) {
-                currentRooms[_t].idle+=1;
+                currentRooms[_t].idle = currentRooms[_t].idle + 1;
             }
         }
     }
+    
+    if(_cleaned != 0)
+        console.log(`${_cleaned} empty rooms cleaned.`);
 }
 
 async function createRoom (_author, _message) {
