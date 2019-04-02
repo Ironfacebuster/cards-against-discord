@@ -226,7 +226,7 @@ function join_room (_roomcode, _author, _message) {
                 if(currentRooms[_room].members[g]._id != _author.id) {
                     var _tempuser = client.fetchUser(currentRooms[_room].members[g]._id);
                     _tempuser.then(function(_user) {
-                        _user.send(`${_author.username} joined your game.`);
+                        _user.send(`${_author.username} has joined your room.`);
                     });
                 }
             }
@@ -257,7 +257,7 @@ async function leave_room (_author, _message) {
             if(currentRooms[_roomindex].members[g]._id != _author.id) {
                 var _tempuser = client.fetchUser(currentRooms[_roomindex].members[g]._id);
                 _tempuser.then(function(_user) {
-                    _user.send(`${_author.username} left your game.`);
+                    _user.send(`${_author.username} has left your room.`);
                 });            
             }
         }
