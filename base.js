@@ -292,10 +292,12 @@ async function clean_up () {
             }
             if(currentRooms[_t].members.length == 0) {
                 currentRooms[_t].idle = currentRooms[_t].idle + 1;
+            } else {
+                currentRooms[_t].idle = 0;
             }
         }
     }
-    
+
     if(_cleaned != 0)
         console.log(`${_cleaned} empty rooms cleaned.`);
 }
