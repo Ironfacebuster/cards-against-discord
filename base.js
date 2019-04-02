@@ -180,6 +180,8 @@ function createRoom (_author, _message) {
 
     currentRooms.push(_new);
     _message.reply ("Room created with code `" + _new.room_code + "`");
+
+    join_room(_new.room_code, _author, _message);
 }
 
 function join_room (_roomcode, _author, _message) {
@@ -238,6 +240,7 @@ function create_room () {
     return {
         "room_code": "",
         "members": [],
+        "czar":"",
         //stage == -1 not started
         //stage == 0 players picking white cards
         //stage == 1 czar picking card
