@@ -11,6 +11,8 @@ const whiteCards = JSON.parse(fs.readFileSync(whiteLocation, 'utf8'));
 
 var currentRooms = [];
 
+setInterval('clean_up', 5000);
+
 const defaultUser = {
     "id": "",
     "wins":0,
@@ -172,7 +174,7 @@ function trimSpaces(string){
 	return s;
 }
 
-function createRoom (_author, _message) {
+async function createRoom (_author, _message) {
     for(var i = 0; i < currentRooms.length; i++){
         _exists = currentRooms[i].members.find(_m => _m._id == _author.id);
 
@@ -195,7 +197,7 @@ function createRoom (_author, _message) {
     join_room(_new.room_code, _author, _message);
 }
 
-function join_room (_roomcode, _author, _message) {
+async function join_room (_roomcode, _author, _message) {
     //const _exists = currentRooms.find(_r => );
 
     var _exists;
@@ -265,7 +267,7 @@ async function leave_room (_author, _message) {
     }
 }
 
-function generateRC (_count) {
+async function generateRC (_count) {
 
      //count is proportional  to room count
     var gen = [];
@@ -282,7 +284,7 @@ function generateRC (_count) {
     return code.toString();
 }
 
-function create_room () {
+async function create_room () {
     return {
         "room_code": "",
         "members": [],
@@ -292,8 +294,24 @@ function create_room () {
         //stage == 1 czar picking card
         //stage == 2 shift czar
         //stage == 3 game finished
-        "stage": -1
+        "stage": -1,
+        "idle":0
    };
+}
+
+function clean_up () {
+    for(var _t = 0; _t < currentRooms.length; _t++) {
+        if(currentRooms[_t].idle >= 10) {
+            var _cur = currentRooms[_t];
+            var _next = currentRooms[currentRooms.length-1];
+            currentRooms[_t] = _next;
+            currentRooms[currentRooms.length-1] = _cur;
+            currentRooms.pop();
+        }
+        if(currentRooms[_t].members.length == 0) {
+            currentRooms[_t].idle+=1;
+        }
+    }
 }
 
 function create_player () {
