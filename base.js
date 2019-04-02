@@ -153,7 +153,7 @@ function credits (_m) {
             },
             {
               "name": "Original Idea",
-              "value": "Thanks to the original creators of [**Cards Against Humanity**](https://cardsagainsthumanity.com/)"
+              "value": "Thanks to the original creators of **[Cards Against Humanity](https://cardsagainsthumanity.com/)**"
             }
           ]
         }
