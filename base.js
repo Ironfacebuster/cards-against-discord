@@ -243,6 +243,8 @@ function leave_room (_author, _message) {
             currentRooms[i].members[_mem] = currentRooms[i].members[currentRooms[i].members.length-1];
             currentRooms[i].members[currentRooms[i].members.length-1] = _temp;
             currentRooms[i].members.pop();
+            _message.reply("Room left.");
+            return;
         }
     }
 }
