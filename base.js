@@ -54,7 +54,7 @@ client.on('message', async message => {
         if(command == "create")
             createRoom(message.author, message);
         if(command == "join") 
-            join_room(args[0], message.author, message);
+            join_room(args.join(''), message.author, message);
     } else {
         if(command == "randomcard") {
             randomCard(args[0], message);
