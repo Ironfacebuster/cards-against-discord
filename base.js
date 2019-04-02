@@ -232,18 +232,20 @@ function join_room (_roomcode, _author, _message) {
 
 async function leave_room (_author, _message) {
     var _mem;
+    var _roomindex;
     for(var i = 0; i < currentRooms.length; i++){
         _mem = currentRooms[i].members.findIndex(_m => _m._id == _author.id);
+        _roomindex = i;
+    }
 
-        if(_mem == -1) {
-            _message.reply("You're not currently in a game.");
-        } else {
-            var _temp = currentRooms[i].members[_mem];
-            currentRooms[i].members[_mem] = currentRooms[i].members[currentRooms[i].members.length-1];
-            currentRooms[i].members[currentRooms[i].members.length-1] = _temp;
-            currentRooms[i].members.pop();
-            _message.reply("Room left.");
-        }
+    if(_mem == -1) {
+        _message.reply("You're not currently in a game.");
+    } else {
+        var _temp = currentRooms[_roomindex].members[_mem];
+        currentRooms[_roomindex].members[_mem] = currentRooms[_roomindex].members[currentRooms[_roomindex].members.length-1];
+        currentRooms[_roomindex].members[currentRooms[_roomindex].members.length-1] = _temp;
+        currentRooms[_roomindex].members.pop();
+        _message.reply("Room left.");
     }
 }
 
