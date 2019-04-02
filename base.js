@@ -51,10 +51,12 @@ client.on('message', async message => {
     var args = message.content.trim().replace(prefix, '').split(' ').slice(1);
 
     if(message.channel.type == "dm") {
-        if(command == "create")
+        if (command == "create")
             createRoom(message.author, message);
-        if(command == "join") 
+        else if (command == "join") 
             join_room(args.join(''), message.author, message);
+        else if (command == "leave")
+            leave_room(message.author, message);
     } else {
         if(command == "randomcard") {
             randomCard(args[0], message);
@@ -224,6 +226,23 @@ function join_room (_roomcode, _author, _message) {
             //_message.channel.send("`" + JSON.stringify(currentRooms) + "`");
         } else {
             _message.reply("Room not found.");
+        }
+    }
+}
+
+function leave_room (_author, _message) {
+    var _mem;
+    for(var i = 0; i < currentRooms.length; i++){
+        _mem = currentRooms[i].members.findIndex(_m => _m._id == _author.id);
+
+        if(_mem == -1) {
+            _message.reply("You're not currently in a game.");
+            return;
+        } else {
+            var _temp = currentRooms[i].members[_mem];
+            currentRooms[i].members[_mem] = currentRooms[i].members[currentRooms[i].members.length-1];
+            currentRooms[i].members[currentRooms[i].members.length-1] = _temp;
+            currentRooms[i].members.pop();
         }
     }
 }
