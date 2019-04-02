@@ -11,7 +11,9 @@ const whiteCards = JSON.parse(fs.readFileSync(whiteLocation, 'utf8'));
 
 var currentRooms = [];
 
-setInterval('clean_up', 5000);
+setInterval(async function () {
+    clean_up ();
+}, 5000);
 
 const defaultUser = {
     "id": "",
