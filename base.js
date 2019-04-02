@@ -196,7 +196,7 @@ function join_room (_roomcode, _author, _message) {
     if(_exists != null) {
         _message.reply("You're already in a game.");
     } else {
-        var _room = currentRooms.findIndex(r => r.room_code.toString() == _roomcode.toString());
+        var _room = currentRooms.findIndex(r => r.room_code.toString().trim() == _roomcode.toString().trim());
 
         _message.reply(_room.toString());
 
