@@ -176,29 +176,6 @@ function trimSpaces(string){
 	return s;
 }
 
-async function createRoom (_author, _message) {
-    for(var i = 0; i < currentRooms.length; i++){
-        _exists = currentRooms[i].members.find(_m => _m._id == _author.id);
-
-        if(_exists != null) {
-            _message.reply("You're already in a game.");
-            return;
-        }
-    }
-    
-    var _new = create_room();
-
-    _new.room_code = generateRC(4);
-    _new.stage = -1;
-    
-    //add creator to room
-
-    currentRooms.push(_new);
-    _message.reply ("Room created with code `" + _new.room_code + "`");
-
-    join_room(_new.room_code, _author, _message);
-}
-
 async function join_room (_roomcode, _author, _message) {
     //const _exists = currentRooms.find(_r => );
 
@@ -286,7 +263,7 @@ async function generateRC (_count) {
     return code.toString();
 }
 
-async function create_room () {
+function create_room () {
     return {
         "room_code": "",
         "members": [],
@@ -301,7 +278,7 @@ async function create_room () {
    };
 }
 
-function clean_up () {
+async function clean_up () {
     for(var _t = 0; _t < currentRooms.length; _t++) {
         if(currentRooms[_t].idle >= 10) {
             var _cur = currentRooms[_t];
@@ -314,6 +291,29 @@ function clean_up () {
             currentRooms[_t].idle+=1;
         }
     }
+}
+
+function createRoom (_author, _message) {
+    for(var i = 0; i < currentRooms.length; i++){
+        _exists = currentRooms[i].members.find(_m => _m._id == _author.id);
+
+        if(_exists != null) {
+            _message.reply("You're already in a game.");
+            return;
+        }
+    }
+    
+    var _new = create_room();
+
+    _new.room_code = generateRC(4);
+    _new.stage = -1;
+    
+    //add creator to room
+
+    currentRooms.push(_new);
+    _message.reply ("Room created with code `" + _new.room_code + "`");
+
+    join_room(_new.room_code, _author, _message);
 }
 
 function create_player () {
