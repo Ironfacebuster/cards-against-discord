@@ -279,16 +279,18 @@ function create_room () {
 }
 
 async function clean_up () {
-    for(var _t = 0; _t < currentRooms.length; _t++) {
-        if(currentRooms[_t].idle >= 10) {
-            var _cur = currentRooms[_t];
-            var _next = currentRooms[currentRooms.length-1];
-            currentRooms[_t] = _next;
-            currentRooms[currentRooms.length-1] = _cur;
-            currentRooms.pop();
-        }
-        if(currentRooms[_t].members.length == 0) {
-            currentRooms[_t].idle+=1;
+    if(currentRooms.length != 0) {
+        for(var _t = 0; _t < currentRooms.length; _t++) {
+            if(currentRooms[_t].idle >= 24) {
+                var _cur = currentRooms[_t];
+                var _next = currentRooms[currentRooms.length-1];
+                currentRooms[_t] = _next;
+                currentRooms[currentRooms.length-1] = _cur;
+                currentRooms.pop();
+            }
+            if(currentRooms[_t].members.length == 0) {
+                currentRooms[_t].idle+=1;
+            }
         }
     }
 }
