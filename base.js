@@ -48,7 +48,7 @@ client.on('message', async message => {
     
     var command = mess.trim().replace(prefix, '').split(' ')[0];
 
-    var args = mess.trim().replace(prefix, '').split(' ').slice(1);
+    var args = message.content.trim().replace(prefix, '').split(' ').slice(1);
 
     if(message.channel.type == "dm") {
         if(command == "create")
@@ -191,18 +191,14 @@ function join_room (_roomcode, _author, _message) {
         _exists = currentRooms[i].members.find(_m => _m._id == _author.id);
     }
 
-    _message.channel.send("`" + JSON.stringify(currentRooms) + "`");
+    //_message.channel.send("`" + JSON.stringify(currentRooms) + "`");
 
     if(_exists != null) {
         _message.reply("You're already in a game.");
     } else {
-        const _room = currentRooms.findIndex(function(r){
-            console.log(r.room_code + ", " + _roomcode);
-            console.log(r.room_code.trim() == _roomcode.toString().trim());
-            return r.room_code.trim() == _roomcode.toString().trim()
-        });
+        const _room = currentRooms.findIndex(r => r.room_code.trim() == _roomcode.toString().trim());
 
-        _message.reply(_room.toString());
+        //_message.reply(_room.toString());
 
         if(_room != -1) {
             var _player = create_player();
@@ -224,7 +220,7 @@ function generateRC (_count) {
     const letters = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNPQRSTUVWXYZ"
 
     for(var i = 0; i < _count; i++){
-        const randLet = letters.charAt(Math.round(Math.random()*letters.length)).toString();
+        const randLet = letters.charAt(Math.round(Math.random()*(letters.length-1))).toString();
         gen.push(randLet);
     }
 
