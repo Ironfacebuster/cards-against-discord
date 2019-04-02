@@ -246,7 +246,7 @@ async function leave_room (_author, _message) {
     }
 }
 
-async function generateRC (_count) {
+function generateRC (_count) {
 
      //count is proportional  to room count
     var gen = [];
@@ -293,7 +293,7 @@ async function clean_up () {
     }
 }
 
-function createRoom (_author, _message) {
+async function createRoom (_author, _message) {
     for(var i = 0; i < currentRooms.length; i++){
         _exists = currentRooms[i].members.find(_m => _m._id == _author.id);
 
