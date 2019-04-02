@@ -197,7 +197,7 @@ function join_room (_roomcode, _author, _message) {
         _message.reply("You're already in a game.");
     } else {
         const _room = currentRooms.findIndex(function(r){
-            console.log(r);
+            console.log(r.room_code + ", " + _roomcode);
             console.log(r.room_code.trim() == _roomcode.toString().trim());
             return r.room_code.trim() == _roomcode.toString().trim()
         });
