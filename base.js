@@ -171,6 +171,15 @@ function trimSpaces(string){
 }
 
 function createRoom (_author, _message) {
+    for(var i = 0; i < currentRooms.length; i++){
+        _exists = currentRooms[i].members.find(_m => _m._id == _author.id);
+
+        if(_exists != null) {
+            _message.reply("You're already in a game.");
+            return;
+        }
+    }
+    
     var _new = create_room();
 
     _new.room_code = generateRC(4);
