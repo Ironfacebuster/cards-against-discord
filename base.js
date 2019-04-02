@@ -281,7 +281,7 @@ function create_room () {
 async function clean_up () {
     var _cleaned = 0;
     if(currentRooms.length != 0) {
-        for(var _t = 0; _t < currentRooms.length; _t++) {
+        for(var _t = currentRooms.length - 1; _t > -1; _t++) {
             if(currentRooms[_t].idle >= 24) {
                 var _cur = currentRooms[_t];
                 var _next = currentRooms[currentRooms.length-1];
