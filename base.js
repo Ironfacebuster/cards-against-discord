@@ -293,6 +293,7 @@ async function clean_up () {
                 _cleaned = _cleaned+1;
             }
             if(currentRooms[_t].members.length == 0) {
+                console.log(JSON.stringify(currentRooms[_t]));
                 currentRooms[_t].idle = currentRooms[_t].idle + 1;
             } else {
                 currentRooms[_t].idle = 0;
