@@ -280,15 +280,16 @@ function create_room () {
 
 async function clean_up () {
     var _cleaned = 0;
-    if(currentRooms.length != 0) {
-        for(var _t = currentRooms.length - 1; _t > -1; _t--) {
-            console.log(_t);
+
+    if(currentRooms.length > 0) {
+        for(var _t = 0; _t < currentRooms.length; _t++) {
+            //console.log(_t);
             if(currentRooms[_t].idle >= 24) {
                 var _cur = currentRooms[_t];
-                var _next = currentRooms[currentRooms.length-1];
+                var _next = currentRooms[0];
                 currentRooms[_t] = _next;
-                currentRooms[currentRooms.length-1] = _cur;
-                currentRooms.pop();
+                currentRooms[0] = _cur;
+                currentRooms.shift();
                 _cleaned = _cleaned+1;
             }
             if(currentRooms[_t].members.length == 0) {
