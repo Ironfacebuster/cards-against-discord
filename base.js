@@ -61,6 +61,9 @@ client.on('message', async message => {
             join_room(args.join(''), message.author, message);
         else if (command == "leave")
             leave_room(message.author, message);
+        else if (command == "getrooms") {
+            message.reply(JSON.stringify(currentRooms));
+        }
     } else {
         if(command == "randomcard") {
             randomCard(args[0], message);
@@ -286,10 +289,13 @@ async function clean_up () {
             //console.log(_t);
             if(currentRooms[_t].idle >= 24) {
                 if(_t != 0) {
+                    /*
                     const _cur = currentRooms[_t];
-                    const _next = currentRooms[0];
-                    currentRooms[_t] = _next;
+                    //const _next = currentRooms[0];
+                    currentRooms[_t] = currentRooms[0];
                     currentRooms[0] = _cur;
+                    */
+                   [currentRooms[0], currentRooms[_t]] = [currentRooms[_t], currentRooms[0]];
                 }
                 //console.log("FIRST " + JSON.stringify(currentRooms[0]))
                 //console.log("_T " + JSON.stringify(currentRooms[_t]))
