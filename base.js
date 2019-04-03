@@ -223,8 +223,10 @@ async function join_room (_roomcode, _author, _message) {
 }
 
 async function leave_room (_author, _message) {
+
     var _mem;
     var _roomindex;
+
     for(var i = 0; i < currentRooms.length; i++){
         _mem = currentRooms[i].members.findIndex(_m => _m._id == _author.id);
         _roomindex = i;
@@ -295,7 +297,9 @@ async function clean_up () {
                     currentRooms[_t] = currentRooms[0];
                     currentRooms[0] = _cur;
                     */
-                   [currentRooms[0], currentRooms[_t]] = [currentRooms[_t], currentRooms[0]];
+                    [currentRooms[0], currentRooms[_t]] = [currentRooms[_t], currentRooms[0]];
+                    console.log("FIRST " + JSON.stringify(currentRooms[0]))
+                    console.log("_T " + JSON.stringify(currentRooms[_t]))
                 }
                 //console.log("FIRST " + JSON.stringify(currentRooms[0]))
                 //console.log("_T " + JSON.stringify(currentRooms[_t]))
