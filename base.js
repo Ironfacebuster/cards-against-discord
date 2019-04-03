@@ -227,7 +227,7 @@ async function leave_room (_author, _message) {
     var _mem;
     var _roomindex;
 
-    for(var i = 0; i < currentRooms.length; i++){
+    for(var i = currentRooms.length - 1; i >= 0; i--){
         _mem = currentRooms[i].members.findIndex(_m => _m._id == _author.id);
         _roomindex = i;
     }
@@ -244,7 +244,7 @@ async function leave_room (_author, _message) {
                 var _tempuser = client.fetchUser(currentRooms[_roomindex].members[g]._id);
                 _tempuser.then(function(_user) {
                     _user.send(`${_author.username} has left your room.`);
-                });            
+                });
             }
         }
         _message.reply("Room left.");
@@ -298,7 +298,7 @@ async function clean_up () {
                     currentRooms[0] = _cur;
                     */
                     [currentRooms[currentRooms.length-1], currentRooms[_t]] = [currentRooms[_t], currentRooms[currentRooms.length-1]];
-                    console.log("FIRST " + JSON.stringify(currentRooms[0]))
+                    console.log("FIRST " + JSON.stringify(currentRooms[currentRooms.length-1]))
                     console.log("_T " + JSON.stringify(currentRooms[_t]))
                 }
                 //console.log("FIRST " + JSON.stringify(currentRooms[0]))
