@@ -229,7 +229,7 @@ async function leave_room (_author, _message) {
 
     for(var i = currentRooms.length - 1; i >= 0; i--){
         _mem = currentRooms[i].members.findIndex(_m => _m._id == _author.id);
-        console(_mem)
+        console.log(_mem)
         _roomindex = i;
     }
 
