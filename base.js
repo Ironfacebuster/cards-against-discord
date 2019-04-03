@@ -287,23 +287,23 @@ async function clean_up () {
     var _cleaned = 0;
 
     if(currentRooms.length > 0) {
-        for(var _t = 0; _t < currentRooms.length; _t++) {
+        for(var _t = currentRooms.length-1; _t >= 0; _t--) {
             //console.log(_t);
             if(currentRooms[_t].idle >= 24) {
-                if(_t != 0) {
+                if(_t != currentRooms.length-1) {
                     /*
                     const _cur = currentRooms[_t];
                     //const _next = currentRooms[0];
                     currentRooms[_t] = currentRooms[0];
                     currentRooms[0] = _cur;
                     */
-                    [currentRooms[0], currentRooms[_t]] = [currentRooms[_t], currentRooms[0]];
+                    [currentRooms[currentRooms.length-1], currentRooms[_t]] = [currentRooms[_t], currentRooms[currentRooms.length-1]];
                     console.log("FIRST " + JSON.stringify(currentRooms[0]))
                     console.log("_T " + JSON.stringify(currentRooms[_t]))
                 }
                 //console.log("FIRST " + JSON.stringify(currentRooms[0]))
                 //console.log("_T " + JSON.stringify(currentRooms[_t]))
-                currentRooms.shift();
+                currentRooms.pop();
                 _cleaned = _cleaned+1;
             }
             if(currentRooms[_t].members.length == 0) {
