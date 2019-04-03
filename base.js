@@ -289,7 +289,8 @@ async function clean_up () {
                 var _next = currentRooms[0];
                 currentRooms[_t] = _next;
                 currentRooms[0] = _cur;
-                console.log(JSON.stringify(currentRooms[0]))
+                console.log("FIRST " + JSON.stringify(currentRooms[0]))
+                console.log("_T " + JSON.stringify(currentRooms[_t]))
                 currentRooms.shift();
                 _cleaned = _cleaned+1;
             }
