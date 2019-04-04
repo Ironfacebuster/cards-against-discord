@@ -246,6 +246,8 @@ async function cards (_author, _message) {
         }
 
         _message.reply(card);
+    } else {
+        _message.reply("You're not in a room!");
     }
 }
 
