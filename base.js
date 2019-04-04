@@ -33,7 +33,7 @@ function loadCards() {
 const client = new discord.Client();
 
 client.on('ready', () => {
-    console.log("Bot ready.");
+    console.log("BOT READY.");
     //client.user.setActivity("Working on things... DO NOT ATTEMPT TO USE.");
     client.user.setActivity(`${client.guilds.size} guilds insult each other | cad help`, {url:"https://www.twitch.tv/ironfacebuster", type:"WATCHING"});
 
@@ -302,8 +302,8 @@ async function clean_up () {
                     currentRooms[0] = _cur;
                     */
                     [currentRooms[currentRooms.length-1], currentRooms[_t]] = [currentRooms[_t], currentRooms[currentRooms.length-1]];
-                    console.log("FIRST " + JSON.stringify(currentRooms[currentRooms.length-1]))
-                    console.log("_T " + JSON.stringify(currentRooms[_t]))
+                    //console.log("FIRST " + JSON.stringify(currentRooms[currentRooms.length-1]))
+                    //console.log("_T " + JSON.stringify(currentRooms[_t]))
                 }
                 //console.log("FIRST " + JSON.stringify(currentRooms[0]))
                 //console.log("_T " + JSON.stringify(currentRooms[_t]))
