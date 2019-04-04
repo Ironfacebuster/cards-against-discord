@@ -228,9 +228,12 @@ async function leave_room (_author, _message) {
     var _roomindex;
 
     for(var i = currentRooms.length - 1; i >= 0; i--){
-        _mem = currentRooms[i].members.findIndex(_m => _m._id == _author.id);
-        console.log("FOUND USER? " + currentRooms[i].members.findIndex(_m => _m._id == _author.id) + "\r\nSERVER: " + currentRooms[i]);
-        _roomindex = i;
+        var _tempmem = currentRooms[i].members.findIndex(_m => _m._id == _author.id);
+        if(_tempmem != -1) {
+            _mem = _tempmem;
+            //console.log("FOUND USER? " + currentRooms[i].members.findIndex(_m => _m._id == _author.id) + "\r\nSERVER: " + currentRooms[i]);
+            _roomindex = i;
+        }
     }
 
     if(_mem == -1) {
