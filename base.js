@@ -61,9 +61,10 @@ client.on('message', async message => {
             join_room(args.join(''), message.author, message);
         else if (command == "leave")
             leave_room(message.author, message);
-        else if (command == "getrooms") {
+        else if (command == "getrooms")
             message.reply(JSON.stringify(currentRooms));
-        }
+        else if (command == "cards") 
+            cards(message.author, message);
     } else {
         if(command == "randomcard") {
             randomCard(args[0], message);
@@ -205,6 +206,9 @@ async function join_room (_roomcode, _author, _message) {
         if(_room != -1) {
             var _player = create_player();
             _player._id = _author.id;
+            for(var _c = 0; _c < 10; _c++) {
+                _player._cards.push(whiteCards._cards[Math.floor(Math.random() * whiteCards._cards.length)]);
+            }
             currentRooms[_room].members.push(_player);
             for(var g = 0; g < currentRooms[_room].members.length; g++){
                 if(currentRooms[_room].members[g]._id != _author.id) {
@@ -219,6 +223,29 @@ async function join_room (_roomcode, _author, _message) {
         } else {
             _message.reply("Room not found.");
         }
+    }
+}
+
+async function cards (_author, _message) {
+    var _mem = -1;
+    var _roomindex;
+
+    for(var i = currentRooms.length - 1; i >= 0; i--){
+        var _tempmem = currentRooms[i].members.findIndex(_m => _m._id == _author.id);
+        if(_tempmem != -1) {
+            _mem = _tempmem;
+            //console.log("FOUND USER? " + currentRooms[i].members.findIndex(_m => _m._id == _author.id) + "\r\nSERVER: " + currentRooms[i]);
+            _roomindex = i;
+        }
+    }
+
+    if(_mem != -1) {
+        var card = "";
+        for(var _c = 0; _c < currentRooms[_roomindex].members[_mem]._cards.length; _c++){
+            card = card + `${_c+1}. ` + currentRooms[_roomindex].members[_mem]._cards[_c].content + "\r\n";
+        }
+
+        _message.reply(card);
     }
 }
 
@@ -340,6 +367,7 @@ async function createRoom (_author, _message) {
 
     _new.room_code = generateRC(4);
     _new.stage = -1;
+    _new.czar = _author.id.toString();
     
     //add creator to room
 
