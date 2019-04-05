@@ -482,7 +482,11 @@ async function submit_card (_author, _message, _args) {
                 _message.reply("That isn't a card.");
             }
         }
-        if(_author.id.toString() != currentRooms[_roomindex].czar.toString() && currentRooms[_roomindex].submissions.find(_card => _card._submitter == _author.id.toString()) == false && currentRooms[_roomindex].stage == 2) {
+        if(_author.id.toString() != currentRooms[_roomindex].czar.toString() && currentRooms[_roomindex].stage == 2 || currentRooms[_roomindex].submissions == null) {
+            if(currentRooms[_roomindex].submissions && currentRooms[_roomindex].submissions.find(_card => _card._submitter == _author.id.toString())) {
+                message.reply("You've already submitted a card.");
+                return;
+            }
             if(_args[0] > 0 || _args[0] < currentRooms[_roomindex].members[_mem]._cards.length) {
                 var card = create_submission();
     
@@ -495,8 +499,6 @@ async function submit_card (_author, _message, _args) {
             }
         } else if(currentRooms[_roomindex].stage != 2){
             _message.reply("It's not your turn to submit a card.")
-        } else {
-            _message.reply("You've already submitted a card.");
         }
     }
 }
