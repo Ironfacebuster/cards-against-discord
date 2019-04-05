@@ -65,12 +65,14 @@ client.on('message', async message => {
             join_room(args.join(''), message.author, message);
         else if (command == "leave")
             leave_room(message.author, message);
-        else if (command == "getrooms")
-            message.reply(JSON.stringify(currentRooms));
+        //else if (command == "getrooms")
+            //message.reply(JSON.stringify(currentRooms));
         else if (command == "cards") 
             cards(message.author, message);
         else if (command == "start")
             start_room(message.author, message);
+        else if (command == "submit")
+            submit_card(message.author, _message, args);
     } else {
         if(command == "randomcard") {
             randomCard(args[0], message);
@@ -322,7 +324,9 @@ function create_room () {
         //stage == 5 shift czar
         //stage == 6 game over
         "stage": -1,
-        "idle":0
+        "idle":0,
+        "played_cards":[],
+        "czar_choice": null
    };
 }
 
@@ -390,17 +394,19 @@ async function start_room (_author, _message) {
             return;
         }
 
-        currentRooms[_roomindex].stage = 0;
-
-        var blackCard = blackCards._cards[Math.floor(Math.random() * blackCards._cards.length)].content;
+        if(currentRooms[_roomindex].stage != -2) {
+            _message.reply("The game's already started!")
+            return;
+        }
 
         for(var _i = 0; _i < currentRooms[_roomindex].members.length; _i++){
             var _tempuser = client.fetchUser(currentRooms[_roomindex].members[_i]._id);
                 _tempuser.then(function(_user) {
                     _user.send(`${_author.username} has started the game!`);
-                    _user.send(`Your prompt is:\r\n` + blackCard.toString());
                 });
         }
+
+        currentRooms[_roomindex].stage = 0;
     }
 }
 
@@ -437,9 +443,136 @@ function create_player () {
     };
 }
 
+function create_submission () {
+    return {
+        "_submitter" : "",
+        "_content":""
+    };
+}
+
+async function submit_card (_author, _message, _args) {
+    var _mem;
+    var _roomindex;
+
+    for(var i = currentRooms.length - 1; i >= 0; i--){
+        var _tempmem = currentRooms[i].members.findIndex(_m => _m._id == _author.id);
+        if(_tempmem != -1) {
+            _mem = _tempmem;
+            _roomindex = i;
+        }
+    }
+
+    if(_mem == -1) {
+        _message.reply("You're not currently in a game.");
+    } else {
+        if(_author.id.toString() == currentRooms[_roomindex].czar.toString()) {
+            if(currentRooms[_roomindex].stage != 4) {
+                _message.reply("You have to wait for everyone to submit their cards.");
+                return;
+            }
+
+            if(_args[0] > 0 || _args[0] < currentRooms[_roomindex].submissions.length) {
+                var czarsubmit = create_submission();
+    
+                czarsubmit._submitter = _author.id.toString();
+                czarsubmit._content = currentRooms[_roomindex].submissions[Number(_args[0])-1];
+    
+                currentRooms[_roomindex].czar_choice = czarsubmit;
+            } else {
+                _message.reply("That isn't a card.");
+            }
+        }
+        if(_author.id.toString() != currentRooms[_roomindex].czar.toString() && currentRooms[_roomindex].submissions.find(_card => _card._submitter == _author.id.toString()) == false && currentRooms[_roomindex].stage == 2) {
+            if(_args[0] > 0 || _args[0] < currentRooms[_roomindex].members[_mem]._cards.length) {
+                var card = create_submission();
+    
+                card._submitter = _author.id.toString();
+                card._content = currentRooms[_roomindex].members[_mem]._cards[Number(_args[0]) - 1];
+    
+                currentRooms[_roomindex].submissions.push(card);
+            } else {
+                _message.reply("That isn't a card.");
+            }
+        } else if(currentRooms[_roomindex].stage != 2){
+            _message.reply("It's not your turn to submit a card.")
+        } else {
+            _message.reply("You've already submitted a card.");
+        }
+    }
+}
+
 async function logic () {
+    //stage == -2 not started
+    //stage == 0 show prompt
+    //stage == 1 send message to pick white cards
+    //stage == 2 players picking white cards
+    //stage == 3 send message to czar
+    //stage == 4 await czar choice
+    //stage == 5 shift czar
+    //stage == 6 game over
+
     for(var _in = 0; _in < currentRooms.length; _in++){
 
+        if(stage == -1) {
+            var _tempuser = client.fetchUser(currentRooms[_roomindex].host.toString());
+            _tempuser.then(function(_user) {
+                    _user.send("Type `cad start` to start the game, when everyone's ready.");
+            });
+
+            currentRooms[_in].stage = -2;
+        }
+
+        if(currentRooms[_in].stage == 0){
+            var blackCard = blackCards._cards[Math.floor(Math.random() * blackCards._cards.length)].content;
+
+            for(var _i = 0; _i < currentRooms[_roomindex].members.length; _i++){
+                var _tempuser = client.fetchUser(currentRooms[_roomindex].members[_i]._id);
+                    _tempuser.then(function(_user) {
+                        _user.send(`Your prompt is:\r\n` + "`" + blackCard.toString() + "`" );
+                    });
+            }
+
+            currentRooms[_in].stage = 1;
+        } else if(currentRooms[_in].stage == 1) {
+            for(var _i = 0; _i < currentRooms[_roomindex].members.length; _i++){
+                var _tempuser = client.fetchUser(currentRooms[_roomindex].members[_i]._id);
+                _tempuser.then(function(_user) {
+                        _user.send(`Pick your response card!`);
+                });
+            }
+
+            currentRooms[_in].stage = 2;
+        } else if (currentRooms[_in].stage==2){
+            if(currentRooms[_in].played_cards.length >= currentRooms[_in].members.length-1){
+                currentRooms[_in].stage = 3;
+            }
+        } else if (currentRooms[_in].stage == 3){
+            var submissions = "";
+
+            for(var _c = 0; _c < currentRooms[_in].played_cards.length; _c++){
+                submissions = submissions + `${c+1}. ${currentRooms[_in].played_cards[_c]._content}\r\n`;
+            }
+
+            for(var _i = 0; _i < currentRooms[_roomindex].members.length; _i++){
+                var _tempuser = client.fetchUser(currentRooms[_roomindex].members[_i]._id);
+                _tempuser.then(function(_user) {
+                    _user.send(submissions);
+                });
+            }
+
+            currentRooms[_in].stage == 4;
+        } else if (currentRooms[_in].stage==4){
+            if(currentRooms[_in].czar_choice != null){
+                for(var _i = 0; _i < currentRooms[_roomindex].members.length; _i++){
+                    var _tempuser = client.fetchUser(currentRooms[_roomindex].members[_i]._id);
+                        _tempuser.then(function(_user) {
+                            _user.send(`Czar's choice: ${currentRooms[_in].czar_choice.content}`);
+                        });
+                }
+
+                currentRooms[_in].stage == 5;
+            }
+        }
     }
 }
 
