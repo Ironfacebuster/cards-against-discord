@@ -388,7 +388,7 @@ async function start_room (_author, _message) {
         for(var _i = 0; _i < currentRooms[_roomindex].members.length; _i++){
             var _tempuser = client.fetchUser(currentRooms[_roomindex].members[_i]._id);
                 _tempuser.then(function(_user) {
-                    _user.send(`${author.username} has started the game!`);
+                    _user.send(`${_author.username} has started the game!`);
                     _user.send(`Your prompt is:\r\n` + blackCard.toString());
                 });
         }
