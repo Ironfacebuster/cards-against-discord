@@ -514,7 +514,7 @@ async function logic () {
     for(var _in = 0; _in < currentRooms.length; _in++){
 
         if(currentRooms[_in].stage == -1) {
-            var _tempuser = client.fetchUser(currentRooms[_roomindex].host.toString());
+            var _tempuser = client.fetchUser(currentRooms[_in].host.toString());
             _tempuser.then(function(_user) {
                     _user.send("Type `cad start` to start the game, when everyone's ready.");
             });
@@ -525,8 +525,8 @@ async function logic () {
         if(currentRooms[_in].stage == 0){
             var blackCard = blackCards._cards[Math.floor(Math.random() * blackCards._cards.length)].content;
 
-            for(var _i = 0; _i < currentRooms[_roomindex].members.length; _i++){
-                var _tempuser = client.fetchUser(currentRooms[_roomindex].members[_i]._id);
+            for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
+                var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
                     _tempuser.then(function(_user) {
                         _user.send(`Your prompt is:\r\n` + "`" + blackCard.toString() + "`" );
                     });
@@ -534,8 +534,8 @@ async function logic () {
 
             currentRooms[_in].stage = 1;
         } else if(currentRooms[_in].stage == 1) {
-            for(var _i = 0; _i < currentRooms[_roomindex].members.length; _i++){
-                var _tempuser = client.fetchUser(currentRooms[_roomindex].members[_i]._id);
+            for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
+                var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
                 _tempuser.then(function(_user) {
                         _user.send(`Pick your response card!`);
                 });
@@ -553,8 +553,8 @@ async function logic () {
                 submissions = submissions + `${c+1}. ${currentRooms[_in].played_cards[_c]._content}\r\n`;
             }
 
-            for(var _i = 0; _i < currentRooms[_roomindex].members.length; _i++){
-                var _tempuser = client.fetchUser(currentRooms[_roomindex].members[_i]._id);
+            for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
+                var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
                 _tempuser.then(function(_user) {
                     _user.send(submissions);
                 });
@@ -563,8 +563,8 @@ async function logic () {
             currentRooms[_in].stage == 4;
         } else if (currentRooms[_in].stage==4){
             if(currentRooms[_in].czar_choice != null){
-                for(var _i = 0; _i < currentRooms[_roomindex].members.length; _i++){
-                    var _tempuser = client.fetchUser(currentRooms[_roomindex].members[_i]._id);
+                for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
+                    var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
                         _tempuser.then(function(_user) {
                             _user.send(`Czar's choice: ${currentRooms[_in].czar_choice.content}`);
                         });
