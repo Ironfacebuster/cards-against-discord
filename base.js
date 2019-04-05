@@ -65,6 +65,8 @@ client.on('message', async message => {
             message.reply(JSON.stringify(currentRooms));
         else if (command == "cards") 
             cards(message.author, message);
+        else if (command == "start")
+            start_room(message.author, message);
     } else {
         if(command == "randomcard") {
             randomCard(args[0], message);
@@ -306,11 +308,15 @@ function create_room () {
         "room_code": "",
         "members": [],
         "czar":"",
+        "host": "",
         //stage == -1 not started
-        //stage == 0 players picking white cards
-        //stage == 1 czar picking card
-        //stage == 2 shift czar
-        //stage == 3 game finished
+        //stage == 0 show prompt
+        //stage == 1 send message to pick white cards
+        //stage == 2 players picking white cards
+        //stage == 3 send message to czar
+        //stage == 4 await czar choice
+        //stage == 5 shift czar
+        //stage == 6 game over
         "stage": -1,
         "idle":0
    };
@@ -355,6 +361,40 @@ async function clean_up () {
         console.log(`${_cleaned} empty rooms cleaned.`);
 }
 
+async function start_room (_author, _message) {
+    var _mem;
+    var _roomindex;
+
+    for(var i = currentRooms.length - 1; i >= 0; i--){
+        var _tempmem = currentRooms[i].members.findIndex(_m => _m._id == _author.id);
+        if(_tempmem != -1) {
+            _mem = _tempmem;
+            _roomindex = i;
+        }
+    }
+
+    if(_mem == -1){
+        _message.reply("You're not in a room!");
+    } else {
+        if(currentRooms[_roomindex].host != _author.id.toString()) {
+            _message.reply("You're not the host!");
+            return;
+        }
+
+        currentRooms[_roomindex].stage = 0;
+
+        var blackCard = blackCards._cards[Math.floor(Math.random() * blackCards._cards.length)].content;
+
+        for(var _i = 0; _i < currentRooms[_roomindex].members.length; _i++){
+            var _tempuser = client.fetchUser(currentRooms[_roomindex].members[_i]._id);
+                _tempuser.then(function(_user) {
+                    _user.send(`${author.username} has started the game!`);
+                    _user.send(`Your prompt is:\r\n` + blackCard.toString());
+                });
+        }
+    }
+}
+
 async function createRoom (_author, _message) {
     for(var i = 0; i < currentRooms.length; i++){
         _exists = currentRooms[i].members.find(_m => _m._id == _author.id);
@@ -370,6 +410,7 @@ async function createRoom (_author, _message) {
     _new.room_code = generateRC(4);
     _new.stage = -1;
     _new.czar = _author.id.toString();
+    _new.host = _author.id.toString();
     
     //add creator to room
 
@@ -385,6 +426,10 @@ function create_player () {
         "_cards": [],
         "_points":0
     };
+}
+
+async function logic () {
+
 }
 
 client.login(process.env.TOKEN);
