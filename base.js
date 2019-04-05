@@ -72,7 +72,7 @@ client.on('message', async message => {
         else if (command == "start")
             start_room(message.author, message);
         else if (command == "submit")
-            submit_card(message.author, _message, args);
+            submit_card(message.author, message, args);
     } else {
         if(command == "randomcard") {
             randomCard(args[0], message);
