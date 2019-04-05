@@ -15,6 +15,10 @@ setInterval(async function () {
     clean_up ();
 }, 5000);
 
+setInterval(async function () {
+    logic ();
+}, 1350);
+
 const defaultUser = {
     "id": "",
     "wins":0,
@@ -381,6 +385,11 @@ async function start_room (_author, _message) {
             return;
         }
 
+        if(currentRooms[_roomindex].members.length < 4) {
+            _message.reply("You don't have enough members in your room to start!");
+            return;
+        }
+
         currentRooms[_roomindex].stage = 0;
 
         var blackCard = blackCards._cards[Math.floor(Math.random() * blackCards._cards.length)].content;
@@ -429,7 +438,9 @@ function create_player () {
 }
 
 async function logic () {
+    for(var _in = 0; _in < currentRooms.length; _in++){
 
+    }
 }
 
 client.login(process.env.TOKEN);
