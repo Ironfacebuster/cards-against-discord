@@ -386,7 +386,7 @@ async function start_room (_author, _message) {
         }
 
         if(currentRooms[_roomindex].members.length < 4) {
-            _message.reply("You don't have enough members in your room to start!");
+            _message.reply("You need a minimum of 4 players to start.");
             return;
         }
 
