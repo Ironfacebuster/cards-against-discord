@@ -513,7 +513,7 @@ async function logic () {
 
     for(var _in = 0; _in < currentRooms.length; _in++){
 
-        if(stage == -1) {
+        if(currentRooms[_in].stage == -1) {
             var _tempuser = client.fetchUser(currentRooms[_roomindex].host.toString());
             _tempuser.then(function(_user) {
                     _user.send("Type `cad start` to start the game, when everyone's ready.");
