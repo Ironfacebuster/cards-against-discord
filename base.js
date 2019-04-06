@@ -65,8 +65,8 @@ client.on('message', async message => {
             join_room(args.join(''), message.author, message);
         else if (command == "leave")
             leave_room(message.author, message);
-        //else if (command == "getrooms")
-            //message.reply(JSON.stringify(currentRooms));
+        else if (command == "getrooms")
+            message.reply(JSON.stringify(currentRooms));
         else if (command == "cards") 
             cards(message.author, message);
         else if (command == "start")
@@ -493,6 +493,7 @@ async function submit_card (_author, _message, _args) {
                 card._content = currentRooms[_roomindex].members[_mem]._cards[Number(_args[0]) - 1]._content;
     
                 currentRooms[_roomindex].played_cards.push(card);
+                console.log(JSON.stringify(currentRooms[_roomindex].played_cards));
                 _message.reply("Your card has been submitted.");
             } else {
                 _message.reply("That isn't a card.");
