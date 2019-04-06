@@ -465,7 +465,7 @@ async function submit_card (_author, _message, _args) {
     if(_mem == -1) {
         _message.reply("You're not currently in a game.");
     } else {
-        console.log("ARG: " + args);
+        console.log("ARG: " + _args);
         if(_author.id.toString() == currentRooms[_roomindex].czar.toString()) {
             if(currentRooms[_roomindex].stage != 4) {
                 _message.reply("You have to wait for everyone to submit their cards.");
