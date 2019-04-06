@@ -490,9 +490,11 @@ async function submit_card (_author, _message, _args) {
                 var card = create_submission();
     
                 card._submitter = _author.id.toString();
+                console.log(_args[0] - 1)
                 card._content = currentRooms[_roomindex].members[_mem]._cards[_args[0] - 1]._content;
     
                 currentRooms[_roomindex].played_cards.push(card);
+                
                 console.log(JSON.stringify(currentRooms[_roomindex].played_cards));
                 _message.reply("Your card has been submitted.");
             } else {
@@ -553,6 +555,8 @@ async function logic () {
             var submissions = "";
 
             for(var _c = 0; _c < currentRooms[_in].played_cards.length; _c++){
+                console.log(currentRooms[_in].played_cards[_c]);
+                console.log(currentRooms[_in].played_cards[_c]._content);
                 submissions = submissions + `${_c+1}. ` + currentRooms[_in].played_cards[_c]._content + "\r\n";
             }
 
@@ -565,6 +569,7 @@ async function logic () {
 
             currentRooms[_in].stage = 4;
         } else if (currentRooms[_in].stage == 4){
+            console.log(JSON.stringify(currentRooms[_in].czar_choice));
             if(currentRooms[_in].czar_choice){
                 for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
                     var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
