@@ -490,7 +490,7 @@ async function submit_card (_author, _message, _args) {
                 var card = create_submission();
     
                 card._submitter = _author.id.toString();
-                card._content = currentRooms[_roomindex].members[_mem]._cards[Number(_args[0]) - 1]._content;
+                card._content = currentRooms[_roomindex].members[_mem]._cards[_args[0] - 1]._content;
     
                 currentRooms[_roomindex].played_cards.push(card);
                 console.log(JSON.stringify(currentRooms[_roomindex].played_cards));
