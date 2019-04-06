@@ -475,8 +475,10 @@ async function submit_card (_author, _message, _args) {
             if(_args[0] > 0 || _args[0] < currentRooms[_roomindex].played_cards.length) {
                 var czarsubmit = create_submission();
     
+                const index = _args[0] - 1;
+
                 czarsubmit._submitter = _author.id.toString();
-                czarsubmit._content = currentRooms[_roomindex].played_cards[Number(_args[0])-1]._content;
+                czarsubmit._content = currentRooms[_roomindex].played_cards[index]._content;
     
                 currentRooms[_roomindex].czar_choice = czarsubmit;
             } else {
@@ -488,11 +490,13 @@ async function submit_card (_author, _message, _args) {
                 return;
             }
             if(_args[0] > 0 || _args[0] < currentRooms[_roomindex].members[_mem]._cards.length) {
+                const index = _args[0] - 1;
+
                 var card = create_submission();
     
                 card._submitter = _author.id.toString();
                 console.log(_args[0] - 1)
-                card._content = currentRooms[_roomindex].members[_mem]._cards[_args[0] - 1]._content;
+                card._content = currentRooms[_roomindex].members[_mem]._cards[index]._content;
     
                 currentRooms[_roomindex].played_cards.push(card);
                 
