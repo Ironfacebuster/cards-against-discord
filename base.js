@@ -583,8 +583,10 @@ async function logic () {
 
             currentRooms[_in].stage = 4;
         } else if (currentRooms[_in].stage == 4){
+            console.log(currentRooms[_in].czar_choice);
             //console.log(JSON.stringify(currentRooms[_in].czar_choice));
-            if(currentRooms[_in].czar_choice){
+            if(typeof(currentRooms[_in].czar_choice) != 'undefined'){
+                console.log(currentRooms[_in].czar_choice);
                 for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
                     var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
                         _tempuser.then(function(_user) {
