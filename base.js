@@ -389,7 +389,7 @@ async function start_room (_author, _message) {
             return;
         }
 
-        if(currentRooms[_roomindex].members.length < 4) {
+        if(currentRooms[_roomindex].members.length < 2) {
             _message.reply("You need a minimum of 4 players to start.");
             return;
         }
@@ -564,11 +564,11 @@ async function logic () {
 
             currentRooms[_in].stage = 4;
         } else if (currentRooms[_in].stage == 4){
-            if(currentRooms[_in].czar_choice != null){
+            if(currentRooms[_in].czar_choice){
                 for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
                     var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
                         _tempuser.then(function(_user) {
-                            _user.send(`Czar's choice: ${currentRooms[_in].czar_choice.content}`);
+                            _user.send(`Czar's choice: ${currentRooms[_in].czar_choice._content}`);
                         });
                 }
 
