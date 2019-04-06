@@ -552,7 +552,7 @@ async function logic () {
             var submissions = "";
 
             for(var _c = 0; _c < currentRooms[_in].played_cards.length; _c++){
-                submissions = submissions + `${_c+1}. ${currentRooms[_in].played_cards[_c]._content}\r\n`;
+                submissions = submissions + `${_c+1}. ` + currentRooms[_in].played_cards[_c]._content + "\r\n";
             }
 
             for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
