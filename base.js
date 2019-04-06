@@ -496,6 +496,7 @@ async function submit_card (_author, _message, _args) {
     
                 card._submitter = _author.id.toString();
                 console.log(_args[0] - 1)
+                console.log(_mem);
                 card._content = currentRooms[_roomindex].members[_mem]._cards[index]._content;
     
                 currentRooms[_roomindex].played_cards.push(card);
