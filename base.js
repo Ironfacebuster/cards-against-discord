@@ -471,19 +471,19 @@ async function submit_card (_author, _message, _args) {
                 return;
             }
 
-            if(_args[0] > 0 || _args[0] < currentRooms[_roomindex].submissions.length) {
+            if(_args[0] > 0 || _args[0] < currentRooms[_roomindex].played_cards.length) {
                 var czarsubmit = create_submission();
     
                 czarsubmit._submitter = _author.id.toString();
-                czarsubmit._content = currentRooms[_roomindex].submissions[Number(_args[0])-1];
+                czarsubmit._content = currentRooms[_roomindex].played_cards[Number(_args[0])-1];
     
                 currentRooms[_roomindex].czar_choice = czarsubmit;
             } else {
                 _message.reply("That isn't a card.");
             }
         }
-        if(_author.id.toString() != currentRooms[_roomindex].czar.toString() && currentRooms[_roomindex].stage == 2 || currentRooms[_roomindex].submissions == null) {
-            if(currentRooms[_roomindex].submissions && currentRooms[_roomindex].submissions.find(_card => _card._submitter == _author.id.toString())) {
+        if(_author.id.toString() != currentRooms[_roomindex].czar.toString() && currentRooms[_roomindex].stage == 2 || currentRooms[_roomindex].played_cards == null) {
+            if(currentRooms[_roomindex].played_cards && currentRooms[_roomindex].played_cards.find(_card => _card._submitter == _author.id.toString())) {
                 message.reply("You've already submitted a card.");
                 return;
             }
@@ -493,7 +493,7 @@ async function submit_card (_author, _message, _args) {
                 card._submitter = _author.id.toString();
                 card._content = currentRooms[_roomindex].members[_mem]._cards[Number(_args[0]) - 1];
     
-                currentRooms[_roomindex].submissions.push(card);
+                currentRooms[_roomindex].played_cards.push(card);
             } else {
                 _message.reply("That isn't a card.");
             }
