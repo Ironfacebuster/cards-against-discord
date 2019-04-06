@@ -481,8 +481,7 @@ async function submit_card (_author, _message, _args) {
             } else {
                 _message.reply("That isn't a card.");
             }
-        }
-        if(_author.id.toString() != currentRooms[_roomindex].czar.toString() && currentRooms[_roomindex].stage == 2 || currentRooms[_roomindex].played_cards == null) {
+        } else if(_author.id.toString() != currentRooms[_roomindex].czar.toString() && currentRooms[_roomindex].stage == 2 || currentRooms[_roomindex].played_cards == null) {
             if(currentRooms[_roomindex].played_cards && currentRooms[_roomindex].played_cards.find(_card => _card._submitter == _author.id.toString())) {
                 _message.reply("You've already submitted a card.");
                 return;
@@ -494,10 +493,11 @@ async function submit_card (_author, _message, _args) {
                 card._content = currentRooms[_roomindex].members[_mem]._cards[Number(_args[0]) - 1]._content;
     
                 currentRooms[_roomindex].played_cards.push(card);
+                _message.reply("Your card has been submitted.");
             } else {
                 _message.reply("That isn't a card.");
             }
-        } else if(currentRooms[_roomindex].stage != 2){
+        } else if(currentRooms[_roomindex].stage != 2 && _author.id.toString() != currentRooms[_roomindex].czar.toString()){
             _message.reply("It's not your turn to submit a card.")
         }
     }
@@ -572,7 +572,7 @@ async function logic () {
                         });
                 }
 
-                currentRooms[_in].stage == 5;
+                currentRooms[_in].stage = 5;
             }
         }
     }
