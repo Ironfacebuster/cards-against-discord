@@ -484,7 +484,7 @@ async function submit_card (_author, _message, _args) {
         }
         if(_author.id.toString() != currentRooms[_roomindex].czar.toString() && currentRooms[_roomindex].stage == 2 || currentRooms[_roomindex].played_cards == null) {
             if(currentRooms[_roomindex].played_cards && currentRooms[_roomindex].played_cards.find(_card => _card._submitter == _author.id.toString())) {
-                message.reply("You've already submitted a card.");
+                _message.reply("You've already submitted a card.");
                 return;
             }
             if(_args[0] > 0 || _args[0] < currentRooms[_roomindex].members[_mem]._cards.length) {
@@ -552,7 +552,7 @@ async function logic () {
             var submissions = "";
 
             for(var _c = 0; _c < currentRooms[_in].played_cards.length; _c++){
-                submissions = submissions + `${c+1}. ${currentRooms[_in].played_cards[_c]._content}\r\n`;
+                submissions = submissions + `${_c+1}. ${currentRooms[_in].played_cards[_c]._content}\r\n`;
             }
 
             for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
