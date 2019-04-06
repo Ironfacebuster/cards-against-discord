@@ -477,10 +477,13 @@ async function submit_card (_author, _message, _args) {
     
                 const index = _args[0] - 1;
 
-                czarsubmit._submitter = _author.id.toString();
+                czarsubmit._submitter = currentRooms[_roomindex].played_cards[index]._submitter;
                 czarsubmit._content = currentRooms[_roomindex].played_cards[index]._content;
     
+                console.log(currentRooms[_roomindex].czar_choice);
+
                 currentRooms[_roomindex].czar_choice = czarsubmit;
+                console.log(currentRooms[_roomindex].czar_choice);
             } else {
                 _message.reply("That isn't a card.");
             }
