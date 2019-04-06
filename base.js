@@ -465,6 +465,7 @@ async function submit_card (_author, _message, _args) {
     if(_mem == -1) {
         _message.reply("You're not currently in a game.");
     } else {
+        console.log("ARG: " + args);
         if(_author.id.toString() == currentRooms[_roomindex].czar.toString()) {
             if(currentRooms[_roomindex].stage != 4) {
                 _message.reply("You have to wait for everyone to submit their cards.");
@@ -569,7 +570,7 @@ async function logic () {
 
             currentRooms[_in].stage = 4;
         } else if (currentRooms[_in].stage == 4){
-            console.log(JSON.stringify(currentRooms[_in].czar_choice));
+            //console.log(JSON.stringify(currentRooms[_in].czar_choice));
             if(currentRooms[_in].czar_choice){
                 for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
                     var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
