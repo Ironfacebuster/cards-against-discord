@@ -490,16 +490,21 @@ async function submit_card (_author, _message, _args) {
                 return;
             }
             if(_args[0] > 0 || _args[0] < currentRooms[_roomindex].members[_mem]._cards.length) {
-                const index = _args[0] - 1;
+                const _c = _args[0] - 1;
 
-                var card = create_submission();
+                var c1 = create_submission();
     
-                card._submitter = _author.id.toString();
+                c1._submitter = _author.id.toString();
                 console.log(_args[0] - 1)
                 console.log(_mem);
-                card._content = currentRooms[_roomindex].members[_mem]._cards[index]._content;
+                //c1._content = currentRooms[_roomindex].members[_mem]._cards[index]._content;
+
+                console.log(currentRooms[_roomindex].members[_mem]);
+                console.log(currentRooms[_roomindex].members[_mem]._cards);
+
+                c1._content = currentRooms[_roomindex].members[_mem]._cards[_c].content;;
     
-                currentRooms[_roomindex].played_cards.push(card);
+                currentRooms[_roomindex].played_cards.push(c1);
                 
                 console.log(JSON.stringify(currentRooms[_roomindex].played_cards));
                 _message.reply("Your card has been submitted.");
