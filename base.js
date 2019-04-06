@@ -475,7 +475,7 @@ async function submit_card (_author, _message, _args) {
                 var czarsubmit = create_submission();
     
                 czarsubmit._submitter = _author.id.toString();
-                czarsubmit._content = currentRooms[_roomindex].played_cards[Number(_args[0])-1];
+                czarsubmit._content = currentRooms[_roomindex].played_cards[Number(_args[0])-1]._content;
     
                 currentRooms[_roomindex].czar_choice = czarsubmit;
             } else {
@@ -491,7 +491,7 @@ async function submit_card (_author, _message, _args) {
                 var card = create_submission();
     
                 card._submitter = _author.id.toString();
-                card._content = currentRooms[_roomindex].members[_mem]._cards[Number(_args[0]) - 1];
+                card._content = currentRooms[_roomindex].members[_mem]._cards[Number(_args[0]) - 1]._content;
     
                 currentRooms[_roomindex].played_cards.push(card);
             } else {
@@ -562,8 +562,8 @@ async function logic () {
                 });
             }
 
-            currentRooms[_in].stage == 4;
-        } else if (currentRooms[_in].stage==4){
+            currentRooms[_in].stage = 4;
+        } else if (currentRooms[_in].stage == 4){
             if(currentRooms[_in].czar_choice != null){
                 for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
                     var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
