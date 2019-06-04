@@ -582,7 +582,7 @@ async function logic () {
                 currentRooms[_in].stage = 3;
             }
         } else if (currentRooms[_in].stage == 3){
-            var submissions = "";
+            var submissions = "Here are the responses:\r\n";
 
             for(var _c = 0; _c < currentRooms[_in].played_cards.length; _c++){
                 //console.log(currentRooms[_in].played_cards[_c]);
