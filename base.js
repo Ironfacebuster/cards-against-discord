@@ -593,7 +593,7 @@ async function logic () {
         } else if (currentRooms[_in].stage == 4){
             console.log(currentRooms[_in].czar_choice);
             //console.log(JSON.stringify(currentRooms[_in].czar_choice));
-            if(typeof(currentRooms[_in].czar_choice) != 'undefined'){
+            if(currentRooms[_in].czar_choice.isEmpty() == false){
                 console.log(currentRooms[_in].czar_choice);
                 for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
                     var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
@@ -606,6 +606,14 @@ async function logic () {
             }
         }
     }
+}
+
+Object.prototype.isEmpty = function() {
+    for(var key in this) {
+        if(this.hasOwnProperty(key))
+            return false;
+    }
+    return true;
 }
 
 client.login(process.env.TOKEN);
