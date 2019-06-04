@@ -596,14 +596,16 @@ async function logic () {
             currentRooms[_in].stage = 4;
         } else if (currentRooms[_in].stage == 4){
             var choice = currentRooms[_in].czar_choice;
+
+            var _currentroom = currentRooms[_in];
             //console.log(JSON.stringify(currentRooms[_in].czar_choice));
             if(choice.isEmpty() == false){
                 //console.log(currentRooms[_in].czar_choice);
                 var _submitter = client.fetchUser(choice._submitter);
 
                 _submitter.then(function(_submit) {
-                    for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
-                        var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
+                    for(var _i = 0; _i < _currentroom.members.length; _i++){
+                        var _tempuser = client.fetchUser(_currentroom.members[_i]._id);
                         _tempuser.then(function(_user) {
                             _user.send(`Czar's choice: ${choice._content}\r\nsent by: ${_submit.username}`);
                         });
