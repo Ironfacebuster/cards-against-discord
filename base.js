@@ -599,7 +599,7 @@ async function logic () {
             //console.log(JSON.stringify(currentRooms[_in].czar_choice));
             if(choice.isEmpty() == false){
                 //console.log(currentRooms[_in].czar_choice);
-                var _submitter = clint.fetchUser(choice._submitter);
+                var _submitter = client.fetchUser(choice._submitter);
 
                 _submitter.then(function(_submit) {
                     for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
