@@ -481,13 +481,13 @@ async function submit_card (_author, _message, _args) {
                 czarsubmit._submitter = currentRooms[_roomindex].played_cards[index]._submitter;
                 czarsubmit._content = currentRooms[_roomindex].played_cards[index]._content;
                 
-                _message.reply("Generated submission: \r\n" + czarsubmit);
+                _message.reply("Generated submission: \r\n" + JSON.stringify(czarsubmit));
     
                 //console.log(currentRooms[_roomindex].czar_choice);
 
                 currentRooms[_roomindex].czar_choice = czarsubmit;
 
-                _message.reply("Room czar choice: \r\n" + currentRooms[_roomindex].czar_choice);
+                _message.reply("Room czar choice: \r\n" + JSON.stringify(currentRooms[_roomindex].czar_choice));
                 //console.log(currentRooms[_roomindex].czar_choice);
             } else {
                 _message.reply("That isn't a card.");
