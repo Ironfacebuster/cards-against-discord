@@ -633,13 +633,13 @@ async function logic () {
             if(next_czar > currentRooms[_in].members.length)
                 next_czar = 0;
 
+            console.log(`OLD CZAR: ${current_czar_index}\r\nNEW CZAR: ${next_czar}\r\nMEMBERS: ${currentRooms[_in].members}\r\nSTAGE: ${currentRooms[_in].stage}`);
+
             currentRooms[_in].czar = currentRooms[_in].members[next_czar]._id;
 
             currentRooms[_in].czar_choice = null;
 
             currentRooms[_in].played_cards = [];
-
-            console.log(`OLD CZAR: ${current_czar_index}\r\nNEW CZAR: ${next_czar}\r\nMEMBERS: ${currentRooms[_in].members}\r\nSTAGE: ${currentRooms[_in].stage}`);
 
             console.log(`FINAL CZAR: ${currentRooms[_in].czar}`);
 
