@@ -370,14 +370,16 @@ async function clean_up () {
 }
 
 async function start_room (_author, _message) {
-    var _mem;
+    var _mem = -1;
     var _roomindex;
 
-    for(var i = currentRooms.length - 1; i >= 0; i--){
-        var _tempmem = currentRooms[i].members.findIndex(_m => _m._id == _author.id);
-        if(_tempmem != -1) {
-            _mem = _tempmem;
-            _roomindex = i;
+    if(currentRooms.length>0) {
+        for(var i = currentRooms.length - 1; i >= 0; i--){
+            var _tempmem = currentRooms[i].members.findIndex(_m => _m._id == _author.id);
+            if(_tempmem != -1) {
+                _mem = _tempmem;
+                _roomindex = i;
+            }
         }
     }
 
@@ -390,8 +392,8 @@ async function start_room (_author, _message) {
         }
 
         //change to 3 dear god please, the 2 is only for testing!!!!!
-        if(currentRooms[_roomindex].members.length < 2) {
-            _message.reply("You need a minimum of 3 players to start.");
+        if(currentRooms[_roomindex].members.length < 3) {
+            _message.reply("You know what they always say, less than 3 is boring, more than 3 is a party!\r\nIn other words, you need at least 3 people to start.");
             return;
         }
 
@@ -633,7 +635,7 @@ async function logic () {
             if(next_czar > currentRooms[_in].members.length - 1)
                 next_czar = 0;
 
-            console.log(`OLD CZAR: ${current_czar_index}\r\nNEW CZAR: ${next_czar}\r\nMEMBERS: ${currentRooms[_in].members}\r\nSTAGE: ${currentRooms[_in].stage}`);
+            //console.log(`OLD CZAR: ${current_czar_index}\r\nNEW CZAR: ${next_czar}\r\nMEMBERS: ${currentRooms[_in].members}\r\nSTAGE: ${currentRooms[_in].stage}`);
 
             currentRooms[_in].czar = currentRooms[_in].members[next_czar]._id;
 
@@ -641,7 +643,7 @@ async function logic () {
 
             currentRooms[_in].played_cards = [];
 
-            console.log(`FINAL CZAR: ${currentRooms[_in].czar}`);
+            //console.log(`FINAL CZAR: ${currentRooms[_in].czar}`);
 
             currentRooms[_in].stage = 0;
         }
