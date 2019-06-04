@@ -503,18 +503,18 @@ async function submit_card (_author, _message, _args) {
                 var c1 = create_submission();
     
                 c1._submitter = _author.id.toString();
-                console.log(_args[0] - 1)
-                console.log(_mem);
+                //console.log(_args[0] - 1)
+                //console.log(_mem);
                 //c1._content = currentRooms[_roomindex].members[_mem]._cards[index]._content;
 
-                console.log(currentRooms[_roomindex].members[_mem]);
-                console.log(currentRooms[_roomindex].members[_mem]._cards);
+                //console.log(currentRooms[_roomindex].members[_mem]);
+                //console.log(currentRooms[_roomindex].members[_mem]._cards);
 
                 c1._content = currentRooms[_roomindex].members[_mem]._cards[_c].content;;
     
                 currentRooms[_roomindex].played_cards.push(c1);
                 
-                console.log(JSON.stringify(currentRooms[_roomindex].played_cards));
+                //console.log(JSON.stringify(currentRooms[_roomindex].played_cards));
                 _message.reply("Your card has been submitted.");
             } else {
                 _message.reply("That isn't a card.");
@@ -581,8 +581,8 @@ async function logic () {
             var submissions = "";
 
             for(var _c = 0; _c < currentRooms[_in].played_cards.length; _c++){
-                console.log(currentRooms[_in].played_cards[_c]);
-                console.log(currentRooms[_in].played_cards[_c]._content);
+                //console.log(currentRooms[_in].played_cards[_c]);
+                //console.log(currentRooms[_in].played_cards[_c]._content);
                 submissions = submissions + `${_c+1}. ` + currentRooms[_in].played_cards[_c]._content + "\r\n";
             }
 
