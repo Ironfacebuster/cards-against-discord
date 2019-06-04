@@ -510,12 +510,14 @@ async function submit_card (_author, _message, _args) {
                 //console.log(currentRooms[_roomindex].members[_mem]);
                 //console.log(currentRooms[_roomindex].members[_mem]._cards);
 
-                c1._content = currentRooms[_roomindex].members[_mem]._cards[_c].content;;
+                c1._content = currentRooms[_roomindex].members[_mem]._cards[_c].content;
     
                 currentRooms[_roomindex].played_cards.push(c1);
                 
                 //console.log(JSON.stringify(currentRooms[_roomindex].played_cards));
                 _message.reply("Your card has been submitted.");
+
+                currentRooms[_roomindex].members[_mem]._cards[_c] = whiteCards._cards[Math.floor(Math.random() * whiteCards._cards.length)];
             } else {
                 _message.reply("That isn't a card.");
             }
@@ -617,6 +619,8 @@ async function logic () {
                     currentRooms[_in].stage = 5;
                 }
             }
+        } else if(currentRooms[_in].stage ==5){
+            currentRooms[_n].czar_choice = null;
         }
     }
 }
