@@ -595,14 +595,14 @@ async function logic () {
 
             currentRooms[_in].stage = 4;
         } else if (currentRooms[_in].stage == 4){
-            console.log(currentRooms[_in].czar_choice);
+            var choice = currentRooms[_in].czar_choice;
             //console.log(JSON.stringify(currentRooms[_in].czar_choice));
-            if(currentRooms[_in].czar_choice.isEmpty() == false){
+            if(choice.isEmpty() == false){
                 console.log(currentRooms[_in].czar_choice);
                 for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
                     var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
                     _tempuser.then(function(_user) {
-                        _user.send(`Czar's choice: ${currentRooms[_in].czar_choice._content}`);
+                        _user.send(`Czar's choice: ${choice._content}`);
                     });
                 }
 
