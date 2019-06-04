@@ -599,6 +599,9 @@ async function logic () {
 
             var _currentroom = currentRooms[_in];
             //console.log(JSON.stringify(currentRooms[_in].czar_choice));
+            if(choice == null)
+                return;
+
             if(choice.isEmpty() == false){
                 //console.log(currentRooms[_in].czar_choice);
                 var _submitter = client.fetchUser(choice._submitter);
@@ -607,7 +610,7 @@ async function logic () {
                     for(var _i = 0; _i < _currentroom.members.length; _i++){
                         var _tempuser = client.fetchUser(_currentroom.members[_i]._id);
                         _tempuser.then(function(_user) {
-                            _user.send(`Czar's choice: ` + "`" + choice._content + "`" + `\r\nsent by: ${_submit.username}`);
+                            _user.send(`Czar's choice: ` + "`" + choice._content + "`" + `\r\nSent by: ${_submit.username}`);
                         });
                     }
                 })
