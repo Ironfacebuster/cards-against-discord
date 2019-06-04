@@ -389,8 +389,9 @@ async function start_room (_author, _message) {
             return;
         }
 
+        //change to 3 dear god please, the 2 is only for testing!!!!!
         if(currentRooms[_roomindex].members.length < 2) {
-            _message.reply("You need a minimum of 4 players to start.");
+            _message.reply("You need a minimum of 3 players to start.");
             return;
         }
 
@@ -465,7 +466,7 @@ async function submit_card (_author, _message, _args) {
     if(_mem == -1) {
         _message.reply("You're not currently in a game.");
     } else {
-        console.log("ARG: " + _args);
+        //console.log("ARG: " + _args);
         if(_author.id.toString() == currentRooms[_roomindex].czar.toString()) {
             if(currentRooms[_roomindex].stage != 4) {
                 _message.reply("You have to wait for everyone to submit their cards.");
@@ -555,9 +556,16 @@ async function logic () {
         } else if(currentRooms[_in].stage == 1) {
             for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
                 var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
-                _tempuser.then(function(_user) {
+
+                if(currentRooms[_in].members[_i]._id != currentRooms[_in].czar.toString()) {
+                    _tempuser.then(function(_user) {
                         _user.send(`Pick your response card!`);
-                });
+                    });
+                } else {
+                    _tempuser.then(function(_user) {
+                        _user.send(`You are the Czar, you'll have to wait for everyone to submit their cards.`);
+                    });
+                }
             }
 
             currentRooms[_in].stage = 2;
@@ -589,9 +597,9 @@ async function logic () {
                 console.log(currentRooms[_in].czar_choice);
                 for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
                     var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
-                        _tempuser.then(function(_user) {
-                            _user.send(`Czar's choice: ${currentRooms[_in].czar_choice._content}`);
-                        });
+                    _tempuser.then(function(_user) {
+                        _user.send(`Czar's choice: ${currentRooms[_in].czar_choice._content}`);
+                    });
                 }
 
                 currentRooms[_in].stage = 5;
