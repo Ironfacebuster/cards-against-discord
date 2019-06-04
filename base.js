@@ -632,6 +632,10 @@ async function logic () {
 
             currentRooms[_in].czar_choice = null;
 
+            currentRooms[_in].played_cards = [];
+
+            console.log(`OLD CZAR: ${current_czar_index}\r\nNEW CZAR: ${next_czar}\r\nMEMBERS: ${currentRooms[_in].members}\r\nSTAGE: ${currentRooms[_in].stage}`);
+
             currentRooms[_in].stage = 0;
         }
     }
