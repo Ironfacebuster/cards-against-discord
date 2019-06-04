@@ -630,7 +630,7 @@ async function logic () {
 
             currentRooms[_in].czar = currentRooms[_in].members[next_czar];
 
-            currentRooms[_n].czar_choice = null;
+            currentRooms[_in].czar_choice = null;
 
             currentRooms[_in].stage = 0;
         }
