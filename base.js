@@ -630,7 +630,7 @@ async function logic () {
 
             var next_czar = current_czar_index + 1;
 
-            if(next_czar > currentRooms[_in].members.length)
+            if(next_czar > currentRooms[_in].members.length - 1)
                 next_czar = 0;
 
             console.log(`OLD CZAR: ${current_czar_index}\r\nNEW CZAR: ${next_czar}\r\nMEMBERS: ${currentRooms[_in].members}\r\nSTAGE: ${currentRooms[_in].stage}`);
