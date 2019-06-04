@@ -554,7 +554,7 @@ async function logic () {
             for(var _i = 0; _i < currentRooms[_in].members.length; _i++){
                 var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
                     _tempuser.then(function(_user) {
-                        _user.send(`Your prompt is:\r\n` + "`" + blackCard.toString() + "`" );
+                        _user.send(`The prompt is:\r\n` + "`" + blackCard.toString() + "`" );
                     });
             }
 
@@ -620,7 +620,19 @@ async function logic () {
                 }
             }
         } else if(currentRooms[_in].stage ==5){
+
+            var current_czar_index=currentRooms[_in].members.indexOf(currentRooms[_in].czar);
+
+            var next_czar = current_czar_index + 1;
+
+            if(next_czar > currentRooms[_in].members.length)
+                next_czar = 0;
+
+            currentRooms[_in].czar = currentRooms[_in].members[next_czar];
+
             currentRooms[_n].czar_choice = null;
+
+            currentRooms[_in].stage = 0;
         }
     }
 }
