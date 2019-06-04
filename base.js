@@ -621,7 +621,12 @@ async function logic () {
             }
         } else if(currentRooms[_in].stage ==5){
 
-            var current_czar_index=currentRooms[_in].members.indexOf(currentRooms[_in].czar);
+            var current_czar_index = 0;
+
+            for(var i = 0; i < currentRooms[_in].members.length; i++){
+                if(currentRooms[_in].members[i]._id == currentRooms[_in].czar)
+                    current_czar_index = i;
+            }
 
             var next_czar = current_czar_index + 1;
 
