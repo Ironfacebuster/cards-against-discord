@@ -61,7 +61,7 @@ client.on('message', async message => {
 
     if (mess.indexOf(prefix) || message.author.bot) {
         if(message.channel.type=="dm"){
-
+            room_chat(message.content.trim().replace(prefix, ''), message);
         } else
             return;
     }
