@@ -730,7 +730,7 @@ async function logic() {
             for (var _i = 0; _i < currentRooms[_in].members.length; _i++) {
                 var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
 
-                const czar = currentRooms[_in].members[_i].czar;
+                const czar = currentRooms[_in].czar;
 
                 _tempuser.then(function (_user) {
                     if (_user.id != czar) {
