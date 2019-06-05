@@ -638,6 +638,17 @@ async function logic() {
             currentRooms[_in].host = currentRooms[_in].members[0]._id;
         }
 
+        if(currentRooms[_in].members.length < 3){
+            for (var _i = 0; _i < currentRooms[_in].members.length; _i++) {
+                var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
+                _tempuser.then(function (_user) {
+                    _user.send(`Oops, since there are less than 3 people in this room, you can't continue playing!`);
+                });
+            }
+            
+            currentRooms[_in].stage = -1;
+        }
+
         if (currentRooms[_in].stage == -1) {
             var _tempuser = client.fetchUser(currentRooms[_in].host.toString());
             _tempuser.then(function (_user) {
