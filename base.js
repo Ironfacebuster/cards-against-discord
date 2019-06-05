@@ -523,13 +523,15 @@ async function room_stats(_author, _message) {
             _tempuser.then(function (_user) {
                 //cur_name = _user.username;
 
-                user = _user;
-
                 console.log(_user.username);
-            });
 
-            scores = scores + `\r\n${user.username}: ${member._points} points.`;
+                scores = scores + `\r\n${_user.username}: ${member._points} points.`;
+
+                console.log(`ADDED SCORE: ${scores}`);
+            });
         }
+
+        console.log(`SENT SCORES: ${scores}`);
 
         _message.reply(scores);
     }
