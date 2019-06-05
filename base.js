@@ -119,7 +119,7 @@ async function room_chat (_args, _m) {
     }
 
     if (_roomindex != -1) {
-        var sentence = _args.join(' ');
+        var sentence = _args;
 
         for (var g = 0; g < currentRooms[_roomindex].members.length; g++) {
             if (currentRooms[_roomindex].members[g]._id != _m.author.id) {
