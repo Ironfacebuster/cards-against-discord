@@ -524,7 +524,7 @@ async function room_stats(_author, _message) {
             scores = scores + `\r\n${cur_name}: ${currentRooms[_roomindex].members[_i]._points} points.`;
         }
 
-        _message.replace(scores);
+        _message.reply(scores);
     }
 }
 
