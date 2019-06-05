@@ -129,7 +129,7 @@ async function room_chat(_args, _m) {
             if (currentRooms[_roomindex].members[g]._id != _m.author.id) {
                 var _tempuser = client.fetchUser(currentRooms[_roomindex].members[g]._id);
                 _tempuser.then(function (_user) {
-                    _user.send(`${_m.author.username} says: ${sentence}`);
+                    _user.send(`**${_m.author.username}**: ${sentence}`);
                 });
             }
         }
