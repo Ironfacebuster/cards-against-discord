@@ -783,7 +783,6 @@ async function logic() {
                         for (var _i = 0; _i < _currentroom.members.length; _i++) {
 
                             if (_currentroom.members[_i]._id == _submit.id) {
-                                console.log("distributed points");
                                 _currentroom.members[_i]._points = _currentroom.members[_i]._points + 1;
                             }
 
