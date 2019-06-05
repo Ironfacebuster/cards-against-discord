@@ -521,11 +521,13 @@ async function room_stats(_author, _message) {
 
             const cur_index = _i;
 
+            const room_index = _roomindex;
+
             _tempuser.then(function (_user) {
 
-                scores = scores + `\r\n${_user.username}: ${member._points}`;
+                scores = scores + `\r\n${_user.username}: ${currentRooms[room_index].members[cur_index]._points}`;
 
-                if (cur_index >= currentRooms[_roomindex].members.length - 1) {
+                if (cur_index >= currentRooms[room_index].members.length - 1) {
                     //console.log(`i = ${_i}\r\nlength = ${currentRooms[_roomindex].members.length}\r\n-1=${currentRooms[_roomindex].members.length-1}`);
                     _message.reply(scores);
                 }
