@@ -1,5 +1,6 @@
 const discord = require("discord.js");
 const fs = require('fs');
+var shuffle = require('shuffle-array');
 
 const prefix = "cad ";
 
@@ -749,6 +750,7 @@ async function logic() {
             currentRooms[_in].stage = 2;
         } else if (currentRooms[_in].stage == 2) {
             if (currentRooms[_in].played_cards.length >= currentRooms[_in].members.length - 1) {
+                shuffle(currentRooms[_in].played_cards);
                 currentRooms[_in].stage = 3;
             }
         } else if (currentRooms[_in].stage == 3) {
