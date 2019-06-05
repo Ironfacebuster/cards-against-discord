@@ -597,9 +597,12 @@ async function logic() {
 
         if(czar_left){
             var _tempczarfind = client.fetchUser(currentRooms[_in].members[0]._id);
+
+            var index = _in;
+
             _tempczarfind.then(function(_newczar){
-                for (var _i = 0; _i < currentRooms[_in].members.length; _i++) {
-                    var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
+                for (var _i = 0; _i < currentRooms[index].members.length; _i++) {
+                    var _tempuser = client.fetchUser(currentRooms[index].members[_i]._id);
                     _tempuser.then(function (_user) {
                         _user.send(`The current Czar has left.\r\nThe new Czar is ${_newczar.username}.`);
                     });
@@ -611,7 +614,7 @@ async function logic() {
                 currentRooms[_in].czar_choice = null;
 
                 currentRooms[_in].played_cards = [];
-                
+
                 currentRooms[_in].state = 0;
             }
 
