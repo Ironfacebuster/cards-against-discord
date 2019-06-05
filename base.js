@@ -523,7 +523,7 @@ async function room_stats(_author, _message) {
 
             _tempuser.then(function (_user) {
 
-                scores = scores + `\r\n${_user.username}: ${member._points} points.`;
+                scores = scores + `\r\n${_user.username}: ${member._points}`;
 
                 if (cur_index >= currentRooms[_roomindex].members.length - 1) {
                     //console.log(`i = ${_i}\r\nlength = ${currentRooms[_roomindex].members.length}\r\n-1=${currentRooms[_roomindex].members.length-1}`);
@@ -781,6 +781,7 @@ async function logic() {
                         for (var _i = 0; _i < _currentroom.members.length; _i++) {
 
                             if (_currentroom.members[_i]._id == _submit.id) {
+                                console.log("distributed points");
                                 _currentroom.members[_i]._points = _currentroom.members[_i]._points + 1;
                             }
 
