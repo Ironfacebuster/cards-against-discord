@@ -639,7 +639,7 @@ async function logic() {
             currentRooms[_in].czar = currentRooms[_in].members[0]._id;
         }
 
-        if (host_left) {
+        if (host_left && currentRooms[_in].members.length>0) {
             var new_host = client.fetchUser(currentRooms[_in].members[0]._id);
             new_host.then(function (_host) {
                 _host.send("The host has left, that makes YOU the new host!");
