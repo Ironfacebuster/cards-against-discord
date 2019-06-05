@@ -530,7 +530,7 @@ async function room_stats(_author, _message) {
                 console.log(`ADDED SCORE: ${scores}`);
             });
 
-            if(i>=currentRooms[_roomindex].members.length-1)
+            if(_i>=currentRooms[_roomindex].members.length-1)
                 _message.reply(scores);
         }
 
