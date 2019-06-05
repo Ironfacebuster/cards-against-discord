@@ -525,8 +525,6 @@ async function room_stats(_author, _message) {
 
                 scores = scores + `\r\n${_user.username}: ${member._points} points.`;
 
-                console.log(`Current Index = ${cur_index}`);
-
                 if (cur_index >= currentRooms[_roomindex].members.length - 1) {
                     //console.log(`i = ${_i}\r\nlength = ${currentRooms[_roomindex].members.length}\r\n-1=${currentRooms[_roomindex].members.length-1}`);
                     _message.reply(scores);
