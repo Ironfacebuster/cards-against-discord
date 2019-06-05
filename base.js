@@ -81,7 +81,7 @@ client.on('message', async message => {
         // else if (command == "getrooms")
         // message.reply(JSON.stringify(currentRooms));
         else if (command == "cards")
-            cards(message.author, message);
+            cards(message.author.id, message);
         else if (command == "start")
             start_room(message.author, message);
         else if (command == "submit")
@@ -280,12 +280,12 @@ async function join_room(_roomcode, _author, _message) {
     }
 }
 
-async function cards(_author, _message) {
+async function cards(id, _message) {
     var _mem = -1;
     var _roomindex;
 
     for (var i = currentRooms.length - 1; i >= 0; i--) {
-        var _tempmem = currentRooms[i].members.findIndex(_m => _m._id == _author.id);
+        var _tempmem = currentRooms[i].members.findIndex(_m => _m._id == id);
         if (_tempmem != -1) {
             _mem = _tempmem;
             //console.log("FOUND USER? " + currentRooms[i].members.findIndex(_m => _m._id == _author.id) + "\r\nSERVER: " + currentRooms[i]);
@@ -299,9 +299,19 @@ async function cards(_author, _message) {
             card = card + `${_c+1}. ` + currentRooms[_roomindex].members[_mem]._cards[_c].content + "\r\n";
         }
 
-        _message.reply(card);
+        temp_user = client.fetchUser(id);
+
+        temp_user.then(function(user){
+            user.send(card);
+        });
+
+        //_message.reply(card);
     } else {
-        _message.reply("You're not in a room!");
+        temp_user = client.fetchUser(id);
+
+        temp_user.then(function(user){
+            user.send("You're not in a room!");
+        });
     }
 }
 
@@ -717,7 +727,8 @@ async function logic() {
             for (var _i = 0; _i < currentRooms[_in].members.length; _i++) {
                 var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
                 _tempuser.then(function (_user) {
-                    _user.send(`The prompt is:\r\n` + "`" + blackCard.toString() + "`");
+                    _user.send(`The prompt is:\r\n` + "`" + blackCard.toString() + "`\r\nHere are your cards:");
+                    cards(_user.id);
                 });
             }
 
@@ -754,6 +765,8 @@ async function logic() {
                 currentRooms[_in].stage = 3;
             }
         } else if (currentRooms[_in].stage == 3) {
+            //come back
+
             var submissions = "Here are the responses:\r\n";
 
             for (var _c = 0; _c < currentRooms[_in].played_cards.length; _c++) {
