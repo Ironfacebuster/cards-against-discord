@@ -596,7 +596,7 @@ async function logic() {
                 host_left = false;
         }
 
-        if (czar_left) {
+        if (czar_left && currentRooms[_in].members.length>0) {
             var _tempczarfind = client.fetchUser(currentRooms[_in].members[0]._id);
 
             var index = _in;
