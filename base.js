@@ -518,13 +518,16 @@ async function room_stats(_author, _message) {
             var member = currentRooms[_roomindex].members[_i];
 
             var _tempuser = client.fetchUser(member._id);
+
+            const cur_index = _i;
+
             _tempuser.then(function (_user) {
 
                 scores = scores + `\r\n${_user.username}: ${member._points} points.`;
 
-                console.log(`i = ${_i}`);
+                console.log(`Current Index = ${cur_index}`);
 
-                if (_i >= currentRooms[_roomindex].members.length - 1) {
+                if (cur_index >= currentRooms[_roomindex].members.length - 1) {
                     //console.log(`i = ${_i}\r\nlength = ${currentRooms[_roomindex].members.length}\r\n-1=${currentRooms[_roomindex].members.length-1}`);
                     _message.reply(scores);
                 }
