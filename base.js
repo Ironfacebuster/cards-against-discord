@@ -521,17 +521,14 @@ async function room_stats(_author, _message) {
 
             var _tempuser = client.fetchUser(member._id);
             _tempuser.then(function (_user) {
-                //cur_name = _user.username;
-
-                console.log(_user.username);
 
                 scores = scores + `\r\n${_user.username}: ${member._points} points.`;
 
-                console.log(`ADDED SCORE: ${scores}`);
+                if (_i >= currentRooms[_roomindex].members.length - 1)
+                    _message.reply(scores);
             });
 
-            if(_i>=currentRooms[_roomindex].members.length-1)
-                _message.reply(scores);
+
         }
 
         //console.log(`SENT SCORES: ${scores}`);
