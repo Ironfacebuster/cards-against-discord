@@ -601,7 +601,7 @@ async function logic() {
 
             var index = _in;
 
-            if (currentRooms[_in].stage >= 0) {
+            if (currentRooms[_in].stage >= 0 && !host_left) {
                 _tempczarfind.then(function (_newczar) {
                     for (var _i = 0; _i < currentRooms[index].members.length; _i++) {
                         var _tempuser = client.fetchUser(currentRooms[index].members[_i]._id);
