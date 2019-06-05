@@ -85,6 +85,8 @@ client.on('message', async message => {
             start_room(message.author, message);
         else if (command == "submit")
             submit_card(message.author, message, args);
+        else if (command == "scores")
+            room_stats(message.author, message);
 
 
     } else {
@@ -496,6 +498,36 @@ function create_submission() {
     };
 }
 
+async function room_stats(_author, _message) {
+    var _roomindex = -1;
+
+    for (var i = currentRooms.length - 1; i >= 0; i--) {
+        var _tempmem = currentRooms[i].members.findIndex(_m => _m._id == _author.id);
+        if (_tempmem != -1) {
+            _roomindex = i;
+        }
+    }
+
+    if (_roomindex == -1) {
+        _message.reply("You're not currently in a room.");
+    } else {
+        var scores = "Scores:";
+
+        for (var i = 0; i < currentRooms[_roomindex].members.length; i++) {
+            var cur_name = "";
+
+            var _tempuser = client.fetchUser(currentRooms[index].members[_i]._id);
+            _tempuser.then(function (_user) {
+                cur_name = _user.username;
+            });
+
+            scores = scores + `\r\n${cur_name}: ${currentRooms[index].members[_i]._points} points.`;
+        }
+
+        _message.replace(scores);
+    }
+}
+
 async function submit_card(_author, _message, _args) {
     var _mem;
     var _roomindex;
@@ -596,7 +628,7 @@ async function logic() {
                 host_left = false;
         }
 
-        if (czar_left && currentRooms[_in].members.length>0) {
+        if (czar_left && currentRooms[_in].members.length > 0) {
             var _tempczarfind = client.fetchUser(currentRooms[_in].members[0]._id);
 
             var index = _in;
@@ -639,7 +671,7 @@ async function logic() {
             currentRooms[_in].czar = currentRooms[_in].members[0]._id;
         }
 
-        if (host_left && currentRooms[_in].members.length>0) {
+        if (host_left && currentRooms[_in].members.length > 0) {
             var new_host = client.fetchUser(currentRooms[_in].members[0]._id);
             new_host.then(function (_host) {
                 _host.send("The host has left, that makes YOU the new host!");
