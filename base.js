@@ -516,12 +516,12 @@ async function room_stats(_author, _message) {
         for (var i = 0; i < currentRooms[_roomindex].members.length; i++) {
             var cur_name = "";
 
-            var _tempuser = client.fetchUser(currentRooms[index].members[_i]._id);
+            var _tempuser = client.fetchUser(currentRooms[_roomindex].members[_i]._id);
             _tempuser.then(function (_user) {
                 cur_name = _user.username;
             });
 
-            scores = scores + `\r\n${cur_name}: ${currentRooms[index].members[_i]._points} points.`;
+            scores = scores + `\r\n${cur_name}: ${currentRooms[_roomindex].members[_i]._points} points.`;
         }
 
         _message.replace(scores);
