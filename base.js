@@ -583,6 +583,50 @@ async function logic() {
 
     for (var _in = 0; _in < currentRooms.length; _in++) {
 
+        //Check if the czar left
+
+        var czar_left = true;
+        var host_left = true;
+
+        for(var _mem = 0; _mem < currentRooms[_in].members.length; _mem++){
+            if(currentRooms[_in].members[_mem]._id == currentRooms[_in].czar)
+                czar_left = false;
+            if(currentRooms[_in].members[_mem]._id == currentRooms[_in].host)
+                host_left = false;
+        }
+
+        if(czar_left){
+            var _tempczarfind = client.fetchUser(currentRooms[_in].members[0]._id);
+            _tempczarfind.then(function(_newczar){
+                for (var _i = 0; _i < currentRooms[_in].members.length; _i++) {
+                    var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
+                    _tempuser.then(function (_user) {
+                        _user.send(`The current Czar has left.\r\nThe new Czar is ${_newczar.username}.`);
+                    });
+                }
+            });
+
+            if (currentRooms[_in].state != 0) {
+
+                currentRooms[_in].czar_choice = null;
+
+                currentRooms[_in].played_cards = [];
+                
+                currentRooms[_in].state = 0;
+            }
+
+            currentRooms[_in].czar = currentRooms[_in].members[0]._id;
+        }
+
+        if(host_left){
+            var new_host = client.fetchUser(currentRooms[_in].members[0]._id);
+            new_host.then(function(_host){
+                _host.send("The host has left, that makes YOU the new host!\r\nUse `cad start` to start the game, if it isn't started already.");
+            });
+
+            currentRooms[_in].host = currentRooms[_in].members[0]._id;
+        }
+
         if (currentRooms[_in].stage == -1) {
             var _tempuser = client.fetchUser(currentRooms[_in].host.toString());
             _tempuser.then(function (_user) {
