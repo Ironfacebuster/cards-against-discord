@@ -57,8 +57,14 @@ client.on('guildCreate', () => {
 client.on('message', async message => {
     const mess = message.content.toLowerCase();
 
-    if (mess.indexOf(prefix) || message.author.bot)
-        return;
+    //if(message.channel.type == "dm" && !mess.indexOf(prefix) && !message.author.bot)
+
+    if (mess.indexOf(prefix) || message.author.bot) {
+        if(message.channel.type=="dm"){
+
+        } else
+            return;
+    }
 
     var command = mess.trim().replace(prefix, '').split(' ')[0];
 
@@ -71,29 +77,59 @@ client.on('message', async message => {
             join_room(args.join(''), message.author, message);
         else if (command == "leave")
             leave_room(message.author, message);
-        else if (command == "getrooms")
-            message.reply(JSON.stringify(currentRooms));
+       // else if (command == "getrooms")
+           // message.reply(JSON.stringify(currentRooms));
         else if (command == "cards")
             cards(message.author, message);
         else if (command == "start")
             start_room(message.author, message);
         else if (command == "submit")
             submit_card(message.author, message, args);
+
+        
     } else {
-        if (command == "randomcard") {
+       /* if (command == "randomcard") {
             randomCard(args[0], message);
-        } else if (command == "stats")
+        } else */if (command == "stats")
             stats(message);
         else if (command == "credits")
             credits(message);
     }
 });
 
+/*
 async function randomCard(_c, _m) {
     if (_c == "black")
         _m.channel.send("`" + blackCards._cards[Math.floor(Math.random() * blackCards._cards.length)].content + "`");
     else if (_c == "white")
         _m.channel.send(whiteCards._cards[Math.floor(Math.random() * whiteCards._cards.length)].content)
+}
+*/
+
+async function room_chat (_args, _m) {
+    var _roomindex = -1;
+
+    _author = _m.author;
+
+    for (var i = currentRooms.length - 1; i >= 0; i--) {
+        var _tempmem = currentRooms[i].members.findIndex(_m => _m._id == _author.id);
+        if (_tempmem != -1) {
+            _roomindex = i;
+        }
+    }
+
+    if (_roomindex != -1) {
+        var sentence = _args.join(' ');
+
+        for (var g = 0; g < currentRooms[_roomindex].members.length; g++) {
+            if (currentRooms[_roomindex].members[g]._id != _m.author.id) {
+                var _tempuser = client.fetchUser(currentRooms[_roomindex].members[g]._id);
+                _tempuser.then(function (_user) {
+                    _user.send(`${_m.author.username} says: ${sentence}`);
+                });
+            }
+        }
+    }
 }
 
 async function stats(_m) {
