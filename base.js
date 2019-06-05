@@ -301,7 +301,7 @@ async function cards(id, _message) {
 
         temp_user = client.fetchUser(id);
 
-        temp_user.then(function(user){
+        temp_user.then(function (user) {
             user.send(card);
         });
 
@@ -309,7 +309,7 @@ async function cards(id, _message) {
     } else {
         temp_user = client.fetchUser(id);
 
-        temp_user.then(function(user){
+        temp_user.then(function (user) {
             user.send("You're not in a room!");
         });
     }
@@ -383,7 +383,7 @@ function create_room() {
         "idle": 0,
         "played_cards": [],
         "czar_choice": null,
-        "prompt":""
+        "prompt": ""
     };
 }
 
@@ -725,13 +725,20 @@ async function logic() {
         if (currentRooms[_in].stage == 0) {
             var blackCard = blackCards._cards[Math.floor(Math.random() * blackCards._cards.length)].content;
 
-            currentRooms[_in].prompt="`"+blackCard+"`";
+            currentRooms[_in].prompt = "`" + blackCard + "`";
 
             for (var _i = 0; _i < currentRooms[_in].members.length; _i++) {
                 var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
+
+                const id = currentRooms[_in].members[_i]._id;
+                const czar = currentRooms[_in].members[_i].czar;
+
                 _tempuser.then(function (_user) {
-                    _user.send(`The prompt is:\r\n` + "`" + blackCard.toString() + "`\r\nHere are your cards:");
-                    cards(_user.id);
+                    if (id != czar) {
+                        _user.send(`The prompt is:\r\n` + "`" + blackCard.toString() + "`\r\nHere are your cards:");
+                        cards(_user.id);
+                    } else
+                        _user.send(`The prompt is:\r\n` + "`" + blackCard.toString());
                 });
             }
 
@@ -772,7 +779,7 @@ async function logic() {
 
             var prompt = currentRooms[_in].prompt;
 
-            var submissions = "Here's the prompt:\r\n"+prompt+"\r\nHere are the responses:\r\n";
+            var submissions = "Here's the prompt:\r\n" + prompt + "\r\nHere are the responses:\r\n";
 
             for (var _c = 0; _c < currentRooms[_in].played_cards.length; _c++) {
                 //console.log(currentRooms[_in].played_cards[_c]);
