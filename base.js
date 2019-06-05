@@ -513,7 +513,7 @@ async function room_stats(_author, _message) {
     } else {
         var scores = "Scores:";
 
-        for (var i = 0; i < currentRooms[_roomindex].members.length; i++) {
+        for (var _i = 0; _i < currentRooms[_roomindex].members.length; _i++) {
             var cur_name = "";
 
             var _tempuser = client.fetchUser(currentRooms[_roomindex].members[_i]._id);
