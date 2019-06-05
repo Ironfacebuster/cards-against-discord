@@ -155,7 +155,7 @@ async function stats(_m) {
         embed: {
             "color": color,
             "footer": {
-                "text": "Cards Against Discord"
+                "text": "Cards Against Discord | This command is not complete, it shows randomly generated values."
             },
             "thumbnail": {
                 "url": author.displayAvatarURL.toString()
@@ -180,7 +180,7 @@ async function stats(_m) {
                 },
                 {
                     "name": "XP",
-                    "value": "0/sonnygay"
+                    "value": "0/0"
                 },
                 {
                     "name": "Level",
@@ -622,7 +622,7 @@ async function logic() {
                 currentRooms[_in].czar_choice = null;
 
                 currentRooms[_in].played_cards = [];
-                
+
                 currentRooms[_in].stage = -1;
             }
 
@@ -632,7 +632,7 @@ async function logic() {
         if(host_left){
             var new_host = client.fetchUser(currentRooms[_in].members[0]._id);
             new_host.then(function(_host){
-                _host.send("The host has left, that makes YOU the new host!\r\nUse `cad start` to start the game, if it isn't started already.");
+                _host.send("The host has left, that makes YOU the new host!");
             });
 
             currentRooms[_in].host = currentRooms[_in].members[0]._id;
@@ -718,12 +718,19 @@ async function logic() {
 
                     _submitter.then(function (_submit) {
                         for (var _i = 0; _i < _currentroom.members.length; _i++) {
+
+                            if(_currentroom.members[_i]._id == _submit.id) {
+                                _currentroom.members[_i]._points = _currentroom.members[_i]._points + 1;
+                            }
+
                             var _tempuser = client.fetchUser(_currentroom.members[_i]._id);
                             _tempuser.then(function (_user) {
                                 _user.send(`Czar's choice: ` + "`" + choice._content + "`" + `\r\nSent by: ${_submit.username}`);
                             });
                         }
                     })
+
+
 
                     currentRooms[_in].stage = 5;
                 }
