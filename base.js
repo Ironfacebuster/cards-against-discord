@@ -601,7 +601,7 @@ async function logic() {
 
             var index = _in;
 
-            if (currentRooms[_in].state >= 0) {
+            if (currentRooms[_in].stage >= 0) {
                 _tempczarfind.then(function (_newczar) {
                     for (var _i = 0; _i < currentRooms[index].members.length; _i++) {
                         var _tempuser = client.fetchUser(currentRooms[index].members[_i]._id);
@@ -612,13 +612,13 @@ async function logic() {
                 });
             }
 
-            if (currentRooms[_in].state != 0) {
+            if (currentRooms[_in].stage != 0) {
 
                 currentRooms[_in].czar_choice = null;
 
                 currentRooms[_in].played_cards = [];
 
-                currentRooms[_in].state = 0;
+                currentRooms[_in].stage = 0;
             }
 
             if (currentRooms[_in].members.length < 3) {
