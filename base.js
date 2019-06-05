@@ -382,7 +382,8 @@ function create_room() {
         "stage": -1,
         "idle": 0,
         "played_cards": [],
-        "czar_choice": null
+        "czar_choice": null,
+        "prompt":""
     };
 }
 
@@ -724,6 +725,8 @@ async function logic() {
         if (currentRooms[_in].stage == 0) {
             var blackCard = blackCards._cards[Math.floor(Math.random() * blackCards._cards.length)].content;
 
+            currentRooms[_in].prompt="`"+blackCard+"`";
+
             for (var _i = 0; _i < currentRooms[_in].members.length; _i++) {
                 var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
                 _tempuser.then(function (_user) {
@@ -767,7 +770,9 @@ async function logic() {
         } else if (currentRooms[_in].stage == 3) {
             //come back
 
-            var submissions = "Here are the responses:\r\n";
+            var prompt = currentRooms[_in].prompt;
+
+            var submissions = "Here's the prompt:\r\n"+prompt+"\r\nHere are the responses:\r\n";
 
             for (var _c = 0; _c < currentRooms[_in].played_cards.length; _c++) {
                 //console.log(currentRooms[_in].played_cards[_c]);
