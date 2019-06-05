@@ -618,6 +618,14 @@ async function logic() {
                 currentRooms[_in].state = 0;
             }
 
+            if(currentRooms[_in].members.length < 3){
+                currentRooms[_in].czar_choice = null;
+
+                currentRooms[_in].played_cards = [];
+                
+                currentRooms[_in].stage = -1;
+            }
+
             currentRooms[_in].czar = currentRooms[_in].members[0]._id;
         }
 
