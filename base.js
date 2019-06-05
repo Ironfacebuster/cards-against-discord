@@ -517,15 +517,15 @@ async function room_stats(_author, _message) {
 
             var member = currentRooms[_roomindex].members[_i];
 
-            var user;
-
             var _tempuser = client.fetchUser(member._id);
             _tempuser.then(function (_user) {
 
                 scores = scores + `\r\n${_user.username}: ${member._points} points.`;
 
-                if (_i >= currentRooms[_roomindex].members.length - 1)
+                if (_i >= currentRooms[_roomindex].members.length - 1) {
+                    console.log(`i = ${_i}\r\nlength = ${currentRooms[_roomindex].members.length}\r\n-1=${currentRooms[_roomindex].members.length-1}`);
                     _message.reply(scores);
+                }
             });
 
 
