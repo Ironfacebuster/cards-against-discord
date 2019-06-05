@@ -730,11 +730,10 @@ async function logic() {
             for (var _i = 0; _i < currentRooms[_in].members.length; _i++) {
                 var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
 
-                const id = currentRooms[_in].members[_i]._id;
                 const czar = currentRooms[_in].members[_i].czar;
 
                 _tempuser.then(function (_user) {
-                    if (id != czar) {
+                    if (_user.id != czar) {
                         _user.send(`The prompt is:\r\n` + "`" + blackCard.toString() + "`\r\nHere are your cards:");
                         cards(_user.id);
                     } else
