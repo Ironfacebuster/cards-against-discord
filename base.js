@@ -638,7 +638,7 @@ async function logic() {
             currentRooms[_in].host = currentRooms[_in].members[0]._id;
         }
 
-        if(currentRooms[_in].members.length < 3){
+        if(currentRooms[_in].members.length < 3 && currentRooms[_in].stage >= 0){
             for (var _i = 0; _i < currentRooms[_in].members.length; _i++) {
                 var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
                 _tempuser.then(function (_user) {
