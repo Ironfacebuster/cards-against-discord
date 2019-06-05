@@ -627,6 +627,13 @@ async function logic() {
                 currentRooms[_in].played_cards = [];
 
                 currentRooms[_in].stage = -1;
+
+                for (var _i = 0; _i < currentRooms[_in].members.length; _i++) {
+                    var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
+                    _tempuser.then(function (_user) {
+                        _user.send(`Oops, since there are less than 3 people in this room, you can't continue playing!`);
+                    });
+                }
             }
 
             currentRooms[_in].czar = currentRooms[_in].members[0]._id;
