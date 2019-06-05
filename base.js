@@ -60,7 +60,7 @@ client.on('message', async message => {
     //if(message.channel.type == "dm" && !mess.indexOf(prefix) && !message.author.bot)
 
     if (mess.indexOf(prefix) || message.author.bot) {
-        if(message.channel.type=="dm"){
+        if (message.channel.type == "dm") {
             room_chat(message.content.trim().replace(prefix, ''), message);
         } else
             return;
@@ -77,8 +77,8 @@ client.on('message', async message => {
             join_room(args.join(''), message.author, message);
         else if (command == "leave")
             leave_room(message.author, message);
-       // else if (command == "getrooms")
-           // message.reply(JSON.stringify(currentRooms));
+        // else if (command == "getrooms")
+        // message.reply(JSON.stringify(currentRooms));
         else if (command == "cards")
             cards(message.author, message);
         else if (command == "start")
@@ -86,11 +86,12 @@ client.on('message', async message => {
         else if (command == "submit")
             submit_card(message.author, message, args);
 
-        
+
     } else {
-       /* if (command == "randomcard") {
-            randomCard(args[0], message);
-        } else */if (command == "stats")
+        /* if (command == "randomcard") {
+             randomCard(args[0], message);
+         } else */
+        if (command == "stats")
             stats(message);
         else if (command == "credits")
             credits(message);
@@ -106,7 +107,7 @@ async function randomCard(_c, _m) {
 }
 */
 
-async function room_chat (_args, _m) {
+async function room_chat(_args, _m) {
     var _roomindex = -1;
 
     _author = _m.author;
@@ -588,26 +589,28 @@ async function logic() {
         var czar_left = true;
         var host_left = true;
 
-        for(var _mem = 0; _mem < currentRooms[_in].members.length; _mem++){
-            if(currentRooms[_in].members[_mem]._id == currentRooms[_in].czar)
+        for (var _mem = 0; _mem < currentRooms[_in].members.length; _mem++) {
+            if (currentRooms[_in].members[_mem]._id == currentRooms[_in].czar)
                 czar_left = false;
-            if(currentRooms[_in].members[_mem]._id == currentRooms[_in].host)
+            if (currentRooms[_in].members[_mem]._id == currentRooms[_in].host)
                 host_left = false;
         }
 
-        if(czar_left){
+        if (czar_left) {
             var _tempczarfind = client.fetchUser(currentRooms[_in].members[0]._id);
 
             var index = _in;
 
-            _tempczarfind.then(function(_newczar){
-                for (var _i = 0; _i < currentRooms[index].members.length; _i++) {
-                    var _tempuser = client.fetchUser(currentRooms[index].members[_i]._id);
-                    _tempuser.then(function (_user) {
-                        _user.send(`The current Czar has left.\r\nThe new Czar is ${_newczar.username}.`);
-                    });
-                }
-            });
+            if (currentRooms[_in].state >= 0) {
+                _tempczarfind.then(function (_newczar) {
+                    for (var _i = 0; _i < currentRooms[index].members.length; _i++) {
+                        var _tempuser = client.fetchUser(currentRooms[index].members[_i]._id);
+                        _tempuser.then(function (_user) {
+                            _user.send(`The current Czar has left.\r\nThe new Czar is ${_newczar.username}.`);
+                        });
+                    }
+                });
+            }
 
             if (currentRooms[_in].state != 0) {
 
@@ -618,7 +621,7 @@ async function logic() {
                 currentRooms[_in].state = 0;
             }
 
-            if(currentRooms[_in].members.length < 3){
+            if (currentRooms[_in].members.length < 3) {
                 currentRooms[_in].czar_choice = null;
 
                 currentRooms[_in].played_cards = [];
@@ -629,23 +632,23 @@ async function logic() {
             currentRooms[_in].czar = currentRooms[_in].members[0]._id;
         }
 
-        if(host_left){
+        if (host_left) {
             var new_host = client.fetchUser(currentRooms[_in].members[0]._id);
-            new_host.then(function(_host){
+            new_host.then(function (_host) {
                 _host.send("The host has left, that makes YOU the new host!");
             });
 
             currentRooms[_in].host = currentRooms[_in].members[0]._id;
         }
 
-        if(currentRooms[_in].members.length < 3 && currentRooms[_in].stage >= 0){
+        if (currentRooms[_in].members.length < 3 && currentRooms[_in].stage >= 0) {
             for (var _i = 0; _i < currentRooms[_in].members.length; _i++) {
                 var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
                 _tempuser.then(function (_user) {
                     _user.send(`Oops, since there are less than 3 people in this room, you can't continue playing!`);
                 });
             }
-            
+
             currentRooms[_in].stage = -1;
         }
 
@@ -679,7 +682,7 @@ async function logic() {
 
                 var czar = client.fetchUser(czar_id);
 
-                czar.then(function(_czar){
+                czar.then(function (_czar) {
                     czar_username = _czar.username;
                 });
 
@@ -730,7 +733,7 @@ async function logic() {
                     _submitter.then(function (_submit) {
                         for (var _i = 0; _i < _currentroom.members.length; _i++) {
 
-                            if(_currentroom.members[_i]._id == _submit.id) {
+                            if (_currentroom.members[_i]._id == _submit.id) {
                                 _currentroom.members[_i]._points = _currentroom.members[_i]._points + 1;
                             }
 
