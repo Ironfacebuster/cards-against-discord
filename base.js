@@ -284,6 +284,32 @@ async function join_room(_roomcode, _author, _message) {
     }
 }
 
+async function new_cards(id, _message) {
+    var _mem = -1;
+    var _roomindex;
+
+    for (var i = currentRooms.length - 1; i >= 0; i--) {
+        var _tempmem = currentRooms[i].members.findIndex(_m => _m._id == id);
+        if (_tempmem != -1) {
+            _mem = _tempmem;
+            //console.log("FOUND USER? " + currentRooms[i].members.findIndex(_m => _m._id == _author.id) + "\r\nSERVER: " + currentRooms[i]);
+            _roomindex = i;
+        }
+    }
+
+    if (_mem != -1) {
+        for (var _c = 0; _c < 10; _c++) {
+            currentRooms[_roomindex].members[_mem]._cards[_c] = whiteCards._cards[Math.floor(Math.random() * whiteCards._cards.length)]
+        }
+
+        _message.author.send("Your cards have been repicked.");
+
+    } else {
+
+        _message.author.send("You're not in a room!");
+    }
+}
+
 async function cards(id, _message) {
     var _mem = -1;
     var _roomindex;
