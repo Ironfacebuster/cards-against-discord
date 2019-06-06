@@ -70,9 +70,9 @@ client.on('message', async message => {
 
     console.log(`LOWERCASE: ${mess}`);
 
-    var command = mess.trim().replace(prefix, '').split(' ')[0].toLowerCase();
+    var command = mess.trim().replace(/cad /i, '').split(' ')[0].toLowerCase();
 
-    var args = message.content.trim().replace(prefix, '').split(' ').slice(1);
+    var args = message.content.trim().replace(/cad /i, '').split(' ').slice(1);
 
     console.log(`COMMAND: ${command}`)
     console.log(`ARGUMENTS: ${args}`)
