@@ -68,14 +68,14 @@ client.on('message', async message => {
             return;
     }
 
-    console.log(`LOWERCASE: ${mess}`);
+    //console.log(`LOWERCASE: ${mess}`);
 
     var command = mess.trim().replace(/cad /i, '').split(' ')[0].toLowerCase();
 
     var args = message.content.trim().replace(/cad /i, '').split(' ').slice(1);
 
-    console.log(`COMMAND: ${command}`)
-    console.log(`ARGUMENTS: ${args}`)
+    //console.log(`COMMAND: ${command}`)
+    //console.log(`ARGUMENTS: ${args}`)
 
     if (message.channel.type == "dm") {
         if (command == "create")
