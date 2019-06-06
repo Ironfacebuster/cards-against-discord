@@ -737,7 +737,7 @@ async function logic() {
                         _user.send(`The prompt is:\r\n` + "`" + blackCard.toString() + "`\r\nHere are your cards:");
                         cards(_user.id);
                     } else
-                        _user.send(`The prompt is:\r\n` + "`" + blackCard.toString());
+                        _user.send(`The prompt is:\r\n` + "`" + blackCard.toString() + "`");
                 });
             }
 
