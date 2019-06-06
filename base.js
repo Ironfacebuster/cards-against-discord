@@ -917,7 +917,7 @@ async function kick_user(kick_id, _author, _message) {
         currentRooms[_roomindex].members[currentRooms[_roomindex].members.length - 1] = _temp;
         currentRooms[_roomindex].members.pop();
         for (var g = 0; g < currentRooms[_roomindex].members.length; g++) {
-            if (currentRooms[_roomindex].members[g]._id != _author.id) {
+            if (currentRooms[_roomindex].members[g]._id != _author.id && currentRooms[_roomindex].members[g]._id != currentRooms[_roomindex].host) {
                 var _tempuser = client.fetchUser(currentRooms[_roomindex].members[g]._id);
                 _tempuser.then(function (_user) {
                     _user.send("The host has kicked a user.");
