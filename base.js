@@ -70,7 +70,7 @@ client.on('message', async message => {
 
     var command = mess.trim().replace(prefix, '').split(' ')[0].toLowerCase();
 
-    var args = message.content.trim().replace(prefix, '').split(' ').slice(1).toLowerCase();
+    var args = message.content.trim().replace(prefix, '').split(' ').slice(1);
 
     if (message.channel.type == "dm") {
         if (command == "create")
