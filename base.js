@@ -94,6 +94,8 @@ client.on('message', async message => {
             submit_card(message.author, message, args);
         else if (command == "scores")
             room_stats(message.author, message);
+        else if (command == "reshuffle")
+            new_cards(message.author.id, message);
     } else {
         /* if (command == "randomcard") {
              randomCard(args[0], message);
