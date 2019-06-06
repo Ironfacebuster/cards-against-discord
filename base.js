@@ -96,6 +96,8 @@ client.on('message', async message => {
             room_stats(message.author, message);
         else if (command == "reshuffle")
             new_cards(message.author.id, message);
+        else if (command == "kick")
+            kick_user(args[0], message.author.id, message);
     } else {
         /* if (command == "randomcard") {
              randomCard(args[0], message);
@@ -882,6 +884,52 @@ async function logic() {
 
             currentRooms[_in].stage = 0;
         }
+    }
+}
+
+async function kick_user(kick_id, _author, _message) {
+    var _roomindex = -1;
+
+    for (var i = currentRooms.length - 1; i >= 0; i--) {
+        var _tempmem = currentRooms[i].members.findIndex(_m => _m._id == _author);
+        if (_tempmem != -1) {
+            //console.log("FOUND USER? " + currentRooms[i].members.findIndex(_m => _m._id == _author.id) + "\r\nSERVER: " + currentRooms[i]);
+            _roomindex = i;
+        }
+    }
+
+    if (_author != currentRooms[i].host) {
+        _message.reply("You're not the host.");
+        return;
+    } else if (currentRooms[i].members[kick_id - 1]._id == currentRooms[i].host && _author == currentRooms[i].host) {
+        _message.reply("You can't kick yourself!");
+        return;
+    } else if (kick_id > currentRooms[i].members.length) {
+        _message.reply("That isn't a user.");
+        return;
+    }
+
+    if (_roomindex == -1) {
+        _message.reply("You're not in a room right now!");
+    } else {
+        var _temp = currentRooms[_roomindex].members[kick_id - 1];
+        currentRooms[_roomindex].members[kick_id - 1] = currentRooms[_roomindex].members[currentRooms[_roomindex].members.length - 1];
+        currentRooms[_roomindex].members[currentRooms[_roomindex].members.length - 1] = _temp;
+        currentRooms[_roomindex].members.pop();
+        for (var g = 0; g < currentRooms[_roomindex].members.length; g++) {
+            if (currentRooms[_roomindex].members[g]._id != _author.id) {
+                var _tempuser = client.fetchUser(currentRooms[_roomindex].members[g]._id);
+                _tempuser.then(function (_user) {
+                    _user.send("The host has kicked a user.");
+                });
+            }
+        }
+        var _tempuser = client.fetchUser(_temp._id);
+        _tempuser.then(function (_user) {
+            _user.send("Oh boy, you've been kicked. What'd you do this time?");
+        });
+
+        _message.reply("The user has been kicked.");
     }
 }
 
