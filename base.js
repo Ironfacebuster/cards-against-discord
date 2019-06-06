@@ -898,14 +898,14 @@ async function kick_user(kick_id, _author, _message) {
         }
     }
 
-    if (_author != currentRooms[_roomindex].host) {
+    if (kick_id > currentRooms[_roomindex].members.length) {
+        _message.reply("That isn't a user.");
+        return;
+    } else if (_author != currentRooms[_roomindex].host) {
         _message.reply("You're not the host.");
         return;
     } else if (currentRooms[_roomindex].members[kick_id - 1]._id == currentRooms[_roomindex].host && _author == currentRooms[_roomindex].host) {
         _message.reply("You can't kick yourself!");
-        return;
-    } else if (kick_id > currentRooms[_roomindex].members.length) {
-        _message.reply("That isn't a user.");
         return;
     }
 
