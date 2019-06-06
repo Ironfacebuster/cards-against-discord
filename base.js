@@ -63,6 +63,7 @@ client.on('message', async message => {
     if (mess.indexOf(prefix) == -1 || message.author.bot) {
         if (message.channel.type == "dm") {
             room_chat(message.content.trim().replace(prefix, ''), message);
+            return;
         } else
             return;
     }
@@ -88,8 +89,6 @@ client.on('message', async message => {
             submit_card(message.author, message, args);
         else if (command == "scores")
             room_stats(message.author, message);
-
-
     } else {
         /* if (command == "randomcard") {
              randomCard(args[0], message);
