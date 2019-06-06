@@ -62,15 +62,20 @@ client.on('message', async message => {
 
     if (mess.indexOf(prefix) == -1 || message.author.bot) {
         if (message.channel.type == "dm") {
-            room_chat(message.content.trim().replace(prefix, ''), message);
+            room_chat(message.content.trim(), message);
             return;
         } else
             return;
     }
 
+    console.log(`LOWERCASE: ${mess}`);
+
     var command = mess.trim().replace(prefix, '').split(' ')[0].toLowerCase();
 
     var args = message.content.trim().replace(prefix, '').split(' ').slice(1);
+
+    console.log(`COMMAND: ${command}`)
+    console.log(`ARGUMENTS: ${args}`)
 
     if (message.channel.type == "dm") {
         if (command == "create")
