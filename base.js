@@ -267,6 +267,7 @@ async function join_room(_roomcode, _author, _message, args) {
 
 
         if (_room != -1) {
+            console.log(_room.password);
             if (_room.password != "") {
                 if (args[0] == _room.password) {
                     var _player = create_player();
