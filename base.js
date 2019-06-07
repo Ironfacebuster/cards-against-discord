@@ -81,7 +81,7 @@ client.on('message', async message => {
         if (command == "create")
             createRoom(message.author, message, args);
         else if (command == "join")
-            join_room(args.join(''), message.author, message, args);
+            join_room(args[0], message.author, message, args[1]);
         else if (command == "leave")
             leave_room(message.author, message);
         // else if (command == "getrooms")
@@ -242,7 +242,7 @@ function trimSpaces(string) {
     return s;
 }
 
-async function join_room(_roomcode, _author, _message, args) {
+async function join_room(_roomcode, _author, _message, _password) {
     //const _exists = currentRooms.find(_r => );
 
     var _exists;
@@ -265,7 +265,7 @@ async function join_room(_roomcode, _author, _message, args) {
 
         if (_room != -1) {
             if (typeof currentRooms[_room].password != 'undefined' || currentRooms[_room].password != "") {
-                if (args[0] == currentRooms[_room].password) {
+                if (_password == currentRooms[_room].password) {
                     var _player = create_player();
                     _player._id = _author.id;
                     for (var _c = 0; _c < 10; _c++) {
