@@ -81,7 +81,7 @@ client.on('message', async message => {
         if (command == "create")
             createRoom(message.author, message);
         else if (command == "join")
-            join_room(args.join(''), message.author, message);
+            join_room(args.join(''), message.author, message, args);
         else if (command == "leave")
             leave_room(message.author, message);
         // else if (command == "getrooms")
@@ -242,7 +242,7 @@ function trimSpaces(string) {
     return s;
 }
 
-async function join_room(_roomcode, _author, _message) {
+async function join_room(_roomcode, _author, _message, args) {
     //const _exists = currentRooms.find(_r => );
 
     var _exists;
@@ -261,27 +261,49 @@ async function join_room(_roomcode, _author, _message) {
     if (_exists != null) {
         _message.reply("You're already in a game.");
     } else {
+
         const _room = currentRooms.findIndex(r => r.room_code.trim() == _roomcode.toString().trim());
 
-        //_message.reply(_room.toString());
+
 
         if (_room != -1) {
-            var _player = create_player();
-            _player._id = _author.id;
-            for (var _c = 0; _c < 10; _c++) {
-                _player._cards.push(whiteCards._cards[Math.floor(Math.random() * whiteCards._cards.length)]);
-            }
-            currentRooms[_room].members.push(_player);
-            for (var g = 0; g < currentRooms[_room].members.length; g++) {
-                if (currentRooms[_room].members[g]._id != _author.id) {
-                    var _tempuser = client.fetchUser(currentRooms[_room].members[g]._id);
-                    _tempuser.then(function (_user) {
-                        _user.send(`${_author.username} has joined your room.`);
-                    });
+            if (_room.password.length > 0) {
+                if (args[0] == _room.password) {
+                    var _player = create_player();
+                    _player._id = _author.id;
+                    for (var _c = 0; _c < 10; _c++) {
+                        _player._cards.push(whiteCards._cards[Math.floor(Math.random() * whiteCards._cards.length)]);
+                    }
+                    currentRooms[_room].members.push(_player);
+                    for (var g = 0; g < currentRooms[_room].members.length; g++) {
+                        if (currentRooms[_room].members[g]._id != _author.id) {
+                            var _tempuser = client.fetchUser(currentRooms[_room].members[g]._id);
+                            _tempuser.then(function (_user) {
+                                _user.send(`${_author.username} has joined your room.`);
+                            });
+                        }
+                    }
+                    _message.reply("Room joined.");
+                } else {
+                    _message.reply("Incorrect password.");
                 }
+            } else {
+                var _player = create_player();
+                _player._id = _author.id;
+                for (var _c = 0; _c < 10; _c++) {
+                    _player._cards.push(whiteCards._cards[Math.floor(Math.random() * whiteCards._cards.length)]);
+                }
+                currentRooms[_room].members.push(_player);
+                for (var g = 0; g < currentRooms[_room].members.length; g++) {
+                    if (currentRooms[_room].members[g]._id != _author.id) {
+                        var _tempuser = client.fetchUser(currentRooms[_room].members[g]._id);
+                        _tempuser.then(function (_user) {
+                            _user.send(`${_author.username} has joined your room.`);
+                        });
+                    }
+                }
+                _message.reply("Room joined.");
             }
-            _message.reply("Room joined.");
-            //_message.channel.send("`" + JSON.stringify(currentRooms) + "`");
         } else {
             _message.reply("Room not found.");
         }
@@ -402,6 +424,7 @@ function generateRC(_count) {
 function create_room() {
     return {
         "room_code": "",
+        "password": "",
         "members": [],
         "czar": "",
         "host": "",
@@ -504,7 +527,7 @@ async function start_room(_author, _message) {
     }
 }
 
-async function createRoom(_author, _message) {
+async function createRoom(_author, _message, args) {
     for (var i = 0; i < currentRooms.length; i++) {
         _exists = currentRooms[i].members.find(_m => _m._id == _author.id);
 
@@ -521,12 +544,15 @@ async function createRoom(_author, _message) {
     _new.czar = _author.id.toString();
     _new.host = _author.id.toString();
 
+    if (args[0] != null && args[0].length > 0)
+        _new.password = args[0];
+
     //add creator to room
 
     currentRooms.push(_new);
     _message.reply("Room created with code `" + _new.room_code + "`");
 
-    join_room(_new.room_code, _author, _message);
+    join_room(_new.room_code, _author, _message, args);
 }
 
 function create_player() {
@@ -579,7 +605,6 @@ async function room_stats(_author, _message) {
                 }
             });
         }
-
         //console.log(`SENT SCORES: ${scores}`);
     }
 }
