@@ -79,7 +79,7 @@ client.on('message', async message => {
 
     if (message.channel.type == "dm") {
         if (command == "create")
-            createRoom(message.author, message);
+            createRoom(message.author, message, args);
         else if (command == "join")
             join_room(args.join(''), message.author, message, args);
         else if (command == "leave")
@@ -544,6 +544,8 @@ async function createRoom(_author, _message, args) {
     _new.stage = -1;
     _new.czar = _author.id.toString();
     _new.host = _author.id.toString();
+
+    console.log(args);
 
     if (args != null && args[0].length > 0)
         _new.password = args[0];
