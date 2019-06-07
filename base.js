@@ -419,13 +419,13 @@ function generateRC(_count) {
     return code.toString();
 }
 
-function create_room() {
+function create_room(_code, _czar, _host, _password) {
     return {
-        "room_code": "",
-        "password": "test",
+        "room_code": _code,
+        "password": _password,
         "members": [],
-        "czar": "",
-        "host": "",
+        "czar": _czar,
+        "host": _host,
         //stage == -1 not started
         //stage == 0 show prompt
         //stage == 1 send message to pick white cards
@@ -535,20 +535,22 @@ async function createRoom(_author, _message, args) {
         }
     }
 
-    var _new = create_room();
+    var _new = create_room(generateRC(4), _author.id.toString(), _author.id.toString(), args[0].toString());
 
-    _new.room_code = generateRC(4);
-    _new.stage = -1;
-    _new.czar = _author.id.toString();
-    _new.host = _author.id.toString();
+    //_new.room_code = generateRC(4);
+    //_new.stage = -1;
+    //_new.czar = _author.id.toString();
+    //_new.host = _author.id.toString();
 
-    console.log(args);
+    //console.log(args);
 
-    if (args.length > 0 && args[0].length > 0)
-        _new.password = args[0];
-    else
-        _new.password="";
+    //if (args.length > 0 && args[0].length > 0)
+       // _new.password = args[0];
+    //else
+       // _new.password="";
     //add creator to room
+
+    console.log(_new.password);
 
     currentRooms.push(_new);
     _message.reply("Room created with code `" + _new.room_code + "`");
