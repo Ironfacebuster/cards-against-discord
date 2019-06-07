@@ -283,7 +283,10 @@ async function join_room(_roomcode, _author, _message, _password) {
                     }
                     _message.reply("Room joined.");
                 } else {
-                    _message.reply("Incorrect password.");
+                    if(_password.length > 0)
+                        _message.reply("Incorrect password.");
+                    else
+                        _message.reply("This room has a password.");
                 }
             } else {
                 var _player = create_player();
