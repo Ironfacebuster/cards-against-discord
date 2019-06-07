@@ -261,14 +261,11 @@ async function join_room(_roomcode, _author, _message, args) {
     if (_exists != null) {
         _message.reply("You're already in a game.");
     } else {
-
         const _room = currentRooms.findIndex(r => r.room_code.trim() == _roomcode.toString().trim());
-
-
 
         if (_room != -1) {
             console.log(_room.password);
-            if (_room.password != "") {
+            if (_room.password != "" || typeof(_room.password) != "undefined") {
                 if (args[0] == _room.password) {
                     var _player = create_player();
                     _player._id = _author.id;
@@ -425,7 +422,7 @@ function generateRC(_count) {
 function create_room() {
     return {
         "room_code": "",
-        "password": "",
+        "password": "test",
         "members": [],
         "czar": "",
         "host": "",
@@ -549,7 +546,8 @@ async function createRoom(_author, _message, args) {
 
     if (args.length > 0 && args[0].length > 0)
         _new.password = args[0];
-
+    else
+        _new.password="";
     //add creator to room
 
     currentRooms.push(_new);
