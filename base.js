@@ -555,7 +555,7 @@ async function createRoom(_author, _message, args) {
     // _new.password="";
     //add creator to room
 
-    console.log(_new.password);
+    console.log("558: " + _new.password);
 
     currentRooms.push(_new);
     _message.reply("Room created with code `" + _new.room_code + "`");
