@@ -267,7 +267,7 @@ async function join_room(_roomcode, _author, _message, args) {
 
 
         if (_room != -1) {
-            if (_room.password != "" && _room.password.length > 0) {
+            if (_room.password != "") {
                 if (args[0] == _room.password) {
                     var _player = create_player();
                     _player._id = _author.id;
