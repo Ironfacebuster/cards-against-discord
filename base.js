@@ -264,8 +264,8 @@ async function join_room(_roomcode, _author, _message, args) {
         const _room = currentRooms.findIndex(r => r.room_code.trim() == _roomcode.toString().trim());
 
         if (_room != -1) {
-            console.log(_room.password);
-            if (_room.password != "" || typeof (_room.password) != "undefined") {
+            console.log(_room);
+            if (_room.password != "" || typeof _room.password != 'undefined') {
                 if (args[0] == _room.password) {
                     var _player = create_player();
                     _player._id = _author.id;
