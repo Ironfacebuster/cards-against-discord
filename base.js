@@ -544,7 +544,7 @@ async function createRoom(_author, _message, args) {
     _new.czar = _author.id.toString();
     _new.host = _author.id.toString();
 
-    if (args[0] != null && args[0].length > 0)
+    if (args != null && args[0].length > 0)
         _new.password = args[0];
 
     //add creator to room
