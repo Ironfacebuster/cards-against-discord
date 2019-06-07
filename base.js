@@ -265,8 +265,6 @@ async function join_room(_roomcode, _author, _message, _password) {
 
         if (_room != -1) {
 
-            console.log(currentRooms[_room].password);
-
             if (currentRooms[_room].password.length>0) {
                 if (_password == currentRooms[_room].password) {
                     var _player = create_player();
@@ -557,7 +555,7 @@ async function createRoom(_author, _message, args) {
     // _new.password="";
     //add creator to room
 
-    console.log("558: " + _new.password);
+    //console.log("558: " + _new.password);
 
     currentRooms.push(_new);
     _message.reply("Room created with code `" + _new.room_code + "`");
