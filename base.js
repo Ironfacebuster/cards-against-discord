@@ -547,7 +547,7 @@ async function createRoom(_author, _message, args) {
 
     console.log(args);
 
-    if (args != null && args[0].length > 0)
+    if (args.length > 0 && args[0].length > 0)
         _new.password = args[0];
 
     //add creator to room
