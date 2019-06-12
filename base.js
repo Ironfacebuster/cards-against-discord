@@ -540,7 +540,7 @@ async function createRoom(_author, _message, args) {
 
     var _new;
 
-    if(args[0].length > 10){
+    if(args.length > 0 && args[0].length > 10){
         _message.reply("The password can't be longer than 10 characters.");
         return;
     }
