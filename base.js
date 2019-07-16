@@ -159,9 +159,11 @@ async function stats(_m) {
         if (err)
             console.error(err);
 
-        const db = client.db("user-data");
+        const db = client.db("cad-storage");
 
-        const user = db.findOne({
+        const dbo = db.collection("user-data");
+
+        const user = dbo.findOne({
             "id": author.id
         })
 
