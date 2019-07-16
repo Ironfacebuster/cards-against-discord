@@ -177,7 +177,7 @@ async function stats(_m) {
         var query = {
             "id": auth.id
         };
-        
+
         dbo.findOne(query, async function (err, res) {
             if (err) {
                 _m.reply("sorry, an error has occurred.");
@@ -244,7 +244,7 @@ async function stats(_m) {
     
             _m.channel.send(embed);
     
-            db.close();
+            client.close();
         })
     });
 
@@ -273,7 +273,7 @@ function addUser (user) {
             if(err)
                 console.err(err);
 
-            db.close();
+            client.close();
         })
     });
 }
