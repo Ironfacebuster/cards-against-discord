@@ -175,7 +175,7 @@ async function stats(_m) {
         // "xp": 0,
         // "games_left": 0
 
-        if (user == null) {
+        if (dbo.count({"id":author.id}) == 0) {
             _m.reply("user not found!");
             client.close();
             return;
