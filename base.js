@@ -185,9 +185,8 @@ async function stats(_m) {
             }
 
             if (res == null) {
-                _m.reply("user not found!");
-                addUser(auth)
-                db.close();
+                _m.reply("user not found! Have they played a game yet?");
+                //addUser(auth)
                 return;
             }
 
