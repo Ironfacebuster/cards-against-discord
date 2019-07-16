@@ -152,7 +152,7 @@ async function stats(_m) {
     if (_m.mentions.users.first() && !_m.mentions.users.first().bot)
         author = _m.mentions.users.first();
 
-    const client = new MongoClient(url);
+    const client = new MongoClient(mongoURL);
 
     // Use connect method to connect to the Server
     client.connect(function (err) {
