@@ -156,7 +156,8 @@ async function stats(_m) {
         useNewUrlParser: true
     });
 
-    // Use connect method to connect to the Server
+    const auth = author;
+
     client.connect(function (err) {
         if (err)
             console.error(err);
@@ -174,9 +175,9 @@ async function stats(_m) {
         // "games_left": 0
 
         var query = {
-            "id": author.id
+            "id": auth.id
         };
-
+        
         dbo.findOne(query, async function (err, res) {
             if (err) {
                 _m.reply("sorry, an error has occurred.");
@@ -185,7 +186,7 @@ async function stats(_m) {
 
             if (res == null) {
                 _m.reply("user not found!");
-                addUser(author)
+                addUser(auth)
                 db.close();
                 return;
             }
@@ -251,6 +252,10 @@ async function stats(_m) {
 }
 
 function addUser (user) {
+
+    const client = new MongoClient(mongoURL, {
+        useNewUrlParser: true
+    });
 
     client.connect(function (err) {
         if (err)
