@@ -71,6 +71,8 @@ client.on('message', async message => {
 
     //console.log(`COMMAND: ${command}`)
     //console.log(`ARGUMENTS: ${args}`)
+    check_user(message.author, message);
+
 
     if (message.channel.type == "dm") {
         if (command == "create")
@@ -103,6 +105,47 @@ client.on('message', async message => {
             credits(message);
     }
 });
+
+function check_user (author, _message) {
+    const c = new MongoClient(mongoURL, {
+        useNewUrlParser: true
+    });
+
+    const auth = author;
+    const _m = _message;
+
+    c.connect(function (err) {
+        if (err)
+            console.error(err);
+
+        const db = c.db("cad-storage");
+
+        const dbo = db.collection("user-data");
+
+        // "_id": "",
+        // "id": "",
+        // "wins": 0,
+        // "losses": 0,
+        // "level": 0,
+        // "xp": 0,
+        // "games_left": 0
+
+        var query = {
+            "id": auth.id
+        };
+
+        dbo.findOne(query, async function (err, res) {
+            if (err) {
+                _m.reply("sorry, an error has occurred.");
+                return;
+            }
+
+            if (res == null) {
+                addUser(auth);
+            }
+        });
+    });
+}
 
 /*
 async function randomCard(_c, _m) {
@@ -152,17 +195,17 @@ async function stats(_m) {
     if (_m.mentions.users.first() && !_m.mentions.users.first().bot)
         author = _m.mentions.users.first();
 
-    const client = new MongoClient(mongoURL, {
+    const c = new MongoClient(mongoURL, {
         useNewUrlParser: true
     });
 
     const auth = author;
 
-    client.connect(function (err) {
+    c.connect(function (err) {
         if (err)
             console.error(err);
 
-        const db = client.db("cad-storage");
+        const db = c.db("cad-storage");
 
         const dbo = db.collection("user-data");
 
@@ -185,7 +228,7 @@ async function stats(_m) {
             }
 
             if (res == null) {
-                _m.reply("user not found! Have they played a game yet?");
+                _m.reply("user not found! Have they said anything to me yet?");
                 //addUser(auth)
                 return;
             }
@@ -197,7 +240,7 @@ async function stats(_m) {
             const color = Math.floor(Math.random() * 16777215);
             const exp = res.xp;
             const level = res.level;
-    
+
             var embed = {
                 embed: {
                     "color": color,
@@ -240,7 +283,7 @@ async function stats(_m) {
                     ]
                 }
             };
-    
+
             _m.channel.send(embed);
         })
     });
@@ -248,13 +291,13 @@ async function stats(_m) {
 
 }
 
-function addUser (user) {
+function addUser(user) {
 
-    const client = new MongoClient(mongoURL, {
+    const c = new MongoClient(mongoURL, {
         useNewUrlParser: true
     });
 
-    client.connect(function (err) {
+    c.connect(function (err) {
         if (err)
             console.error(err);
 
@@ -262,12 +305,12 @@ function addUser (user) {
         data.id = user.id;
         data._id = user.id;
 
-        const db = client.db("cad-storage");
+        const db = c.db("cad-storage");
 
         const dbo = db.collection("user-data");
 
-        dbo.insertOne(data, function(err) {
-            if(err)
+        dbo.insertOne(data, function (err) {
+            if (err)
                 console.err(err);
 
         })
@@ -472,8 +515,16 @@ async function leave_room(_author, _message) {
                 });
             }
         }
-        _message.reply("Room left.");
+        if (currentRooms[_roomindex].stage >= 0 && currentRooms[_roomindex].stage < 6){
+            _message.reply("Room left. But, you left while a game was in progess!");
+            leave_in_progress(_author);
+        }else
+            _message.reply("Room left.");
     }
+}
+
+function leave_in_progress (_author){
+
 }
 
 function generateRC(_count) {
