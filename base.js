@@ -331,6 +331,8 @@ async function new_cards(id, _message) {
 
         _message.author.send("Your cards have been repicked.");
 
+        cards(id, _message);
+
     } else {
 
         _message.author.send("You're not in a room!");
@@ -702,6 +704,10 @@ async function submit_card(_author, _message, _args) {
 }
 
 async function logic() {
+    client.user.setActivity(`${client.guilds.size} guilds insult each other | cad help`, {
+        url: "https://www.twitch.tv/ironfacebuster",
+        type: "WATCHING"
+    });
     //stage == -2 not started
     //stage == 0 show prompt
     //stage == 1 send message to pick white cards
