@@ -569,7 +569,7 @@ async function leave_room(_author, _message) {
         }
         if (currentRooms[_roomindex].stage >= 0 && currentRooms[_roomindex].stage < 6) {
             _message.reply("Room left. But, you left while a game was in progess!");
-            update_user(author.id, 0, 1, 0, 0, 1)
+            update_user(_author.id, 0, 1, 0, 0, 1)
         } else
             _message.reply("Room left.");
     }
