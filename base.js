@@ -1115,7 +1115,7 @@ async function logic() {
             var end = false;
 
             for (var i = 0; i < currentRooms[_in].members.length; i++) {
-                if (currentRooms[_in].members[i]._points >= 10)
+                if (currentRooms[_in].members[i]._points >= 1)
                     end = true;
             }
 
@@ -1134,17 +1134,19 @@ async function logic() {
 
             var _winner = client.fetchUser(currentRooms[_in].members[winner]._id);
 
+            const _mem = currentRooms[_in].members;
+
             _winner.then(function(_win){
-                for (var i = 0; i < currentRooms[_in].members.length; i++) {
+                for (var i = 0; i < _mem.length; i++) {
                     var _tempuser = client.fetchUser(_currentroom.members[i]._id);
                     _tempuser.then(function (_user) {
                         _user.send(`And we have a winner: ${_win.username}! That means the rest of you are losers!`);
                     });
     
                     if (i == winner)
-                        update_user(currentRooms[_in].members[i]._id, 1, 0, 0, 100, 0)
+                        update_user(_mem[i]._id, 1, 0, 0, 100, 0)
                     else
-                        update_user(currentRooms[_in].members[i]._in, 0, 1, 0, 5, 0)
+                        update_user(_mem[i]._id, 0, 1, 0, 5, 0)
                 }
             });
 
