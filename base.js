@@ -243,8 +243,6 @@ async function stats(_m) {
             };
     
             _m.channel.send(embed);
-    
-            client.close();
         })
     });
 
@@ -273,7 +271,6 @@ function addUser (user) {
             if(err)
                 console.err(err);
 
-            client.close();
         })
     });
 }
