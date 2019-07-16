@@ -11,7 +11,7 @@ const whiteLocation = "CARDS/WHITE_CARDS.json"
 const blackCards = JSON.parse(fs.readFileSync(blackLocation, 'utf8'));
 const whiteCards = JSON.parse(fs.readFileSync(whiteLocation, 'utf8'));
 
-const mongoURL = proccess.env.URL;
+const mongoURL = process.env.URL;
 
 var currentRooms = [];
 
