@@ -49,7 +49,7 @@ client.on('ready', () => {
 });
 
 client.on('guildCreate', () => {
-    client.user.setActivity(`${client.guilds.size} guilds insult each other | cad help`, {
+    client.user.setActivity(`${client.users.size} users insult each other | cad help`, {
         url: "https://www.twitch.tv/ironfacebuster",
         type: "WATCHING"
     });
@@ -704,7 +704,7 @@ async function submit_card(_author, _message, _args) {
 }
 
 async function logic() {
-    client.user.setActivity(`${client.guilds.size} guilds insult each other | cad help`, {
+    client.user.setActivity(`${client.users.size} users insult each other | cad help`, {
         url: "https://www.twitch.tv/ironfacebuster",
         type: "WATCHING"
     });
