@@ -185,7 +185,8 @@ async function stats(_m) {
 
             if (res == null) {
                 _m.reply("user not found!");
-                dbo.close();
+                addUser(author)
+                db.close();
                 return;
             }
 
@@ -242,13 +243,34 @@ async function stats(_m) {
     
             _m.channel.send(embed);
     
-            dbo.close();
+            db.close();
         })
-
-        
     });
 
 
+}
+
+function addUser (user) {
+
+    client.connect(function (err) {
+        if (err)
+            console.error(err);
+
+        var data = create_player_data();
+        data.id = user.id;
+        data._id = user.id;
+
+        const db = client.db("cad-storage");
+
+        const dbo = db.collection("user-data");
+
+        dbo.insertOne(data, function(err) {
+            if(err)
+                console.err(err);
+
+            db.close();
+        })
+    });
 }
 
 function credits(_m) {
