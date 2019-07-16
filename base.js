@@ -1070,7 +1070,9 @@ async function logic() {
                         for (var _i = 0; _i < _currentroom.members.length; _i++) {
 
                             if (_currentroom.members[_i]._id == _submit.id) {
-                                update_user(_currentroom.members[_i].id, 0, 0, 0, 10, 0)
+
+                                update_user(_currentroom.members[_i]._id, 0, 0, 0, 10, 0)
+
                                 _currentroom.members[_i]._points = _currentroom.members[_i]._points + 1;
                             }
 
