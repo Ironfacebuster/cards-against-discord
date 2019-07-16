@@ -1112,7 +1112,43 @@ async function logic() {
 
             //console.log(`FINAL CZAR: ${currentRooms[_in].czar}`);
 
-            currentRooms[_in].stage = 0;
+            var end = false;
+
+            for (var i = 0; i < currentRooms[_in].members.length; i++) {
+                if (currentRooms[_in].members[i]._points >= 10)
+                    end = true;
+            }
+
+            if (!end)
+                currentRooms[_in].stage = 0;
+            else
+                currentRooms[_in].stage = 6;
+
+        } else if (currentRooms[_in].stage == 6) {
+            var winner = -1;
+
+            for (var i = 0; i < currentRooms[_in].members.length; i++) {
+                if (currentRooms[_in].members[i]._points >= 10)
+                    winner = i;
+            }
+
+            var _winner = client.fetchUser(currentRooms[_in].members[winner]._id);
+
+            _winner.then(function(_win){
+                for (var i = 0; i < currentRooms[_in].members.length; i++) {
+                    var _tempuser = client.fetchUser(_currentroom.members[i]._id);
+                    _tempuser.then(function (_user) {
+                        _user.send(`And we have a winner: ${_win.username}! That means the rest of you are losers!`);
+                    });
+    
+                    if (i == winner)
+                        update_user(currentRooms[_in].members[i]._id, 1, 0, 0, 100, 0)
+                    else
+                        update_user(currentRooms[_in].members[i]._in, 0, 1, 0, 5, 0)
+                }
+            });
+
+            currentRooms[_in].stage = -1;
         }
     }
 }
