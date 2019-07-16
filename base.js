@@ -40,7 +40,7 @@ const client = new discord.Client();
 client.on('ready', () => {
     console.log("BOT READY.");
     //client.user.setActivity("Working on things... DO NOT ATTEMPT TO USE.");
-    client.user.setActivity(`${client.guilds.size} guilds insult each other | cad help`, {
+    client.user.setActivity(`${client.users.size} users insult each other | cad help`, {
         url: "https://www.twitch.tv/ironfacebuster",
         type: "WATCHING"
     });
