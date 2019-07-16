@@ -152,7 +152,7 @@ async function stats(_m) {
     if (_m.mentions.users.first() && !_m.mentions.users.first().bot)
         author = _m.mentions.users.first();
 
-    const client = new MongoClient(mongoURL);
+    const client = new MongoClient(mongoURL,{ useNewUrlParser: true });
 
     // Use connect method to connect to the Server
     client.connect(function (err) {
@@ -175,7 +175,7 @@ async function stats(_m) {
         // "xp": 0,
         // "games_left": 0
 
-        if (user = null) {
+        if (user == null) {
             _m.reply("user not found!");
             client.close();
             return;
