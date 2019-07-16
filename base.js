@@ -165,10 +165,6 @@ async function stats(_m) {
 
         const dbo = db.collection("user-data");
 
-        const user = dbo.findOne({
-            "id": author.id
-        })
-
         // "_id": "",
         // "id": "",
         // "wins": 0,
@@ -189,7 +185,7 @@ async function stats(_m) {
 
             if (res == null) {
                 _m.reply("user not found!");
-                client.close();
+                dbo.close();
                 return;
             }
 
@@ -246,7 +242,7 @@ async function stats(_m) {
     
             _m.channel.send(embed);
     
-            client.close();
+            dbo.close();
         })
 
         
