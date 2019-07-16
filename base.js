@@ -575,10 +575,6 @@ async function leave_room(_author, _message) {
     }
 }
 
-function leave_in_progress(_author) {
-
-}
-
 function generateRC(_count) {
 
     //count is proportional  to room count
@@ -1074,6 +1070,7 @@ async function logic() {
                         for (var _i = 0; _i < _currentroom.members.length; _i++) {
 
                             if (_currentroom.members[_i]._id == _submit.id) {
+                                update_user(_currentroom.members[_i].id, 0, 0, 0, 10, 0)
                                 _currentroom.members[_i]._points = _currentroom.members[_i]._points + 1;
                             }
 
