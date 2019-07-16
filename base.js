@@ -1,6 +1,7 @@
 const discord = require("discord.js");
 const fs = require('fs');
 var shuffle = require('shuffle-array');
+const MongoClient = require('mongodb').MongoClient;
 
 const prefix = "cad ";
 
@@ -9,6 +10,8 @@ const whiteLocation = "CARDS/WHITE_CARDS.json"
 
 const blackCards = JSON.parse(fs.readFileSync(blackLocation, 'utf8'));
 const whiteCards = JSON.parse(fs.readFileSync(whiteLocation, 'utf8'));
+
+const mongoURL = proccess.env.URL;
 
 var currentRooms = [];
 
@@ -19,14 +22,6 @@ setInterval(async function () {
 setInterval(async function () {
     logic();
 }, 1350);
-
-const defaultUser = {
-    "id": "",
-    "wins": 0,
-    "losses": 0,
-    "level": 0,
-    "xp": 0
-}
 
 function loadCards() {
     if (blackCards != null && whiteCards != null)
@@ -157,52 +152,90 @@ async function stats(_m) {
     if (_m.mentions.users.first() && !_m.mentions.users.first().bot)
         author = _m.mentions.users.first();
 
-    const wins = Math.round(Math.random() * 100);
-    const losses = Math.round(Math.random() * 100);
-    const wl = Math.floor((wins / losses) * 100) / 100;
+    const client = new MongoClient(url);
 
-    var color = Math.floor(Math.random() * 16777215);
+    // Use connect method to connect to the Server
+    client.connect(function (err) {
+        if (err)
+            console.error(err);
 
-    var embed = {
-        embed: {
-            "color": color,
-            "footer": {
-                "text": "Cards Against Discord | This command is not complete, it shows randomly generated values."
-            },
-            "thumbnail": {
-                "url": author.displayAvatarURL.toString()
-            },
-            "author": {
-                "name": `${author.username}'s stats`
-            },
-            "fields": [{
-                    "name": "Wins",
-                    "value": wins.toString(),
-                    "inline": true
-                },
-                {
-                    "name": "Losses",
-                    "value": losses.toString(),
-                    "inline": true
-                },
-                {
-                    "name": "W/L Ratio",
-                    "value": wl.toString(),
-                    "inline": true
-                },
-                {
-                    "name": "XP",
-                    "value": "0/0"
-                },
-                {
-                    "name": "Level",
-                    "value": "1"
-                }
-            ]
+        const db = client.db("user-data");
+
+        const user = db.findOne({
+            "id": author.id
+        })
+
+        // "_id": "",
+        // "id": "",
+        // "wins": 0,
+        // "losses": 0,
+        // "level": 0,
+        // "xp": 0,
+        // "games_left": 0
+
+        if (user = null) {
+            _m.reply("user not found!");
+            client.close();
+            return;
         }
-    };
 
-    _m.channel.send(embed);
+        const wins = user.wins;
+        const losses = user.losses;
+        const wl = Math.floor((wins / losses) * 100) / 100;
+        const left = user.games_left;
+        const color = Math.floor(Math.random() * 16777215);
+        const exp = user.xp;
+        const level = user.level; 
+
+        var embed = {
+            embed: {
+                "color": color,
+                "footer": {
+                    "text": "Cards Against Discord | This command is still a work in progress."
+                },
+                "thumbnail": {
+                    "url": author.displayAvatarURL.toString()
+                },
+                "author": {
+                    "name": `${author.username}'s stats`
+                },
+                "fields": [{
+                        "name": "Wins",
+                        "value": wins.toString(),
+                        "inline": true
+                    },
+                    {
+                        "name": "Losses",
+                        "value": losses.toString(),
+                        "inline": true
+                    },
+                    {
+                        "name": "W/L Ratio",
+                        "value": wl.toString(),
+                        "inline": true
+                    },
+                    {
+                        "name": "XP",
+                        "value": exp.toString()
+                    },
+                    {
+                        "name": "Level",
+                        "value": level.toString()
+                    },
+                    {
+                        "name": "Games in progress left",
+                        "value": left.toString()
+                    }
+                ]
+            }
+        };
+
+        _m.channel.send(embed);
+
+        client.close();
+    });
+
+
 }
 
 function credits(_m) {
@@ -265,7 +298,7 @@ async function join_room(_roomcode, _author, _message, _password) {
 
         if (_room != -1) {
 
-            if (currentRooms[_room].password.length>0) {
+            if (currentRooms[_room].password.length > 0) {
                 if (_password == currentRooms[_room].password) {
                     var _player = create_player();
                     _player._id = _author.id;
@@ -283,7 +316,7 @@ async function join_room(_roomcode, _author, _message, _password) {
                     }
                     _message.reply("Room joined.");
                 } else {
-                    if(_password.length > 0)
+                    if (_password.length > 0)
                         _message.reply("Incorrect password.");
                     else
                         _message.reply("This room has a password.");
@@ -542,7 +575,7 @@ async function createRoom(_author, _message, args) {
 
     var _new;
 
-    if(args.length > 0 && args[0].length > 10){
+    if (args.length > 0 && args[0].length > 10) {
         _message.reply("The password can't be longer than 10 characters.");
         return;
     }
@@ -579,6 +612,18 @@ function create_player() {
         "_cards": [],
         "_points": 0
     };
+}
+
+function create_player_data() {
+    return {
+        "_id": "",
+        "id": "",
+        "wins": 0,
+        "losses": 0,
+        "level": 0,
+        "xp": 0,
+        "games_left": 0
+    }
 }
 
 function create_submission() {
