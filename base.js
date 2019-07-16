@@ -152,7 +152,9 @@ async function stats(_m) {
     if (_m.mentions.users.first() && !_m.mentions.users.first().bot)
         author = _m.mentions.users.first();
 
-    const client = new MongoClient(mongoURL,{ useNewUrlParser: true });
+    const client = new MongoClient(mongoURL, {
+        useNewUrlParser: true
+    });
 
     // Use connect method to connect to the Server
     client.connect(function (err) {
@@ -175,66 +177,79 @@ async function stats(_m) {
         // "xp": 0,
         // "games_left": 0
 
-        if (dbo.count({"id":author.id}) == 0) {
-            _m.reply("user not found!");
-            client.close();
-            return;
-        }
-
-        const wins = user.wins;
-        const losses = user.losses;
-        const wl = Math.floor((wins / losses) * 100) / 100;
-        const left = user.games_left;
-        const color = Math.floor(Math.random() * 16777215);
-        const exp = user.xp;
-        const level = user.level; 
-
-        var embed = {
-            embed: {
-                "color": color,
-                "footer": {
-                    "text": "Cards Against Discord | This command is still a work in progress."
-                },
-                "thumbnail": {
-                    "url": author.displayAvatarURL.toString()
-                },
-                "author": {
-                    "name": `${author.username}'s stats`
-                },
-                "fields": [{
-                        "name": "Wins",
-                        "value": wins.toString(),
-                        "inline": true
-                    },
-                    {
-                        "name": "Losses",
-                        "value": losses.toString(),
-                        "inline": true
-                    },
-                    {
-                        "name": "W/L Ratio",
-                        "value": wl.toString(),
-                        "inline": true
-                    },
-                    {
-                        "name": "XP",
-                        "value": exp.toString()
-                    },
-                    {
-                        "name": "Level",
-                        "value": level.toString()
-                    },
-                    {
-                        "name": "Games in progress left",
-                        "value": left.toString()
-                    }
-                ]
-            }
+        var query = {
+            "id": author.id
         };
 
-        _m.channel.send(embed);
+        dbo.findOne(query, async function (err, res) {
+            if (err) {
+                _m.reply("sorry, an error has occurred.");
+                return;
+            }
 
-        client.close();
+            if (res == null) {
+                _m.reply("user not found!");
+                client.close();
+                return;
+            }
+
+            const wins = res.wins;
+            const losses = res.losses;
+            const wl = Math.floor((wins / losses) * 100) / 100;
+            const left = res.games_left;
+            const color = Math.floor(Math.random() * 16777215);
+            const exp = res.xp;
+            const level = res.level;
+    
+            var embed = {
+                embed: {
+                    "color": color,
+                    "footer": {
+                        "text": "Cards Against Discord | This command is still a work in progress."
+                    },
+                    "thumbnail": {
+                        "url": author.displayAvatarURL.toString()
+                    },
+                    "author": {
+                        "name": `${author.username}'s stats`
+                    },
+                    "fields": [{
+                            "name": "Wins",
+                            "value": wins.toString(),
+                            "inline": true
+                        },
+                        {
+                            "name": "Losses",
+                            "value": losses.toString(),
+                            "inline": true
+                        },
+                        {
+                            "name": "W/L Ratio",
+                            "value": wl.toString(),
+                            "inline": true
+                        },
+                        {
+                            "name": "XP",
+                            "value": exp.toString()
+                        },
+                        {
+                            "name": "Level",
+                            "value": level.toString()
+                        },
+                        {
+                            "name": "Games in progress left",
+                            "value": left.toString()
+                        }
+                    ]
+                }
+            };
+    
+            _m.channel.send(embed);
+    
+            client.close();
+        })
+
+        
     });
 
 
