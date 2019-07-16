@@ -106,7 +106,7 @@ client.on('message', async message => {
     }
 });
 
-function check_user (author, _message) {
+function check_user(author, _message) {
     const c = new MongoClient(mongoURL, {
         useNewUrlParser: true
     });
@@ -317,6 +317,58 @@ function addUser(user) {
     });
 }
 
+// {
+//     "_id": "",
+//     "id": "",
+//     "wins": 0,
+//     "losses": 0,
+//     "level": 0,
+//     "xp": 0,
+//     "games_left": 0
+// }
+
+function update_user(id, wins, losses, level, xp, games_left) {
+    const c = new MongoClient(mongoURL, {
+        useNewUrlParser: true
+    });
+
+    var query = {
+        "id": id
+    };
+
+    c.connect(function (err) {
+        if (err)
+            console.error(err);
+
+        const db = c.db("cad-storage");
+
+        const dbo = db.collection("user-data");
+
+        dbo.findOne(query, async function (err, res) {
+            if (err) {
+                _m.reply("sorry, an error has occurred.");
+                return;
+            }
+
+            if (res == null) {
+                //addUser(auth)
+                return;
+            }
+
+            var user = res;
+
+            dbo.updateOne(query, {
+                $set: {
+                    wins: user.wins + wins,
+                    losses: user.losses + losses,
+                    xp: user.xp + xp,
+                    games_left: user.games_left + games_left
+                }
+            })
+        });
+    });
+}
+
 function credits(_m) {
     const _em = {
         "embed": {
@@ -515,15 +567,15 @@ async function leave_room(_author, _message) {
                 });
             }
         }
-        if (currentRooms[_roomindex].stage >= 0 && currentRooms[_roomindex].stage < 6){
+        if (currentRooms[_roomindex].stage >= 0 && currentRooms[_roomindex].stage < 6) {
             _message.reply("Room left. But, you left while a game was in progess!");
-            leave_in_progress(_author);
-        }else
+            update_user(author.id, 0, 1, 0, 0, 1)
+        } else
             _message.reply("Room left.");
     }
 }
 
-function leave_in_progress (_author){
+function leave_in_progress(_author) {
 
 }
 
