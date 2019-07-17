@@ -1062,7 +1062,7 @@ async function logic() {
             //console.log(JSON.stringify(currentRooms[_in].czar_choice));
             if (choice != null) {
 
-                if (choice.isEmpty() == false) {
+                if (choice.isEmpty == false) {
                     //console.log(currentRooms[_in].czar_choice);
                     var _submitter = client.fetchUser(choice._submitter);
 
