@@ -635,7 +635,7 @@ async function clean_up() {
                     _cleaned = _cleaned + 1;
                 }
 
-                console.log(currentRooms[_t]);
+                //console.log(currentRooms[_t]);
 
                 if(Array.isArray(currentRooms[_t].members)) {
                     if(currentRooms[_t].members.length <= 0)
@@ -645,10 +645,10 @@ async function clean_up() {
                 }
             }
         }
-    }
 
-    if (_cleaned != 0)
-        console.log(`${_cleaned} empty rooms cleaned.`);
+        if (_cleaned != 0)
+            console.log(`${_cleaned} empty rooms cleaned.`);
+    }
 }
 
 async function start_room(_author, _message) {
