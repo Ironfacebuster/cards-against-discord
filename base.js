@@ -635,8 +635,7 @@ async function clean_up() {
                     _cleaned = _cleaned + 1;
                 }
 
-                // console.log(currentRooms[_t]);
-                // console.log(currentRooms[_t].members)
+                console.log(currentRooms[_t]);
 
                 if(!Array.isArray(currentRooms[_t].members)) {
                     if(!currentRooms[_t].members.length)
