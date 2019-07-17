@@ -626,31 +626,19 @@ async function clean_up() {
 
     if (currentRooms.length > 0) {
         for (var _t = currentRooms.length - 1; _t >= 0; _t--) {
-            //console.log(_t);
             if (currentRooms[_t] != null) {
                 if (currentRooms[_t].idle >= 24) {
                     if (_t != currentRooms.length - 1) {
-                        /*
-                        const _cur = currentRooms[_t];
-                        //const _next = currentRooms[0];
-                        currentRooms[_t] = currentRooms[0];
-                        currentRooms[0] = _cur;
-                        */
                         [currentRooms[currentRooms.length - 1], currentRooms[_t]] = [currentRooms[_t], currentRooms[currentRooms.length - 1]];
-                        //console.log("FIRST " + JSON.stringify(currentRooms[currentRooms.length-1]))
-                        //console.log("_T " + JSON.stringify(currentRooms[_t]))
                     }
-                    //console.log("FIRST " + JSON.stringify(currentRooms[0]))
-                    //console.log("_T " + JSON.stringify(currentRooms[_t]))
                     currentRooms.pop();
                     _cleaned = _cleaned + 1;
                 }
 
-                console.log(currentRooms[_t]);
-                console.log(currentRooms[_t].members)
+                // console.log(currentRooms[_t]);
+                // console.log(currentRooms[_t].members)
 
-                if (currentRooms[_t].members === undefined || currentRooms[_t].members.length == 0) {
-                    //console.log(JSON.stringify(currentRooms[_t]));
+                if(!Array.isArray(currentRooms[_t].members) || !currentRooms[_t].members.length) {
                     currentRooms[_t].idle = currentRooms[_t].idle + 1;
                 } else {
                     currentRooms[_t].idle = 0;
