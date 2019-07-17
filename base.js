@@ -240,6 +240,7 @@ async function stats(_m) {
             const color = Math.floor(Math.random() * 16777215);
             const exp = res.xp;
             const level = res.level;
+            const cash = res.cash;
 
             var embed = {
                 embed: {
@@ -269,6 +270,9 @@ async function stats(_m) {
                             "inline": true
                         },
                         {
+                            "name": "Cash",
+                            "value": `$${cash}`
+                        } {
                             "name": "XP",
                             "value": exp.toString()
                         },
@@ -327,7 +331,7 @@ function addUser(user) {
 //     "games_left": 0
 // }
 
-function update_user(id, wins, losses, level, xp, games_left) {
+function update_user(id, wins, losses, level, xp, games_left, cash) {
     const c = new MongoClient(mongoURL, {
         useNewUrlParser: true
     });
@@ -362,7 +366,8 @@ function update_user(id, wins, losses, level, xp, games_left) {
                     wins: user.wins + wins,
                     losses: user.losses + losses,
                     xp: user.xp + xp,
-                    games_left: user.games_left + games_left
+                    games_left: user.games_left + games_left,
+                    cash: user.cash + cash
                 }
             })
         });
@@ -757,7 +762,8 @@ function create_player_data() {
         "losses": 0,
         "level": 0,
         "xp": 0,
-        "games_left": 0
+        "games_left": 0,
+        "cash": 0
     }
 }
 
@@ -1071,7 +1077,7 @@ async function logic() {
 
                             if (_currentroom.members[_i]._id == _submit.id) {
 
-                                update_user(_currentroom.members[_i]._id, 0, 0, 0, 10, 0)
+                                update_user(_currentroom.members[_i]._id, 0, 0, 0, 10, 0, 5)
 
                                 _currentroom.members[_i]._points = _currentroom.members[_i]._points + 1;
                             }
@@ -1130,25 +1136,25 @@ async function logic() {
             for (var i = 0; i < currentRooms[_in].members.length; i++) {
                 if (currentRooms[_in].members[i]._points >= 10)
                     winner = i;
-                    
-                    currentRooms[_in].members[i]._points = 0;
+
+                currentRooms[_in].members[i]._points = 0;
             }
 
             var _winner = client.fetchUser(currentRooms[_in].members[winner]._id);
 
             const _mem = currentRooms[_in].members;
 
-            _winner.then(function(_win){
+            _winner.then(function (_win) {
                 for (var i = 0; i < _mem.length; i++) {
                     var _tempuser = client.fetchUser(_mem[i]._id);
                     _tempuser.then(function (_user) {
                         _user.send(`And the winner is: **${_win.username}**!\r\nThat means the rest of you are **losers**!`);
                     });
-    
+
                     if (i == winner)
-                        update_user(_mem[i]._id, 1, 0, 0, 100, 0)
+                        update_user(_mem[i]._id, 1, 0, 0, 100, 0, 20)
                     else
-                        update_user(_mem[i]._id, 0, 1, 0, 5, 0)
+                        update_user(_mem[i]._id, 0, 1, 0, 5, 0, 5)
                 }
             });
 
@@ -1211,7 +1217,7 @@ Object.defineProperty(Object.prototype, 'isEmpty', function () {
     return true;
 })
 
-function empty (o) {
+function empty(o) {
     for (var key in o) {
         if (o.hasOwnProperty(key))
             return false;
