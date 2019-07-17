@@ -1142,7 +1142,7 @@ async function logic() {
                 for (var i = 0; i < _mem.length; i++) {
                     var _tempuser = client.fetchUser(_mem[i]._id);
                     _tempuser.then(function (_user) {
-                        _user.send(`And we have a winner: ${_win.username}! That means the rest of you are losers!`);
+                        _user.send(`And the winner is: **${_win.username}**!\r\nThat means the rest of you are **losers**!`);
                     });
     
                     if (i == winner)
