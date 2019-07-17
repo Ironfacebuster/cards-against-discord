@@ -640,8 +640,9 @@ async function clean_up() {
                 if(currentRooms[_t]) {
                     if(currentRooms[_t].members && currentRooms[_t].members.length <= 0)
                         currentRooms[_t].idle = currentRooms[_t].idle + 1;
-                } else {
-                    currentRooms[_t].idle = 0;
+                    else {
+                        currentRooms[_t].idle = 0;
+                    }
                 }
             }
         }
