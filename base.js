@@ -364,11 +364,11 @@ function update_user(id, wins, losses, level, xp, games_left, cash) {
 
             dbo.updateOne(query, {
                 $set: {
-                    wins: user.wins + wins,
-                    losses: user.losses + losses,
-                    xp: user.xp + xp,
-                    games_left: user.games_left + games_left,
-                    cash: user.cash + cash
+                    wins: Number(user.wins) + wins,
+                    losses: Number(user.losses) + losses,
+                    xp: Number(user.xp) + xp,
+                    games_left: Number(user.games_left) + games_left,
+                    cash: Number(user.cash) + cash
                 }
             })
         });
