@@ -624,7 +624,7 @@ function create_room(_code, _czar, _host, _password) {
 async function clean_up() {
     var _cleaned = 0;
 
-    if (currentRooms.length > 0) {
+    if (Array.isArray(currentRooms) || currentRooms.length > 0) {
         for (var _t = currentRooms.length - 1; _t >= 0; _t--) {
             if (currentRooms[_t] != null) {
                 if (currentRooms[_t].idle >= 24) {
