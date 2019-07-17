@@ -1115,7 +1115,7 @@ async function logic() {
             var end = false;
 
             for (var i = 0; i < currentRooms[_in].members.length; i++) {
-                if (currentRooms[_in].members[i]._points >= 1)
+                if (currentRooms[_in].members[i]._points >= 10)
                     end = true;
             }
 
@@ -1128,7 +1128,7 @@ async function logic() {
             var winner = -1;
 
             for (var i = 0; i < currentRooms[_in].members.length; i++) {
-                if (currentRooms[_in].members[i]._points >= 1)
+                if (currentRooms[_in].members[i]._points >= 10)
                     winner = i;
                     
                     currentRooms[_in].members[i]._points = 0;
