@@ -272,7 +272,8 @@ async function stats(_m) {
                         {
                             "name": "Cash",
                             "value": `$${cash}`
-                        } {
+                        },
+                        {
                             "name": "XP",
                             "value": exp.toString()
                         },
