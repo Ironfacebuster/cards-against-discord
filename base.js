@@ -637,7 +637,7 @@ async function clean_up() {
 
                 console.log(currentRooms[_t]);
 
-                if(!Array.isArray(currentRooms[_t].members)) {
+                if(Array.isArray(currentRooms[_t].members)) {
                     if(currentRooms[_t].members.length <= 0)
                         currentRooms[_t].idle = currentRooms[_t].idle + 1;
                 } else {
