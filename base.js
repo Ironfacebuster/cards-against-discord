@@ -1203,17 +1203,16 @@ async function kick_user(kick_id, _author, _message) {
     }
 }
 
-Object.defineProperty(Object.prototype, 'isEmpty', {
-    value: empty(this),
-    writable: false
-})
-
-function empty (o) {
+Object.defineProperty(Object.prototype, 'isEmpty', function () {
     for (var key in o) {
         if (o.hasOwnProperty(key))
             return false;
     }
     return true;
+})
+
+function empty (o) {
+    
 }
 
 client.login(process.env.TOKEN);
