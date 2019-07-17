@@ -1130,6 +1130,8 @@ async function logic() {
             for (var i = 0; i < currentRooms[_in].members.length; i++) {
                 if (currentRooms[_in].members[i]._points >= 1)
                     winner = i;
+                    
+                    currentRooms[_in].members[i]._points = 0;
             }
 
             var _winner = client.fetchUser(currentRooms[_in].members[winner]._id);
@@ -1138,7 +1140,7 @@ async function logic() {
 
             _winner.then(function(_win){
                 for (var i = 0; i < _mem.length; i++) {
-                    var _tempuser = client.fetchUser(_currentroom.members[i]._id);
+                    var _tempuser = client.fetchUser(_mem[i]._id);
                     _tempuser.then(function (_user) {
                         _user.send(`And we have a winner: ${_win.username}! That means the rest of you are losers!`);
                     });
