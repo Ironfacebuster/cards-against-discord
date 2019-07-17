@@ -1203,12 +1203,12 @@ async function kick_user(kick_id, _author, _message) {
     }
 }
 
-Object.prototype.isEmpty = function () {
+Object.defineProperty(Object.prototype, 'isEmpty', function () {
     for (var key in this) {
         if (this.hasOwnProperty(key))
             return false;
     }
     return true;
-}
+})
 
 client.login(process.env.TOKEN);
