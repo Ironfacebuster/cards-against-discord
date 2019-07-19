@@ -662,6 +662,9 @@ function create_room(_code, _czar, _host, _password) {
 }
 
 async function clean_up() {
+
+    console.log(`Memory usage: ${process.memoryUsage().heapUsed}/${proce.memoryUsage().heapTotal}`)
+
     var _cleaned = 0;
 
     if (Array.isArray(currentRooms) || currentRooms.length) {
