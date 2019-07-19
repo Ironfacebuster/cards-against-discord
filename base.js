@@ -32,6 +32,8 @@ function loadCards() {
 
 const helpMenu = {
     "embed": {
+        "title": "Cards Against Discord Help",
+        "description": "Need some other help? Join the [support server.](https://discord.gg/zf9RJP4)",
         "fields": [{
                 "name": "Host",
                 "value": "cad start - starts the game\r\ncad create [opt. password] - creates a room with an optional password\r\ncad kick [user number] - kicks the user with that number on the scoreboard"
