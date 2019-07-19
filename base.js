@@ -30,6 +30,32 @@ function loadCards() {
         console.log("CARDS NOT LOADED!");
 }
 
+const helpMenu = {
+    "embed": {
+        "fields": [{
+                "name": "Host",
+                "value": "cad start - starts the game\r\ncad create [opt. password] - creates a room with an optional password\r\ncad kick [user number] - kicks the user with that number on the scoreboard"
+            },
+            {
+                "name": "Czar",
+                "value": "cad submit [card number] - picks the specified card to win the round"
+            },
+            {
+                "name": "Non-Czar",
+                "value": "cad submit [card number] - submits the specified card to be judged by the czar\r\ncad cards - shows your cards"
+            },
+            {
+                "name": "Other",
+                "value": "cad join [room code] [optional password] - joins the room with that room code (and password, if there is one)\r\ncad leave - leaves the room you're in\r\ncad scores - shows the scores of all the users in the same room as you\r\ncad reshuffle - reshuffle your hand, giving you new cards"
+            },
+            {
+                "name": "Non-DM",
+                "value": "cad stats [opt. user mention] - shows the stats of a user\r\ncad credits - sends you the credits"
+            }
+        ]
+    }
+}
+
 const client = new discord.Client();
 
 client.on('ready', () => {
@@ -95,6 +121,8 @@ client.on('message', async message => {
             new_cards(message.author.id, message);
         else if (command == "kick")
             kick_user(args[0], message.author.id, message);
+        else if (command == "help")
+            help(message.author)
     } else {
         /* if (command == "randomcard") {
              randomCard(args[0], message);
@@ -103,8 +131,14 @@ client.on('message', async message => {
             stats(message);
         else if (command == "credits")
             credits(message);
+        else if (command == "help")
+            help(message.author)
     }
 });
+
+async function help(author) {
+    author.send(helpMenu)
+}
 
 function check_user(author, _message) {
     const c = new MongoClient(mongoURL, {
@@ -637,8 +671,8 @@ async function clean_up() {
 
                 //console.log(currentRooms[_t]);
 
-                if(currentRooms[_t]) {
-                    if(currentRooms[_t].members && currentRooms[_t].members.length <= 0)
+                if (currentRooms[_t]) {
+                    if (currentRooms[_t].members && currentRooms[_t].members.length <= 0)
                         currentRooms[_t].idle = currentRooms[_t].idle + 1;
                     else {
                         currentRooms[_t].idle = 0;
