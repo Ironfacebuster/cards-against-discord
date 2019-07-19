@@ -307,19 +307,23 @@ async function stats(_m) {
                         },
                         {
                             "name": "Cash",
-                            "value": `$${cash}`
+                            "value": `$${cash}`,
+                            "inline": true
                         },
                         {
                             "name": "XP",
-                            "value": exp.toString()
+                            "value": exp.toString(),
+                            "inline": true
                         },
                         {
                             "name": "Level",
-                            "value": level.toString()
+                            "value": level.toString(),
+                            "inline": true
                         },
                         {
                             "name": "Games in progress left",
-                            "value": left.toString()
+                            "value": left.toString(),
+                            "inline": true
                         }
                     ]
                 }
