@@ -663,7 +663,7 @@ function create_room(_code, _czar, _host, _password) {
 
 async function clean_up() {
 
-    console.log(`Memory usage: ${Math.round(process.memoryUsage().heapUsed/process.memoryUsage().heapTotal)}% (${process.memoryUsage().heapUsed}/${process.memoryUsage().heapTotal})`)
+    console.log(`Memory usage: ${Math.round((process.memoryUsage().heapUsed/process.memoryUsage().heapTotal)*100)}% (${process.memoryUsage().heapUsed}/${process.memoryUsage().heapTotal})`)
 
     var _cleaned = 0;
 
