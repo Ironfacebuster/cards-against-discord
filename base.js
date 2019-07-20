@@ -213,7 +213,7 @@ async function randomCard(_c, _m) {
 }
 */
 
-function room_chat(_args, _m) {
+async function room_chat(_args, _m) {
     var _roomindex = -1;
 
     _author = _m.author;
@@ -239,7 +239,7 @@ function room_chat(_args, _m) {
     }
 }
 
-function stats(_m) {
+async function stats(_m) {
     /*
     if(_m.author.id == "209063671316480002") {
         _m.reply("sorry, I didn't understand that command. Please try again.");
@@ -393,7 +393,7 @@ function addUser(user) {
 //     "games_left": 0
 // }
 
-function update_user(id, wins, losses, level, xp, games_left, cash) {
+async function update_user(id, wins, losses, level, xp, games_left, cash) {
     const c = new MongoClient(mongoURL, {
         useNewUrlParser: true
     });
@@ -412,7 +412,7 @@ function update_user(id, wins, losses, level, xp, games_left, cash) {
 
         dbo.findOne(query, async function (err, res) {
             if (err) {
-                _m.reply("sorry, an error has occurred.");
+                console.log(err)
                 return;
             }
 
@@ -473,7 +473,7 @@ function trimSpaces(string) {
     return s;
 }
 
-function join_room(_roomcode, _author, _message, _password) {
+async function join_room(_roomcode, _author, _message, _password) {
     //const _exists = currentRooms.find(_r => );
 
     var _exists;
@@ -542,7 +542,7 @@ function join_room(_roomcode, _author, _message, _password) {
     }
 }
 
-function new_cards(id, _message) {
+async function new_cards(id, _message) {
     var _mem = -1;
     var _roomindex;
 
@@ -570,7 +570,7 @@ function new_cards(id, _message) {
     }
 }
 
-function cards(id, _message) {
+async function cards(id, _message) {
     var _mem = -1;
     var _roomindex;
 
@@ -605,9 +605,9 @@ function cards(id, _message) {
     }
 }
 
-function leave_room(_author, _message) {
+async function leave_room(_author, _message) {
 
-    var _mem;
+    var _mem = -1;
     var _roomindex;
 
     for (var i = currentRooms.length - 1; i >= 0; i--) {
@@ -722,7 +722,7 @@ async function clean_up() {
     }
 }
 
-function start_room(_author, _message) {
+async function start_room(_author, _message) {
     var _mem = -1;
     var _roomindex;
 
@@ -766,7 +766,7 @@ function start_room(_author, _message) {
     }
 }
 
-function createRoom(_author, _message, args) {
+async function createRoom(_author, _message, args) {
     for (var i = 0; i < currentRooms.length; i++) {
         _exists = currentRooms[i].members.find(_m => _m._id == _author.id);
 
@@ -837,7 +837,7 @@ function create_submission() {
     };
 }
 
-function room_stats(_author, _message) {
+async function room_stats(_author, _message) {
     var _roomindex = -1;
 
     for (var i = currentRooms.length - 1; i >= 0; i--) {
@@ -876,8 +876,8 @@ function room_stats(_author, _message) {
     }
 }
 
-function submit_card(_author, _message, _args) {
-    var _mem;
+async function submit_card(_author, _message, _args) {
+    var _mem = -1;
     var _roomindex;
 
     for (var i = currentRooms.length - 1; i >= 0; i--) {
@@ -1132,7 +1132,7 @@ async function logic() {
             if (choice != null) {
 
                 //if (empty(choice) == false) {
-                if (choice.isEmpty() == false) {
+                if (choice.isEmpty == false) {
                     //console.log(currentRooms[_in].czar_choice);
                     var _submitter = client.fetchUser(choice._submitter);
 
@@ -1227,7 +1227,7 @@ async function logic() {
     }
 }
 
-function kick_user(kick_id, _author, _message) {
+async function kick_user(kick_id, _author, _message) {
     var _roomindex = -1;
 
     for (var i = currentRooms.length - 1; i >= 0; i--) {
