@@ -690,7 +690,7 @@ async function clean_up() {
 
     console.log(`${client.guilds.size} guilds joined.`)
 
-    console.log(`Uptime: ${client.uptime * 1000}s.`)
+    console.log(`Uptime: ${client.uptime / 1000}s.`)
 
     var _cleaned = 0;
 
@@ -1289,7 +1289,7 @@ function empty(o) {
 }
 
 const DBL = require("dblapi.js");
-const dbl = new DBL(process.DBL_TOKEN, client);
+const dbl = new DBL(process.env.DBL_TOKEN, client);
 
 dbl.on('posted', () => {
     console.log('Server count updated.');
