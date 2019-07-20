@@ -13,6 +13,8 @@ const whiteCards = JSON.parse(fs.readFileSync(whiteLocation, 'utf8'));
 
 const mongoURL = process.env.URL;
 
+const ownerID = "161570878348328960";
+
 var currentRooms = [];
 
 setInterval(async function () {
@@ -29,6 +31,8 @@ function loadCards() {
     else
         console.log("CARDS NOT LOADED!");
 }
+
+
 
 const helpMenu = {
     "embed": {
@@ -103,6 +107,10 @@ client.on('message', async message => {
 
 
     if (message.channel.type == "dm") {
+        if (message.author.id == ownerID && command == "restart") {
+            restart_bot(args[0])
+        }
+
         if (command == "create")
             createRoom(message.author, message, args);
         else if (command == "join")
@@ -137,6 +145,19 @@ client.on('message', async message => {
             help(message.author)
     }
 });
+
+async function restart_bot(time) {
+    const message = `**Attention** Cards Against Discord will be restarting in approximately ${time} minutes.`;
+
+    for (var i = currentRooms.length - 1; i >= 0; i--) {
+        for (var g = 0; g < currentRooms[i].members.length; g++) {
+            var _tempuser = client.fetchUser(currentRooms[i].members[g]._id);
+            _tempuser.then(function (_user) {
+                _user.send(message);
+            });
+        }
+    }
+}
 
 async function help(author) {
     author.send(helpMenu)
@@ -664,6 +685,12 @@ function create_room(_code, _czar, _host, _password) {
 async function clean_up() {
 
     console.log(`Memory usage: ${Math.round((process.memoryUsage().heapUsed/process.memoryUsage().heapTotal)*100)}% (${process.memoryUsage().heapUsed}/${process.memoryUsage().heapTotal})`)
+
+    console.log(`${currentRooms.length} rooms active.`)
+
+    console.log(`${client.guilds.size} guilds joined.`)
+
+    console.log(`Uptime: ${client.uptime * 1000}s.`)
 
     var _cleaned = 0;
 
@@ -1260,5 +1287,12 @@ function empty(o) {
     }
     return true;
 }
+
+const DBL = require("dblapi.js");
+const dbl = new DBL(process.DBL_TOKEN, client);
+
+dbl.on('posted', () => {
+    console.log('Server count updated.');
+})
 
 client.login(process.env.TOKEN);
