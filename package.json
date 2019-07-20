@@ -9,6 +9,7 @@
   "author": "Yer Good Ol' Loli Grandpappy#8486",
   "license": "ISC",
   "dependencies": {
+    "dblapi.js": "^2.3.0",
     "discord.js": "^11.4.2",
     "mongodb": "^3.2.7",
     "shuffle-array": "^1.0.1"
