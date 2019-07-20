@@ -213,7 +213,7 @@ async function randomCard(_c, _m) {
 }
 */
 
-async function room_chat(_args, _m) {
+function room_chat(_args, _m) {
     var _roomindex = -1;
 
     _author = _m.author;
@@ -239,7 +239,7 @@ async function room_chat(_args, _m) {
     }
 }
 
-async function stats(_m) {
+function stats(_m) {
     /*
     if(_m.author.id == "209063671316480002") {
         _m.reply("sorry, I didn't understand that command. Please try again.");
@@ -473,7 +473,7 @@ function trimSpaces(string) {
     return s;
 }
 
-async function join_room(_roomcode, _author, _message, _password) {
+function join_room(_roomcode, _author, _message, _password) {
     //const _exists = currentRooms.find(_r => );
 
     var _exists;
@@ -542,7 +542,7 @@ async function join_room(_roomcode, _author, _message, _password) {
     }
 }
 
-async function new_cards(id, _message) {
+function new_cards(id, _message) {
     var _mem = -1;
     var _roomindex;
 
@@ -570,7 +570,7 @@ async function new_cards(id, _message) {
     }
 }
 
-async function cards(id, _message) {
+function cards(id, _message) {
     var _mem = -1;
     var _roomindex;
 
@@ -605,7 +605,7 @@ async function cards(id, _message) {
     }
 }
 
-async function leave_room(_author, _message) {
+function leave_room(_author, _message) {
 
     var _mem;
     var _roomindex;
@@ -722,7 +722,7 @@ async function clean_up() {
     }
 }
 
-async function start_room(_author, _message) {
+function start_room(_author, _message) {
     var _mem = -1;
     var _roomindex;
 
@@ -766,7 +766,7 @@ async function start_room(_author, _message) {
     }
 }
 
-async function createRoom(_author, _message, args) {
+function createRoom(_author, _message, args) {
     for (var i = 0; i < currentRooms.length; i++) {
         _exists = currentRooms[i].members.find(_m => _m._id == _author.id);
 
@@ -837,7 +837,7 @@ function create_submission() {
     };
 }
 
-async function room_stats(_author, _message) {
+function room_stats(_author, _message) {
     var _roomindex = -1;
 
     for (var i = currentRooms.length - 1; i >= 0; i--) {
@@ -876,7 +876,7 @@ async function room_stats(_author, _message) {
     }
 }
 
-async function submit_card(_author, _message, _args) {
+function submit_card(_author, _message, _args) {
     var _mem;
     var _roomindex;
 
@@ -1131,7 +1131,8 @@ async function logic() {
             //console.log(JSON.stringify(currentRooms[_in].czar_choice));
             if (choice != null) {
 
-                if (empty(choice) == false) {
+                //if (empty(choice) == false) {
+                if (choice.isEmpty() == false) {
                     //console.log(currentRooms[_in].czar_choice);
                     var _submitter = client.fetchUser(choice._submitter);
 
@@ -1226,7 +1227,7 @@ async function logic() {
     }
 }
 
-async function kick_user(kick_id, _author, _message) {
+function kick_user(kick_id, _author, _message) {
     var _roomindex = -1;
 
     for (var i = currentRooms.length - 1; i >= 0; i--) {
