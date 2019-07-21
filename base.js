@@ -954,7 +954,7 @@ function submit_card(_author, _message, _args) {
     }
 }
 
-async function logic() {
+function logic() {
     client.user.setActivity(`${client.users.size} users insult each other | cad help`, {
         url: "https://www.twitch.tv/ironfacebuster",
         type: "WATCHING"
