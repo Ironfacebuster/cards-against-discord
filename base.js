@@ -1125,20 +1125,20 @@ function logic() {
                 });
             }
 
-            console.log(currentRooms)
+            //console.log(currentRooms)
 
             currentRooms[_in].stage = 4;
         } else if (currentRooms[_in].stage == 4) {
-            console.log(currentRooms)
+            //console.log(currentRooms)
 
             var choice = currentRooms[_in].czar_choice;
 
             var _currentroom = currentRooms[_in];
-            console.log(JSON.stringify(currentRooms[_in].czar_choice));
+            //console.log(JSON.stringify(currentRooms[_in].czar_choice));
             if (choice != null) {
 
                 //if (empty(choice) == false) {
-                if (choice.isEmpty() == false) {
+                if (empty(choice) == false) {
                     //console.log(currentRooms[_in].czar_choice);
                     var _submitter = client.fetchUser(choice._submitter);
 
