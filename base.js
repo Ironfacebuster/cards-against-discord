@@ -898,7 +898,7 @@ function submit_card(_author, _message, _args) {
                 return;
             }
 
-            if (Number(_args[0]) > 0 || _args[0] <= currentRooms[_roomindex].played_cards.length) {
+            if (_args[0] > 0 && _args[0] <= currentRooms[_roomindex].played_cards.length) {
                 var czarsubmit = create_submission();
 
                 const index = _args[0] - 1;
