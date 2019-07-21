@@ -876,7 +876,7 @@ async function room_stats(_author, _message) {
     }
 }
 
-function submit_card(_author, _message, _args) {
+async function submit_card(_author, _message, _args) {
     var _mem = -1;
     var _roomindex;
 
@@ -954,7 +954,7 @@ function submit_card(_author, _message, _args) {
     }
 }
 
-function logic() {
+async function logic() {
     client.user.setActivity(`${client.users.size} users insult each other | cad help`, {
         url: "https://www.twitch.tv/ironfacebuster",
         type: "WATCHING"
