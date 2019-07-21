@@ -1125,12 +1125,16 @@ function logic() {
                 });
             }
 
+            console.log(currentRooms)
+
             currentRooms[_in].stage = 4;
         } else if (currentRooms[_in].stage == 4) {
+            console.log(currentRooms)
+
             var choice = currentRooms[_in].czar_choice;
 
             var _currentroom = currentRooms[_in];
-            //console.log(JSON.stringify(currentRooms[_in].czar_choice));
+            console.log(JSON.stringify(currentRooms[_in].czar_choice));
             if (choice != null) {
 
                 //if (empty(choice) == false) {
