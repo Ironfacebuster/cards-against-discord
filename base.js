@@ -1138,7 +1138,7 @@ function logic() {
             if (choice != null) {
 
                 //if (empty(choice) == false) {
-                if (choice.isEmpty == false) {
+                if (choice.isEmpty() == false) {
                     //console.log(currentRooms[_in].czar_choice);
                     var _submitter = client.fetchUser(choice._submitter);
 
