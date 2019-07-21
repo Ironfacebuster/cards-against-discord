@@ -1,19 +1,18 @@
 const discord = require("discord.js");
 const fs = require('fs');
 var shuffle = require('shuffle-array');
-const MongoClient = require('mongodb').MongoClient;
 
 const prefix = "cad ";
 
 const blackLocation = "CARDS/BLACK_CARDS.json"
 const whiteLocation = "CARDS/WHITE_CARDS.json"
+const clowns = "clowns.txt";
 
 const blackCards = JSON.parse(fs.readFileSync(blackLocation, 'utf8'));
 const whiteCards = JSON.parse(fs.readFileSync(whiteLocation, 'utf8'));
-
-const mongoURL = process.env.URL;
-
-const ownerID = "161570878348328960";
+const names = fs.readFileSync(clowns, {
+    encoding: "utf8"
+}).split('z');
 
 var currentRooms = [];
 
@@ -25,6 +24,14 @@ setInterval(async function () {
     logic();
 }, 1350);
 
+const defaultUser = {
+    "id": "",
+    "wins": 0,
+    "losses": 0,
+    "level": 0,
+    "xp": 0
+}
+
 function loadCards() {
     if (blackCards != null && whiteCards != null)
         console.log("CARDS LOADED SUCCESSFULLY");
@@ -32,42 +39,12 @@ function loadCards() {
         console.log("CARDS NOT LOADED!");
 }
 
-
-
-const helpMenu = {
-    "embed": {
-        "title": "Cards Against Discord Help",
-        "description": "Need some other help? Join the [support server.](https://discord.gg/zf9RJP4)",
-        "fields": [{
-                "name": "Host",
-                "value": "cad start - starts the game\r\ncad create [opt. password] - creates a room with an optional password\r\ncad kick [user number] - kicks the user with that number on the scoreboard"
-            },
-            {
-                "name": "Czar",
-                "value": "cad submit [card number] - picks the specified card to win the round"
-            },
-            {
-                "name": "Non-Czar",
-                "value": "cad submit [card number] - submits the specified card to be judged by the czar\r\ncad cards - shows your cards"
-            },
-            {
-                "name": "Other",
-                "value": "cad join [room code] [optional password] - joins the room with that room code (and password, if there is one)\r\ncad leave - leaves the room you're in\r\ncad scores - shows the scores of all the users in the same room as you\r\ncad reshuffle - reshuffle your hand, giving you new cards"
-            },
-            {
-                "name": "Non-DM",
-                "value": "cad stats [opt. user mention] - shows the stats of a user\r\ncad credits - sends you the credits"
-            }
-        ]
-    }
-}
-
 const client = new discord.Client();
 
 client.on('ready', () => {
     console.log("BOT READY.");
     //client.user.setActivity("Working on things... DO NOT ATTEMPT TO USE.");
-    client.user.setActivity(`${client.users.size} users insult each other | cad help`, {
+    client.user.setActivity(`${client.guilds.size} guilds insult each other | cad help`, {
         url: "https://www.twitch.tv/ironfacebuster",
         type: "WATCHING"
     });
@@ -76,7 +53,7 @@ client.on('ready', () => {
 });
 
 client.on('guildCreate', () => {
-    client.user.setActivity(`${client.users.size} users insult each other | cad help`, {
+    client.user.setActivity(`${client.guilds.size} guilds insult each other | cad help`, {
         url: "https://www.twitch.tv/ironfacebuster",
         type: "WATCHING"
     });
@@ -103,14 +80,8 @@ client.on('message', async message => {
 
     //console.log(`COMMAND: ${command}`)
     //console.log(`ARGUMENTS: ${args}`)
-    check_user(message.author, message);
-
 
     if (message.channel.type == "dm") {
-        if (message.author.id == ownerID && command == "restart") {
-            restart_bot(args[0])
-        }
-
         if (command == "create")
             createRoom(message.author, message, args);
         else if (command == "join")
@@ -131,8 +102,8 @@ client.on('message', async message => {
             new_cards(message.author.id, message);
         else if (command == "kick")
             kick_user(args[0], message.author.id, message);
-        else if (command == "help")
-            help(message.author)
+        else if (command == "ai")
+
     } else {
         /* if (command == "randomcard") {
              randomCard(args[0], message);
@@ -141,68 +112,8 @@ client.on('message', async message => {
             stats(message);
         else if (command == "credits")
             credits(message);
-        else if (command == "help")
-            help(message.author)
     }
 });
-
-async function restart_bot(time) {
-    const message = `**Attention** Cards Against Discord will be restarting in approximately ${time} minutes.`;
-
-    for (var i = currentRooms.length - 1; i >= 0; i--) {
-        for (var g = 0; g < currentRooms[i].members.length; g++) {
-            var _tempuser = client.fetchUser(currentRooms[i].members[g]._id);
-            _tempuser.then(function (_user) {
-                _user.send(message);
-            });
-        }
-    }
-}
-
-async function help(author) {
-    author.send(helpMenu)
-}
-
-function check_user(author, _message) {
-    const c = new MongoClient(mongoURL, {
-        useNewUrlParser: true
-    });
-
-    const auth = author;
-    const _m = _message;
-
-    c.connect(function (err) {
-        if (err)
-            console.error(err);
-
-        const db = c.db("cad-storage");
-
-        const dbo = db.collection("user-data");
-
-        // "_id": "",
-        // "id": "",
-        // "wins": 0,
-        // "losses": 0,
-        // "level": 0,
-        // "xp": 0,
-        // "games_left": 0
-
-        var query = {
-            "id": auth.id
-        };
-
-        dbo.findOne(query, async function (err, res) {
-            if (err) {
-                _m.reply("sorry, an error has occurred.");
-                return;
-            }
-
-            if (res == null) {
-                addUser(auth);
-            }
-        });
-    });
-}
 
 /*
 async function randomCard(_c, _m) {
@@ -252,188 +163,52 @@ async function stats(_m) {
     if (_m.mentions.users.first() && !_m.mentions.users.first().bot)
         author = _m.mentions.users.first();
 
-    const c = new MongoClient(mongoURL, {
-        useNewUrlParser: true
-    });
+    const wins = Math.round(Math.random() * 100);
+    const losses = Math.round(Math.random() * 100);
+    const wl = Math.floor((wins / losses) * 100) / 100;
 
-    const auth = author;
+    var color = Math.floor(Math.random() * 16777215);
 
-    c.connect(function (err) {
-        if (err)
-            console.error(err);
-
-        const db = c.db("cad-storage");
-
-        const dbo = db.collection("user-data");
-
-        // "_id": "",
-        // "id": "",
-        // "wins": 0,
-        // "losses": 0,
-        // "level": 0,
-        // "xp": 0,
-        // "games_left": 0
-
-        var query = {
-            "id": auth.id
-        };
-
-        dbo.findOne(query, async function (err, res) {
-            if (err) {
-                _m.reply("sorry, an error has occurred.");
-                return;
-            }
-
-            if (res == null) {
-                _m.reply("user not found! Have they said anything to me yet?");
-                //addUser(auth)
-                return;
-            }
-
-            const wins = res.wins;
-            const losses = res.losses;
-            const wl = Math.floor((wins / losses) * 100) / 100;
-            const left = res.games_left;
-            const color = Math.floor(Math.random() * 16777215);
-            const exp = res.xp;
-            const level = res.level;
-            const cash = res.cash;
-
-            var embed = {
-                embed: {
-                    "color": color,
-                    "footer": {
-                        "text": "Cards Against Discord | This command is still a work in progress."
-                    },
-                    "thumbnail": {
-                        "url": author.displayAvatarURL.toString()
-                    },
-                    "author": {
-                        "name": `${author.username}'s stats`
-                    },
-                    "fields": [{
-                            "name": "Wins",
-                            "value": wins.toString(),
-                            "inline": true
-                        },
-                        {
-                            "name": "Losses",
-                            "value": losses.toString(),
-                            "inline": true
-                        },
-                        {
-                            "name": "W/L Ratio",
-                            "value": wl.toString(),
-                            "inline": true
-                        },
-                        {
-                            "name": "Cash",
-                            "value": `$${cash}`,
-                            "inline": true
-                        },
-                        {
-                            "name": "XP",
-                            "value": exp.toString(),
-                            "inline": true
-                        },
-                        {
-                            "name": "Level",
-                            "value": level.toString(),
-                            "inline": true
-                        },
-                        {
-                            "name": "Games in progress left",
-                            "value": left.toString(),
-                            "inline": true
-                        }
-                    ]
+    var embed = {
+        embed: {
+            "color": color,
+            "footer": {
+                "text": "Cards Against Discord | This command is not complete, it shows randomly generated values."
+            },
+            "thumbnail": {
+                "url": author.displayAvatarURL.toString()
+            },
+            "author": {
+                "name": `${author.username}'s stats`
+            },
+            "fields": [{
+                    "name": "Wins",
+                    "value": wins.toString(),
+                    "inline": true
+                },
+                {
+                    "name": "Losses",
+                    "value": losses.toString(),
+                    "inline": true
+                },
+                {
+                    "name": "W/L Ratio",
+                    "value": wl.toString(),
+                    "inline": true
+                },
+                {
+                    "name": "XP",
+                    "value": "0/0"
+                },
+                {
+                    "name": "Level",
+                    "value": "1"
                 }
-            };
-
-            _m.channel.send(embed);
-        })
-    });
-
-
-}
-
-function addUser(user) {
-
-    const c = new MongoClient(mongoURL, {
-        useNewUrlParser: true
-    });
-
-    c.connect(function (err) {
-        if (err)
-            console.error(err);
-
-        var data = create_player_data();
-        data.id = user.id;
-        data._id = user.id;
-
-        const db = c.db("cad-storage");
-
-        const dbo = db.collection("user-data");
-
-        dbo.insertOne(data, function (err) {
-            if (err)
-                console.err(err);
-
-        })
-    });
-}
-
-// {
-//     "_id": "",
-//     "id": "",
-//     "wins": 0,
-//     "losses": 0,
-//     "level": 0,
-//     "xp": 0,
-//     "games_left": 0
-// }
-
-async function update_user(id, wins, losses, level, xp, games_left, cash) {
-    const c = new MongoClient(mongoURL, {
-        useNewUrlParser: true
-    });
-
-    var query = {
-        "id": id
+            ]
+        }
     };
 
-    c.connect(function (err) {
-        if (err)
-            console.error(err);
-
-        const db = c.db("cad-storage");
-
-        const dbo = db.collection("user-data");
-
-        dbo.findOne(query, async function (err, res) {
-            if (err) {
-                console.log(err)
-                return;
-            }
-
-            if (res == null) {
-                //addUser(auth)
-                return;
-            }
-
-            var user = res;
-
-            dbo.updateOne(query, {
-                $set: {
-                    wins: Number(user.wins) + wins,
-                    losses: Number(user.losses) + losses,
-                    xp: Number(user.xp) + xp,
-                    games_left: Number(user.games_left) + games_left,
-                    cash: Number(user.cash) + cash
-                }
-            })
-        });
-    });
+    _m.channel.send(embed);
 }
 
 function credits(_m) {
@@ -505,7 +280,7 @@ async function join_room(_roomcode, _author, _message, _password) {
                     }
                     currentRooms[_room].members.push(_player);
                     for (var g = 0; g < currentRooms[_room].members.length; g++) {
-                        if (currentRooms[_room].members[g]._id != _author.id) {
+                        if (currentRooms[_room].members[g]._id != _author.id && currentRooms[_room].members[g]._ai == false) {
                             var _tempuser = client.fetchUser(currentRooms[_room].members[g]._id);
                             _tempuser.then(function (_user) {
                                 _user.send(`${_author.username} has joined your room.`);
@@ -527,7 +302,7 @@ async function join_room(_roomcode, _author, _message, _password) {
                 }
                 currentRooms[_room].members.push(_player);
                 for (var g = 0; g < currentRooms[_room].members.length; g++) {
-                    if (currentRooms[_room].members[g]._id != _author.id) {
+                    if (currentRooms[_room].members[g]._id != _author.id && currentRooms[_room].members[g]._ai == false) {
                         var _tempuser = client.fetchUser(currentRooms[_room].members[g]._id);
                         _tempuser.then(function (_user) {
                             _user.send(`${_author.username} has joined your room.`);
@@ -561,8 +336,6 @@ async function new_cards(id, _message) {
         }
 
         _message.author.send("Your cards have been repicked.");
-
-        cards(id, _message);
 
     } else {
 
@@ -607,7 +380,7 @@ async function cards(id, _message) {
 
 async function leave_room(_author, _message) {
 
-    var _mem = -1;
+    var _mem;
     var _roomindex;
 
     for (var i = currentRooms.length - 1; i >= 0; i--) {
@@ -627,18 +400,14 @@ async function leave_room(_author, _message) {
         currentRooms[_roomindex].members[currentRooms[_roomindex].members.length - 1] = _temp;
         currentRooms[_roomindex].members.pop();
         for (var g = 0; g < currentRooms[_roomindex].members.length; g++) {
-            if (currentRooms[_roomindex].members[g]._id != _author.id) {
+            if (currentRooms[_roomindex].members[g]._id != _author.id && currentRooms[_roomindex].members[g]._ai == false) {
                 var _tempuser = client.fetchUser(currentRooms[_roomindex].members[g]._id);
                 _tempuser.then(function (_user) {
                     _user.send(`${_author.username} has left your room.`);
                 });
             }
         }
-        if (currentRooms[_roomindex].stage >= 0 && currentRooms[_roomindex].stage < 6) {
-            _message.reply("Room left. But, you left while a game was in progess!");
-            update_user(_author.id, 0, 1, 0, 0, 1)
-        } else
-            _message.reply("Room left.");
+        _message.reply("Room left.");
     }
 }
 
@@ -664,6 +433,7 @@ function create_room(_code, _czar, _host, _password) {
         "room_code": _code,
         "password": _password,
         "members": [],
+        "ai":[],
         "czar": _czar,
         "host": _host,
         //stage == -1 not started
@@ -683,43 +453,42 @@ function create_room(_code, _czar, _host, _password) {
 }
 
 async function clean_up() {
-
-    console.log(`Memory usage: ${Math.round((process.memoryUsage().heapUsed/process.memoryUsage().heapTotal)*100)}% (${process.memoryUsage().heapUsed}/${process.memoryUsage().heapTotal})`)
-
-    console.log(`${currentRooms.length} rooms active.`)
-
-    console.log(`${client.guilds.size} guilds joined.`)
-
-    console.log(`Uptime: ${client.uptime / 1000}s.`)
-
     var _cleaned = 0;
 
-    if (Array.isArray(currentRooms) || currentRooms.length) {
+    if (currentRooms.length > 0) {
         for (var _t = currentRooms.length - 1; _t >= 0; _t--) {
+            //console.log(_t);
             if (currentRooms[_t] != null) {
                 if (currentRooms[_t].idle >= 24) {
                     if (_t != currentRooms.length - 1) {
+                        /*
+                        const _cur = currentRooms[_t];
+                        //const _next = currentRooms[0];
+                        currentRooms[_t] = currentRooms[0];
+                        currentRooms[0] = _cur;
+                        */
                         [currentRooms[currentRooms.length - 1], currentRooms[_t]] = [currentRooms[_t], currentRooms[currentRooms.length - 1]];
+                        //console.log("FIRST " + JSON.stringify(currentRooms[currentRooms.length-1]))
+                        //console.log("_T " + JSON.stringify(currentRooms[_t]))
                     }
+                    //console.log("FIRST " + JSON.stringify(currentRooms[0]))
+                    //console.log("_T " + JSON.stringify(currentRooms[_t]))
                     currentRooms.pop();
                     _cleaned = _cleaned + 1;
                 }
 
-                //console.log(currentRooms[_t]);
-
-                if (currentRooms[_t]) {
-                    if (currentRooms[_t].members && currentRooms[_t].members.length <= 0)
-                        currentRooms[_t].idle = currentRooms[_t].idle + 1;
-                    else {
-                        currentRooms[_t].idle = 0;
-                    }
+                if (currentRooms[_t].members.length == 0) {
+                    //console.log(JSON.stringify(currentRooms[_t]));
+                    currentRooms[_t].idle = currentRooms[_t].idle + 1;
+                } else {
+                    currentRooms[_t].idle = 0;
                 }
             }
         }
-
-        if (_cleaned != 0)
-            console.log(`${_cleaned} empty rooms cleaned.`);
     }
+
+    if (_cleaned != 0)
+        console.log(`${_cleaned} empty rooms cleaned.`);
 }
 
 async function start_room(_author, _message) {
@@ -813,21 +582,10 @@ function create_player() {
     return {
         "_id": "",
         "_cards": [],
-        "_points": 0
+        "_points": 0,
+        "_ai": false,
+        "_username":"real player"
     };
-}
-
-function create_player_data() {
-    return {
-        "_id": "",
-        "id": "",
-        "wins": 0,
-        "losses": 0,
-        "level": 0,
-        "xp": 0,
-        "games_left": 0,
-        "cash": 0
-    }
 }
 
 function create_submission() {
@@ -877,7 +635,7 @@ async function room_stats(_author, _message) {
 }
 
 async function submit_card(_author, _message, _args) {
-    var _mem = -1;
+    var _mem;
     var _roomindex;
 
     for (var i = currentRooms.length - 1; i >= 0; i--) {
@@ -898,7 +656,7 @@ async function submit_card(_author, _message, _args) {
                 return;
             }
 
-            if (_args[0] > 0 || _args[0] < currentRooms[_roomindex].played_cards.length) {
+            if (Number(_args[0]) > 0 || _args[0] < currentRooms[_roomindex].played_cards.length) {
                 var czarsubmit = create_submission();
 
                 const index = _args[0] - 1;
@@ -953,10 +711,6 @@ async function submit_card(_author, _message, _args) {
 }
 
 async function logic() {
-    client.user.setActivity(`${client.users.size} users insult each other | cad help`, {
-        url: "https://www.twitch.tv/ironfacebuster",
-        type: "WATCHING"
-    });
     //stage == -2 not started
     //stage == 0 show prompt
     //stage == 1 send message to pick white cards
@@ -988,10 +742,12 @@ async function logic() {
             if (currentRooms[_in].stage >= 0 && !host_left) {
                 _tempczarfind.then(function (_newczar) {
                     for (var _i = 0; _i < currentRooms[index].members.length; _i++) {
-                        var _tempuser = client.fetchUser(currentRooms[index].members[_i]._id);
-                        _tempuser.then(function (_user) {
-                            _user.send(`The current Czar has left.\r\nThe new Czar is ${_newczar.username}.`);
-                        });
+                        if (currentRooms[index].members[_i]._ai == false) {
+                            var _tempuser = client.fetchUser(currentRooms[index].members[_i]._id);
+                            _tempuser.then(function (_user) {
+                                _user.send(`The current Czar has left.\r\nThe new Czar is ${_newczar.username}.`);
+                            });
+                        }
                     }
                 });
             }
@@ -1131,8 +887,7 @@ async function logic() {
             //console.log(JSON.stringify(currentRooms[_in].czar_choice));
             if (choice != null) {
 
-                //if (empty(choice) == false) {
-                if (choice.isEmpty == false) {
+                if (choice.isEmpty() == false) {
                     //console.log(currentRooms[_in].czar_choice);
                     var _submitter = client.fetchUser(choice._submitter);
 
@@ -1140,9 +895,6 @@ async function logic() {
                         for (var _i = 0; _i < _currentroom.members.length; _i++) {
 
                             if (_currentroom.members[_i]._id == _submit.id) {
-
-                                update_user(_currentroom.members[_i]._id, 0, 0, 0, 10, 0, 5)
-
                                 _currentroom.members[_i]._points = _currentroom.members[_i]._points + 1;
                             }
 
@@ -1182,47 +934,7 @@ async function logic() {
 
             //console.log(`FINAL CZAR: ${currentRooms[_in].czar}`);
 
-            var end = false;
-
-            for (var i = 0; i < currentRooms[_in].members.length; i++) {
-                if (currentRooms[_in].members[i]._points >= 10)
-                    end = true;
-            }
-
-            if (!end)
-                currentRooms[_in].stage = 0;
-            else
-                currentRooms[_in].stage = 6;
-
-        } else if (currentRooms[_in].stage == 6) {
-            var winner = -1;
-
-            for (var i = 0; i < currentRooms[_in].members.length; i++) {
-                if (currentRooms[_in].members[i]._points >= 10)
-                    winner = i;
-
-                currentRooms[_in].members[i]._points = 0;
-            }
-
-            var _winner = client.fetchUser(currentRooms[_in].members[winner]._id);
-
-            const _mem = currentRooms[_in].members;
-
-            _winner.then(function (_win) {
-                for (var i = 0; i < _mem.length; i++) {
-                    var _tempuser = client.fetchUser(_mem[i]._id);
-                    _tempuser.then(function (_user) {
-                        _user.send(`And the winner is: **${_win.username}**!\r\nThat means the rest of you are **losers**!`);
-                    });
-
-                    if (i == winner)
-                        update_user(_mem[i]._id, 1, 0, 0, 100, 0, 20)
-                    else
-                        update_user(_mem[i]._id, 0, 1, 0, 5, 0, 5)
-                }
-            });
-
-            currentRooms[_in].stage = -1;
+            currentRooms[_in].stage = 0;
         }
     }
 }
@@ -1273,27 +985,41 @@ async function kick_user(kick_id, _author, _message) {
     }
 }
 
-Object.defineProperty(Object.prototype, 'isEmpty', function () {
+async function addAI(count, _author, _message) {
+
+    var _roomindex = -1;
+
+    for (var i = currentRooms.length - 1; i >= 0; i--) {
+        var _tempmem = currentRooms[i].members.findIndex(_m => _m._id == _author);
+        if (_tempmem != -1) {
+            //console.log("FOUND USER? " + currentRooms[i].members.findIndex(_m => _m._id == _author.id) + "\r\nSERVER: " + currentRooms[i]);
+            _roomindex = i;
+        }
+    }
+
+    if (_author != currentRooms[_roomindex].host) {
+        _message.reply("You're not the host.");
+        return;
+    }
+
+    var AIcount = Number(count);
+
+    if (AIcount < 0)
+        AIcount = 1;
+
+    for (var i = 0; i < AIcount; i++) {
+        var ai = create_player();
+        ai._username = names[Math.floor(Math.random() * names.length)]
+    }
+
+}
+
+Object.prototype.isEmpty = function () {
     for (var key in this) {
         if (this.hasOwnProperty(key))
             return false;
     }
     return true;
-})
-
-function empty(o) {
-    for (var key in o) {
-        if (o.hasOwnProperty(key))
-            return false;
-    }
-    return true;
 }
-
-const DBL = require("dblapi.js");
-const dbl = new DBL(process.env.DBL_TOKEN, client);
-
-dbl.on('posted', () => {
-    console.log('Server count updated.');
-})
 
 client.login(process.env.TOKEN);
