@@ -912,6 +912,8 @@ function submit_card(_author, _message, _args) {
 
                 currentRooms[_roomindex].czar_choice = czarsubmit;
 
+                _message.reply("Your choice has been submitted.");
+
                 //_message.reply("Room czar choice: \r\n" + JSON.stringify(currentRooms[_roomindex].czar_choice));
                 //console.log(currentRooms[_roomindex].czar_choice);
             } else {
