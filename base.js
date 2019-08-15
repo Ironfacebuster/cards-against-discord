@@ -423,13 +423,19 @@ async function update_user(id, wins, losses, level, xp, games_left, cash) {
 
             var user = res;
 
+            const w = Number.parseInt(Number(user.wins) + wins)
+            const l = Number.parseInt(Number(user.losses) + losses)
+            const x = Number.parseInt(Number(user.xp) + xp)
+            const gl = Number.parseInt(Number(user.games_left) + games_left)
+            const c = Number.parseInt(Number(user.cash) + cash)
+
             dbo.updateOne(query, {
                 $set: {
-                    wins: Number(user.wins) + wins,
-                    losses: Number(user.losses) + losses,
-                    xp: Number(user.xp) + xp,
-                    games_left: Number(user.games_left) + games_left,
-                    cash: Number(user.cash) + cash
+                    wins: w,
+                    losses: l,
+                    xp: x,
+                    games_left: gl,
+                    cash: c
                 }
             })
         });
