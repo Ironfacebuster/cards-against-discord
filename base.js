@@ -158,7 +158,7 @@ async function restart_bot(time) {
         for (var g = 0; g < currentRooms[i].members.length; g++) {
             var _tempuser = client.fetchUser(currentRooms[i].members[g]._id);
 
-            translate.run(message,currentRooms[i].members[g]._id,mongoURL,MongoClient,client,true,_tempuser)
+            translate.run(message,currentRooms[i].members[g]._id,mongoURL,null,null,true,_tempuser)
             // _tempuser.then(function (_user) {
             //     translate.run(message,null,)
             //     _user.send(message);
@@ -187,14 +187,14 @@ function change_language (author, _args, message) {
 
         const message = `${_args[0]} is not a 2 letter language code.\r\nAvailable codes are: ${languageList}`
 
-        translate.run(message,message.author.id,mongoURL,MongoClient,client);
+        translate.run(message,message.author.id,mongoURL,null,client);
 
         return;
     }
 
     update_user(author.id,0,0,0,0,0,0,_args[0]);
 
-    translate.run("Your language has been changed.",message.author.id,mongoURL,MongoClient,client,false,message);
+    translate.run("Your language has been changed.",message.author.id,mongoURL,null,client,false,message);
     
     //say
 }
@@ -321,7 +321,7 @@ async function stats(_m) {
             }
 
             if (res == null) {
-                translate.run("user not found! Have they said anything to me yet?", _m.author.id,mongoURL,MongoClient,client,true,_m)
+                translate.run("user not found! Have they said anything to me yet?", _m.author.id,mongoURL,,client,true,_m)
                 //_m.reply("user not found! Have they said anything to me yet?");
                 //addUser(auth)
                 return;
@@ -387,7 +387,7 @@ async function stats(_m) {
                 }
             };
 
-            //translate.run(embed, null, _m.author.id, mongoURL,MongoClient,client,false,_m,true)
+            //translate.run(embed, null, _m.author.id, mongoURL,null,client,false,_m,true)
 
             _m.channel.send(embed);
         })
@@ -535,7 +535,7 @@ async function join_room(_roomcode, _author, _message, _password) {
         _exists = currentRooms[i].members.find(_m => _m._id == _author.id);
 
         if (_exists != null) {
-            translate.run("You're already in a game.", _message.author.id,mongoURL,MongoClient,client,true,_message)
+            translate.run("You're already in a game.", _message.author.id,mongoURL,null,client,true,_message)
             //_message.reply("You're already in a game.");
             return;
         }
@@ -544,7 +544,7 @@ async function join_room(_roomcode, _author, _message, _password) {
     //_message.channel.send("`" + JSON.stringify(currentRooms) + "`");
 
     if (_exists != null) {
-        translate.run("You're already in a game.", _message.author.id,mongoURL,MongoClient,client,true,_message)
+        translate.run("You're already in a game.", _message.author.id,mongoURL,null,client,true,_message)
         // _message.reply("You're already in a game.");
     } else {
         const _room = currentRooms.findIndex(r => r.room_code.trim() == _roomcode.toString().trim());
@@ -563,7 +563,7 @@ async function join_room(_roomcode, _author, _message, _password) {
                         if (currentRooms[_room].members[g]._id != _author.id) {
                             var _tempuser = client.fetchUser(currentRooms[_room].members[g]._id);
                             _tempuser.then(function (_user) {
-                                translate.run(`${_author.username} has joined your room.`, _user.id, mongoURL,MongoClient,client,true,_m)
+                                translate.run(`${_author.username} has joined your room.`, _user.id, mongoURL,null,client,true,_m)
                                 //_user.send(`${_author.username} has joined your room.`);
                             });
                         }
@@ -571,10 +571,10 @@ async function join_room(_roomcode, _author, _message, _password) {
                     _message.reply("Room joined.");
                 } else {
                     if (_password.length > 0)
-                        translate.run("Incorrect password.", _message.author.id, mongoURL,MongoClient,client,true,_m)
+                        translate.run("Incorrect password.", _message.author.id, mongoURL,null,client,true,_m)
                         //_message.reply("Incorrect password.");
                     else
-                        translate.run("This room has a password.", _message.author.id, mongoURL,MongoClient,client,true,_m)
+                        translate.run("This room has a password.", _message.author.id, mongoURL,null,client,true,_m)
                         //_message.reply("This room has a password.");
                 }
             } else {
@@ -588,16 +588,16 @@ async function join_room(_roomcode, _author, _message, _password) {
                     if (currentRooms[_room].members[g]._id != _author.id) {
                         var _tempuser = client.fetchUser(currentRooms[_room].members[g]._id);
                         _tempuser.then(function (_user) {
-                            translate.run(`${_author.username} has joined your room.`, _message.author.id, mongoURL,MongoClient,client,true,_m)
+                            translate.run(`${_author.username} has joined your room.`, _message.author.id, mongoURL,null,client,true,_m)
                             //_user.send(`${_author.username} has joined your room.`);
                         });
                     }
                 }
-                translate.run("Room joined.", _message.author.id, mongoURL,MongoClient,client,true,_m)
+                translate.run("Room joined.", _message.author.id, mongoURL,null,client,true,_m)
                 //_message.reply("Room joined.");
             }
         } else {
-            translate.run("Room not found.", _message.author.id, mongoURL,MongoClient,client,true,_m)
+            translate.run("Room not found.", _message.author.id, mongoURL,null,client,true,_m)
             // _message.reply("Room not found.");
         }
     }
@@ -621,13 +621,13 @@ async function new_cards(id, _message) {
             currentRooms[_roomindex].members[_mem]._cards[_c] = whiteCards._cards[Math.floor(Math.random() * whiteCards._cards.length)]
         }
 
-        translate.run("Your cards have been repicked.", _message.author.id, mongoURL,MongoClient,client,true,_m)
+        translate.run("Your cards have been repicked.", _message.author.id, mongoURL,null,client,true,_m)
         //_message.author.send("Your cards have been repicked.");
 
         cards(id, _message);
 
     } else {
-        translate.run("You're not in a room!", _message.author.id, mongoURL,MongoClient,client,true,_m)
+        translate.run("You're not in a room!", _message.author.id, mongoURL,null,client,true,_m)
         //_message.author.send("You're not in a room!");
     }
 }
@@ -654,7 +654,7 @@ async function cards(id, _message) {
         temp_user = client.fetchUser(id);
 
         temp_user.then(function (user) {
-            translate.run(card, user.id, mongoURL,MongoClient,client,true,user)
+            translate.run(card, user.id, mongoURL,null,client,true,user)
             //user.send(card);
         });
 
@@ -663,7 +663,7 @@ async function cards(id, _message) {
         temp_user = client.fetchUser(id);
 
         temp_user.then(function (user) {
-            translate.run("You're not in a room!", temp_user.id, mongoURL,MongoClient,client,true,user)
+            translate.run("You're not in a room!", temp_user.id, mongoURL,null,client,true,user)
             //user.send("You're not in a room!");
         });
     }
@@ -684,7 +684,7 @@ async function leave_room(_author, _message) {
     }
 
     if (_mem == -1) {
-        translate.run("You're not currently in a game.", _message.author.id, mongoURL,MongoClient,client,true,_m)
+        translate.run("You're not currently in a game.", _message.author.id, mongoURL,null,client,true,_m)
         //_message.reply("You're not currently in a game.");
     } else {
         var _temp = currentRooms[_roomindex].members[_mem];
@@ -695,17 +695,17 @@ async function leave_room(_author, _message) {
             if (currentRooms[_roomindex].members[g]._id != _author.id) {
                 var _tempuser = client.fetchUser(currentRooms[_roomindex].members[g]._id);
                 _tempuser.then(function (_user) {
-                    translate.run(`${_author.username} has left your room.`, _author.id, mongoURL,MongoClient,client,true,_user)
+                    translate.run(`${_author.username} has left your room.`, _author.id, mongoURL,null,client,true,_user)
                     //_user.send(`${_author.username} has left your room.`);
                 });
             }
         }
         if (currentRooms[_roomindex].stage >= 0 && currentRooms[_roomindex].stage < 6) {
-            translate.run("Room left. But, you left while a game was in progress!", _author.id, mongoURL,MongoClient,client,true,_message)
+            translate.run("Room left. But, you left while a game was in progress!", _author.id, mongoURL,null,client,true,_message)
             //_message.reply("Room left. But, you left while a game was in progress!");
             update_user(_author.id, 0, 1, 0, 0, 1)
         } else
-            translate.run("Room left.", _message.author.id, mongoURL,MongoClient,client,true,_message)
+            translate.run("Room left.", _message.author.id, mongoURL,null,client,true,_message)
             //_message.reply("Room left.");
     }
 }
@@ -826,7 +826,7 @@ async function start_room(_author, _message) {
         for (var _i = 0; _i < currentRooms[_roomindex].members.length; _i++) {
             var _tempuser = client.fetchUser(currentRooms[_roomindex].members[_i]._id);
             _tempuser.then(function (_user) {
-                translate.run(`${_author.username} has started the game!`,_user.id,mongoURL,MongoClient,client,true,_user)
+                translate.run(`${_author.username} has started the game!`,_user.id,mongoURL,null,client,true,_user)
                 //_user.send(`${_author.username} has started the game!`);
             });
         }
@@ -840,7 +840,7 @@ async function createRoom(_author, _message, args) {
         _exists = currentRooms[i].members.find(_m => _m._id == _author.id);
 
         if (_exists != null) {
-            translate.run("You're already in a game.",_message.author.id,mongoURL,MongoClient,client,true,_message)
+            translate.run("You're already in a game.",_message.author.id,mongoURL,null,client,true,_message)
             // _message.reply("You're already in a game.");
             return;
         }
@@ -849,7 +849,7 @@ async function createRoom(_author, _message, args) {
     var _new;
 
     if (args.length > 0 && args[0].length > 10) {
-        translate.run("The password can't be longer than 10 characters.",_message.author.id,mongoURL,MongoClient,client,true,_message)
+        translate.run("The password can't be longer than 10 characters.",_message.author.id,mongoURL,null,client,true,_message)
         //_message.reply("The password can't be longer than 10 characters.");
         return;
     }
@@ -875,7 +875,7 @@ async function createRoom(_author, _message, args) {
     //console.log("558: " + _new.password);
 
     currentRooms.push(_new);
-    translate.run("Room created with code `" + _new.room_code + "`",_message.author.id,mongoURL,MongoClient,client,true,_message)
+    translate.run("Room created with code `" + _new.room_code + "`",_message.author.id,mongoURL,null,client,true,_message)
     //_message.reply("Room created with code `" + _new.room_code + "`");
 
     join_room(_new.room_code, _author, _message, args);
@@ -921,7 +921,7 @@ async function room_stats(_author, _message) {
     }
 
     if (_roomindex == -1) {
-        translate.run("You're not currently in a room.",_message.author.id,mongoURL,MongoClient,client,true,_message)
+        translate.run("You're not currently in a room.",_message.author.id,mongoURL,null,client,true,_message)
         // _message.reply("You're not currently in a room.");
     } else {
         var scores = "Scores:";
@@ -963,13 +963,13 @@ async function submit_card(_author, _message, _args) {
     }
 
     if (_mem == -1) {
-        translate.run("You're not currently in a game.", _message.author.id,mongoURL,MongoClient,client,true,_message)
+        translate.run("You're not currently in a game.", _message.author.id,mongoURL,null,client,true,_message)
         // _message.reply("You're not currently in a game.");
     } else {
         //console.log("ARG: " + _args);
         if (_author.id.toString() == currentRooms[_roomindex].czar.toString()) {
             if (currentRooms[_roomindex].stage != 4) {
-                translate.run("You have to wait for everyone to submit their cards.", _message.author.id,mongoURL,MongoClient,client,true,_message)
+                translate.run("You have to wait for everyone to submit their cards.", _message.author.id,mongoURL,null,client,true,_message)
                 //_message.reply("You have to wait for everyone to submit their cards.");
                 return;
             }
@@ -988,19 +988,19 @@ async function submit_card(_author, _message, _args) {
 
                 currentRooms[_roomindex].czar_choice = czarsubmit;
 
-                translate.run("Your choice has been submitted.", _message.author.id,mongoURL,MongoClient,client,true,_message)
+                translate.run("Your choice has been submitted.", _message.author.id,mongoURL,null,client,true,_message)
 
                 //_message.reply("Your choice has been submitted.");
 
                 //_message.reply("Room czar choice: \r\n" + JSON.stringify(currentRooms[_roomindex].czar_choice));
                 //console.log(currentRooms[_roomindex].czar_choice);
             } else {
-                translate.run("That isn't a card.", _message.author.id,mongoURL,MongoClient,client,true,_message)
+                translate.run("That isn't a card.", _message.author.id,mongoURL,null,client,true,_message)
                // _message.reply("That isn't a card.");
             }
         } else if (_author.id.toString() != currentRooms[_roomindex].czar.toString() && currentRooms[_roomindex].stage == 2 || currentRooms[_roomindex].played_cards == null) {
             if (currentRooms[_roomindex].played_cards && currentRooms[_roomindex].played_cards.find(_card => _card._submitter == _author.id.toString())) {
-                translate.run("You've already submitted a card.", _message.author.id,mongoURL,MongoClient,client,true,_message)
+                translate.run("You've already submitted a card.", _message.author.id,mongoURL,null,client,true,_message)
                 //_message.reply("You've already submitted a card.");
                 return;
             }
@@ -1022,16 +1022,16 @@ async function submit_card(_author, _message, _args) {
                 currentRooms[_roomindex].played_cards.push(c1);
 
                 //console.log(JSON.stringify(currentRooms[_roomindex].played_cards));
-                translate.run("Your card has been submitted.", _message.author.id,mongoURL,MongoClient,client,true,_message)
+                translate.run("Your card has been submitted.", _message.author.id,mongoURL,null,client,true,_message)
                 //_message.reply("Your card has been submitted.");
 
                 currentRooms[_roomindex].members[_mem]._cards[_c] = whiteCards._cards[Math.floor(Math.random() * whiteCards._cards.length)];
             } else {
-                translate.run("That isn't a card.", _message.author.id,mongoURL,MongoClient,client,true,_message)
+                translate.run("That isn't a card.", _message.author.id,mongoURL,null,client,true,_message)
                 //_message.reply("That isn't a card.");
             }
         } else if (currentRooms[_roomindex].stage != 2 && _author.id.toString() != currentRooms[_roomindex].czar.toString()) {
-            translate.run("It's not your turn to submit a card.", _message.author.id,mongoURL,MongoClient,client,true,_message)
+            translate.run("It's not your turn to submit a card.", _message.author.id,mongoURL,null,client,true,_message)
             //_message.reply("It's not your turn to submit a card.")
         }
     }
@@ -1075,7 +1075,7 @@ async function logic() {
                     for (var _i = 0; _i < currentRooms[index].members.length; _i++) {
                         var _tempuser = client.fetchUser(currentRooms[index].members[_i]._id);
                         _tempuser.then(function (_user) {
-                            translate.run(`The current Czar has left.\r\nThe new Czar is ${_newczar.username}.`, _user.id,mongoURL,MongoClient,client,true,_user)
+                            translate.run(`The current Czar has left.\r\nThe new Czar is ${_newczar.username}.`, _user.id,mongoURL,null,client,true,_user)
                             //_user.send(`The current Czar has left.\r\nThe new Czar is ${_newczar.username}.`);
                         });
                     }
@@ -1101,7 +1101,7 @@ async function logic() {
                 for (var _i = 0; _i < currentRooms[_in].members.length; _i++) {
                     var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
                     _tempuser.then(function (_user) {
-                        translate.run(`Oops, since there are less than 3 people in this room, you can't continue playing!`, _user.id,mongoURL,MongoClient,client,true,_user);
+                        translate.run(`Oops, since there are less than 3 people in this room, you can't continue playing!`, _user.id,mongoURL,null,client,true,_user);
                         //_user.send(`Oops, since there are less than 3 people in this room, you can't continue playing!`);
                     });
                 }
@@ -1113,7 +1113,7 @@ async function logic() {
         if (host_left && currentRooms[_in].members.length > 0) {
             var new_host = client.fetchUser(currentRooms[_in].members[0]._id);
             new_host.then(function (_host) {
-                translate.run("The host has left, that makes YOU the new host!", _host.id,mongoURL,MongoClient,client,true,_host);
+                translate.run("The host has left, that makes YOU the new host!", _host.id,mongoURL,null,client,true,_host);
                 //_host.send("The host has left, that makes YOU the new host!");
             });
 
@@ -1124,7 +1124,7 @@ async function logic() {
             for (var _i = 0; _i < currentRooms[_in].members.length; _i++) {
                 var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
                 _tempuser.then(function (_user) {
-                    translate.run(`Oops, since there are less than 3 people in this room, you can't continue playing!`, _user.id,mongoURL,MongoClient,client,true,_user);
+                    translate.run(`Oops, since there are less than 3 people in this room, you can't continue playing!`, _user.id,mongoURL,null,client,true,_user);
                     //_user.send(`Oops, since there are less than 3 people in this room, you can't continue playing!`);
                 });
             }
@@ -1135,7 +1135,7 @@ async function logic() {
         if (currentRooms[_in].stage == -1) {
             var _tempuser = client.fetchUser(currentRooms[_in].host.toString());
             _tempuser.then(function (_user) {
-                translate.run(`Oops, since there are less than 3 people in this room, you can't continue playing!`, _user.id,mongoURL,MongoClient,client,true,_user);
+                translate.run(`Oops, since there are less than 3 people in this room, you can't continue playing!`, _user.id,mongoURL,null,client,true,_user);
                 //_user.send("Type `cad start` to start the game when everyone's ready.");
             });
 
@@ -1154,11 +1154,11 @@ async function logic() {
 
                 _tempuser.then(function (_user) {
                     if (_user.id != czar) {
-                        translate.run(`The prompt is:\r\n` + "`" + blackCard.toString() + "`\r\nHere are your cards:", _user.id,mongoURL,MongoClient,client,true,_user);
+                        translate.run(`The prompt is:\r\n` + "`" + blackCard.toString() + "`\r\nHere are your cards:", _user.id,mongoURL,null,client,true,_user);
                         //_user.send(`The prompt is:\r\n` + "`" + blackCard.toString() + "`\r\nHere are your cards:");
                         cards(_user.id);
                     } else
-                    translate.run(`The prompt is:\r\n` + "`" + blackCard.toString() + "`", _user.id,mongoURL,MongoClient,client,true,_user);
+                    translate.run(`The prompt is:\r\n` + "`" + blackCard.toString() + "`", _user.id,mongoURL,null,client,true,_user);
                         //_user.send(`The prompt is:\r\n` + "`" + blackCard.toString() + "`");
                 });
             }
@@ -1180,12 +1180,12 @@ async function logic() {
 
                 if (currentRooms[_in].members[_i]._id != currentRooms[_in].czar.toString()) {
                     _tempuser.then(function (_user) {
-                        translate.run(`The Czar is ` + "`" + czar_username + "`" + `\r\nPick your response card!`, _user.id,mongoURL,MongoClient,client,true,_user);
+                        translate.run(`The Czar is ` + "`" + czar_username + "`" + `\r\nPick your response card!`, _user.id,mongoURL,null,client,true,_user);
                         //_user.send(`The Czar is ` + "`" + czar_username + "`" + `\r\nPick your response card!`);
                     });
                 } else {
                     _tempuser.then(function (_user) {
-                        translate.run(`You are the Czar, you'll have to wait for everyone to submit their cards.`, _user.id,mongoURL,MongoClient,client,true,_user);
+                        translate.run(`You are the Czar, you'll have to wait for everyone to submit their cards.`, _user.id,mongoURL,null,client,true,_user);
                         //_user.send(`You are the Czar, you'll have to wait for everyone to submit their cards.`);
                     });
                 }
@@ -1213,7 +1213,7 @@ async function logic() {
             for (var _i = 0; _i < currentRooms[_in].members.length; _i++) {
                 var _tempuser = client.fetchUser(currentRooms[_in].members[_i]._id);
                 _tempuser.then(function (_user) {
-                    translate.run(submissions, _user.id,mongoURL,MongoClient,client,true,_user);
+                    translate.run(submissions, _user.id,mongoURL,null,client,true,_user);
                     //_user.send(submissions);
                 });
             }
@@ -1247,7 +1247,7 @@ async function logic() {
 
                             var _tempuser = client.fetchUser(_currentroom.members[_i]._id);
                             _tempuser.then(function (_user) {
-                                translate.run(`Czar's choice: ` + "`" + choice._content + "`" + `\r\nSent by: ${_submit.username}`, _user.id,mongoURL,MongoClient,client,true,_user);
+                                translate.run(`Czar's choice: ` + "`" + choice._content + "`" + `\r\nSent by: ${_submit.username}`, _user.id,mongoURL,null,client,true,_user);
                                 //_user.send(`Czar's choice: ` + "`" + choice._content + "`" + `\r\nSent by: ${_submit.username}`);
                             });
                         }
@@ -1312,7 +1312,7 @@ async function logic() {
                 for (var i = 0; i < _mem.length; i++) {
                     var _tempuser = client.fetchUser(_mem[i]._id);
                     _tempuser.then(function (_user) {
-                        translate.run(`And the winner is: **${_win.username}**!\r\nThat means the rest of you are **losers**!`, _user.id,mongoURL,MongoClient,client,true,_user);
+                        translate.run(`And the winner is: **${_win.username}**!\r\nThat means the rest of you are **losers**!`, _user.id,mongoURL,null,client,true,_user);
                         //_user.send(`And the winner is: **${_win.username}**!\r\nThat means the rest of you are **losers**!`);
                     });
 
@@ -1340,21 +1340,21 @@ async function kick_user(kick_id, _author, _message) {
     }
 
     if (kick_id > currentRooms[_roomindex].members.length) {
-        translate.run("That isn't a user.", _message.author.id,mongoURL,MongoClient,client,true,_message)
+        translate.run("That isn't a user.", _message.author.id,mongoURL,null,client,true,_message)
         //_message.reply("That isn't a user.");
         return;
     } else if (_author != currentRooms[_roomindex].host) {
-        translate.run("You're not the host.", _message.author.id,mongoURL,MongoClient,client,true,_message)
+        translate.run("You're not the host.", _message.author.id,mongoURL,null,client,true,_message)
         //_message.reply("You're not the host.");
         return;
     } else if (currentRooms[_roomindex].members[kick_id - 1]._id == currentRooms[_roomindex].host && _author == currentRooms[_roomindex].host) {
-        translate.run("You can't kick yourself!", _message.author.id,mongoURL,MongoClient,client,true,_message)
+        translate.run("You can't kick yourself!", _message.author.id,mongoURL,null,client,true,_message)
         //_message.reply("You can't kick yourself!");
         return;
     }
 
     if (_roomindex == -1) {
-        translate.run("You're not in a room right now!", _message.author.id,mongoURL,MongoClient,client,true,_message)
+        translate.run("You're not in a room right now!", _message.author.id,mongoURL,null,client,true,_message)
         //_message.reply("You're not in a room right now!");
     } else {
         var _temp = currentRooms[_roomindex].members[kick_id - 1];
@@ -1365,18 +1365,18 @@ async function kick_user(kick_id, _author, _message) {
             if (currentRooms[_roomindex].members[g]._id != _author.id && currentRooms[_roomindex].members[g]._id != currentRooms[_roomindex].host) {
                 var _tempuser = client.fetchUser(currentRooms[_roomindex].members[g]._id);
                 _tempuser.then(function (_user) {
-                    translate.run("The host has kicked a user.", _user.id,mongoURL,MongoClient,client,true,_user)
+                    translate.run("The host has kicked a user.", _user.id,mongoURL,null,client,true,_user)
                     //_user.send("The host has kicked a user.");
                 });
             }
         }
         var _tempuser = client.fetchUser(_temp._id);
         _tempuser.then(function (_user) {
-            translate.run("Oh boy, you've been kicked. What'd you do this time?", _user.id,mongoURL,MongoClient,client,true,_user)
+            translate.run("Oh boy, you've been kicked. What'd you do this time?", _user.id,mongoURL,null,client,true,_user)
             // _user.send("Oh boy, you've been kicked. What'd you do this time?");
         });
 
-        translate.run("Oh boy, you've been kicked. What'd you do this time?", _message.author.id,mongoURL,MongoClient,client,true,_message)
+        translate.run("Oh boy, you've been kicked. What'd you do this time?", _message.author.id,mongoURL,null,client,true,_message)
         //_message.reply("The user has been kicked.");
     }
 }
