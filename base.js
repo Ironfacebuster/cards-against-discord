@@ -522,7 +522,7 @@ function update_language(id, language, message) {
 
             dbo.updateOne(query, {
                 $set: {
-                    langauge: language
+                    language: language
                 }
             })
 
