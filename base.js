@@ -185,9 +185,9 @@ function change_language (author, _args, message) {
                 languageList = languageList + languages[i] + `(${code[i]}).`
         }
 
-        const message = `${_args[0]} is not a 2 letter language code.\r\nAvailable codes are: ${languageList}`
+        const mess = `${_args[0]} is not a 2 letter language code.\r\nAvailable codes are: ${languageList}`
 
-        translate.run(message,message.author.id,mongoURL,null,client);
+        translate.run(mess,message.author.id,mongoURL,null,client);
 
         return;
     }
