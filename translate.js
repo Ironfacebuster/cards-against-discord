@@ -59,25 +59,25 @@ exports.run = (sent_message, _id, mongoURL, mongoClient, discordClient, isDM, me
                 console.log(lan);
 
                 if (isDM) {
-                    dm_sent_message(lan);
+                    dm_sent_message(lan,mess);
                 } else {
-                    channel_sent_message(lan);
+                    channel_sent_message(lan,mess);
                 }
             });
         });
     }
 
-    function dm_sent_message(language_code) {
+    function dm_sent_message(language_code,_mess) {
         //console.log(language_code);
         if (language_code == 'en') {
-            mess.send(sent_message);
+            _mess.reply(sent_message);
         } else {
             translate(sent_message, {
                 to: language_code
             }).then(res => {
                 //console.log(res.text);
 
-                mess.send(res.text);
+                _mess.reply(res.text);
 
             }).catch(err => {
                 console.error(err);
@@ -85,17 +85,17 @@ exports.run = (sent_message, _id, mongoURL, mongoClient, discordClient, isDM, me
         }
     }
 
-    function channel_sent_message(language_code) {
+    function channel_sent_message(language_code,_mess) {
         //console.log(language_code);
         if (language_code == 'en') {
-            mess.channel.send(sent_message);
+            _mess.channel.send(sent_message);
         } else {
             translate(sent_message, {
                 to: language_code
             }).then(res => {
                 //console.log(res.text);
 
-                mess.channel.send(res.text);
+                _mess.channel.send(res.text);
 
             }).catch(err => {
                 console.error(err);

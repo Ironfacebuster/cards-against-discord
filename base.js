@@ -588,12 +588,12 @@ async function join_room(_roomcode, _author, _message, _password) {
                     if (currentRooms[_room].members[g]._id != _author.id) {
                         var _tempuser = client.fetchUser(currentRooms[_room].members[g]._id);
                         _tempuser.then(function (_user) {
-                            translate.run(`${_author.username} has joined your room.`, _message.author.id, mongoURL,null,client,true,_m)
+                            translate.run(`${_author.username} has joined your room.`, _user.id, mongoURL,null,client,true,_user)
                             //_user.send(`${_author.username} has joined your room.`);
                         });
                     }
                 }
-                translate.run("Room joined.", _message.author.id, mongoURL,null,client,true,_m)
+                translate.run("Room joined.", _message.author.id, mongoURL,null,client,true,_message)
                 //_message.reply("Room joined.");
             }
         } else {
