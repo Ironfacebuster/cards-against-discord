@@ -147,7 +147,7 @@ client.on('message', async message => {
         else if (command == "help")
             help(message.author)
         else if (command = "language")
-            change_language(message.author.id, args)
+            change_language(message.author.id, args, message)
     }
 });
 
@@ -171,7 +171,7 @@ async function help(author) {
     author.send(helpMenu)
 }
 
-function change_language (author, _args) {
+function change_language (author, _args, message) {
     const code = ["zh", "en", "hi", "es", "ar", "ms", "ru", "bn", "pt", "fr"]
     const languages = ["中文", "English", "हिन्दी", "español", "جزائري", "Bahasa melayu", "Русский язык", "বাংলা", "português", "français"]
 
@@ -194,7 +194,7 @@ function change_language (author, _args) {
 
     update_user(author.id,0,0,0,0,0,0,_args[0]);
 
-    translate.run("Your language has been changed.",message.author.id,mongoURL,MongoClient,client);
+    translate.run("Your language has been changed.",message.author.id,mongoURL,MongoClient,client,false,message);
     
     //say
 }
