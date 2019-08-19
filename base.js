@@ -493,6 +493,9 @@ async function update_user(id, wins, losses, level, xp, games_left, cash, langua
 }
 
 function update_language(id, language, message) {
+
+    console.log("updating language")
+    
     const c = new MongoClient(mongoURL, {
         useNewUrlParser: true
     });
@@ -519,9 +522,6 @@ function update_language(id, language, message) {
                 //addUser(auth)
                 return;
             }
-
-            var user = res;
-
             console.log(language);
 
             console.log("PARAM LANGUAGE" + language)
