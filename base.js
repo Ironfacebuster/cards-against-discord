@@ -321,7 +321,7 @@ async function stats(_m) {
             }
 
             if (res == null) {
-                translate.run("user not found! Have they said anything to me yet?", _m.author.id, mongoURL, null, client, true, _m)
+                translate.run("user not found! Have they said anything to me yet?", _m.author.id, mongoURL, null, client, true, _m.author)
                 //_m.reply("user not found! Have they said anything to me yet?");
                 //addUser(auth)
                 return;
@@ -462,7 +462,7 @@ async function update_user(id, wins, losses, level, xp, games_left, cash) {
 
             var user = res;
 
-            console.log(language);
+            // console.log(language);
 
             if (language) {
                 dbo.updateOne(query, {
@@ -605,7 +605,7 @@ async function join_room(_roomcode, _author, _message, _password) {
                         if (currentRooms[_room].members[g]._id != _author.id) {
                             var _tempuser = client.fetchUser(currentRooms[_room].members[g]._id);
                             _tempuser.then(function (_user) {
-                                translate.run(`${_author.username} has joined your room.`, _user.id, mongoURL, null, client, true, _m)
+                                translate.run(`${_author.username} has joined your room.`, _user.id, mongoURL, null, client, true, _user)
                                 //_user.send(`${_author.username} has joined your room.`);
                             });
                         }
@@ -613,10 +613,10 @@ async function join_room(_roomcode, _author, _message, _password) {
                     _message.reply("Room joined.");
                 } else {
                     if (_password.length > 0)
-                        translate.run("Incorrect password.", _message.author.id, mongoURL, null, client, true, _m)
+                        translate.run("Incorrect password.", _message.author.id, mongoURL, null, client, true, _message.author)
                     //_message.reply("Incorrect password.");
                     else
-                        translate.run("This room has a password.", _message.author.id, mongoURL, null, client, true, _m)
+                        translate.run("This room has a password.", _message.author.id, mongoURL, null, client, true, _message.author)
                     //_message.reply("This room has a password.");
                 }
             } else {
@@ -639,7 +639,7 @@ async function join_room(_roomcode, _author, _message, _password) {
                 //_message.reply("Room joined.");
             }
         } else {
-            translate.run("Room not found.", _message.author.id, mongoURL, null, client, true, _m)
+            translate.run("Room not found.", _message.author.id, mongoURL, null, client, true, _message.author)
             // _message.reply("Room not found.");
         }
     }
@@ -663,13 +663,13 @@ async function new_cards(id, _message) {
             currentRooms[_roomindex].members[_mem]._cards[_c] = whiteCards._cards[Math.floor(Math.random() * whiteCards._cards.length)]
         }
 
-        translate.run("Your cards have been repicked.", _message.author.id, mongoURL, null, client, true, _m)
+        translate.run("Your cards have been repicked.", _message.author.id, mongoURL, null, client, true, _message.author)
         //_message.author.send("Your cards have been repicked.");
 
         cards(id, _message);
 
     } else {
-        translate.run("You're not in a room!", _message.author.id, mongoURL, null, client, true, _m)
+        translate.run("You're not in a room!", _message.author.id, mongoURL, null, client, true, _message.author)
         //_message.author.send("You're not in a room!");
     }
 }
