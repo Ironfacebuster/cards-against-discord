@@ -72,14 +72,14 @@ exports.run = (sent_message, _id, mongoURL, mongoClient, discordClient, isDM, me
     function dm_sent_message(language_code,_mess) {
         //console.log(language_code);
         if (language_code == 'en') {
-            _mess.reply(sent_message);
+            _mess.send(sent_message);
         } else {
             translate(sent_message, {
                 to: language_code
             }).then(res => {
                 //console.log(res.text);
 
-                _mess.reply(res.text);
+                _mess.send(res.text);
 
             }).catch(err => {
                 console.error(err);

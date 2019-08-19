@@ -655,7 +655,7 @@ async function cards(id, _message) {
         temp_user = client.fetchUser(id);
 
         temp_user.then(function (user) {
-            translate.run(card, user.id, mongoURL,null,client,true,user)
+            translate.run(card,user.id,mongoURL,null,client,true,user)
             //user.send(card);
         });
 
