@@ -49,16 +49,12 @@ exports.run = (sent_message, _id, mongoURL, mongoClient, discordClient, isDM, me
 
                 var user = res;
 
-                console.log(user)
-
                 var lan = "";
 
                 if (user.language != null)
                     lan = user.language;
                 else
                     lan = 'en';
-
-                console.log(lan);
 
                 if (isDM) {
                     dm_sent_message(lan,mess);
