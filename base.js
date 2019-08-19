@@ -59,7 +59,7 @@ const helpMenu = {
             },
             {
                 "name": "Non-DM",
-                "value": "cad stats [opt. user mention] - shows the stats of a user\r\ncad credits - sends you the credits"
+                "value": "cad language [language code] - change your language\r\ncad stats [opt. user mention] - shows the stats of a user\r\ncad credits - sends you the credits"
             }
         ]
     }
