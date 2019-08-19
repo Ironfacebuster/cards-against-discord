@@ -194,9 +194,7 @@ function change_language(author, _args, message) {
 
     //update_user(author.id,0,0,0,0,0,0,_args[0]);
 
-    update_language(author.id,_args[0])
-
-    translate.run("Your language has been changed.", message.author.id, mongoURL, null, client, false, message);
+    update_language(author.id,_args[0],message)
 
     //say
 }
@@ -494,7 +492,7 @@ async function update_user(id, wins, losses, level, xp, games_left, cash, langua
     });
 }
 
-async function update_language(id, language) {
+function update_language(id, language, message) {
     const c = new MongoClient(mongoURL, {
         useNewUrlParser: true
     });
@@ -532,6 +530,8 @@ async function update_language(id, language) {
                     langauge: language
                 }
             })
+
+            translate.run("Your language has been changed.", id, mongoURL, null, client, false, message);
         });
     });
 }
