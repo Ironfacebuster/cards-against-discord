@@ -180,9 +180,9 @@ function change_language(author, _args, message) {
 
         for (var i = 0; i < 10; i++) {
             if (i < 9)
-                languageList = languageList + languages[i] + `(${code[i]}), `
+                languageList = languageList + languages[i] + ` (${code[i]}), `
             else
-                languageList = languageList + languages[i] + `(${code[i]}).`
+                languageList = languageList + languages[i] + ` (${code[i]}).`
         }
 
         const mess = `${_args[0]} is not a 2 letter language code.\r\nAvailable codes are: ${languageList}`
