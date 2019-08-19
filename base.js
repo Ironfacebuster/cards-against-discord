@@ -462,7 +462,7 @@ async function update_user(id, wins, losses, level, xp, games_left, cash, langua
 
             var user = res;
 
-            if(language != null) {
+            if(language !== null) {
                 console.log("PARAM LANGUAGE" + language)
                 dbo.updateOne(query, {
                     $set: {
