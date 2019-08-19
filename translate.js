@@ -1,4 +1,5 @@
 const translate = require('@vitalets/google-translate-api');
+const MongoClient = require('mongodb').MongoClient;
 // const test = "You're not the host!\r\nYou're not the host!\r\nYou're not the host!\r\nYou're not the host!\r\nYou're not the host!"
 
 // translate(test, {to: 'es'}).then(res => {
