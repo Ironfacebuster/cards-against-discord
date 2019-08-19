@@ -49,6 +49,8 @@ exports.run = (sent_message, _id, mongoURL, mongoClient, discordClient, isDM, me
 
                 var user = res;
 
+                console.log(user)
+
                 var lan = "";
 
                 if (user.language != null)

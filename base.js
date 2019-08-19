@@ -463,6 +463,7 @@ async function update_user(id, wins, losses, level, xp, games_left, cash, langua
             var user = res;
 
             if(language != null) {
+                console.log(language)
                 dbo.updateOne(query, {
                     $set: {
                         langauge: language
@@ -684,7 +685,7 @@ async function leave_room(_author, _message) {
     }
 
     if (_mem == -1) {
-        translate.run("You're not currently in a game.", _message.author.id, mongoURL,null,client,true,_m)
+        translate.run("You're not currently in a game.", _message.author.id, mongoURL,null,client,true,_message)
         //_message.reply("You're not currently in a game.");
     } else {
         var _temp = currentRooms[_roomindex].members[_mem];
