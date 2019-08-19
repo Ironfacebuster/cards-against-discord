@@ -68,7 +68,7 @@ exports.run = (sent_message, _id, mongoURL, mongoClient, discordClient, isDM, me
     }
 
     function dm_sent_message(language_code) {
-        console.log(language_code);
+        //console.log(language_code);
         if (language_code == 'en') {
             mess.send(sent_message);
         } else {
@@ -85,8 +85,8 @@ exports.run = (sent_message, _id, mongoURL, mongoClient, discordClient, isDM, me
         }
     }
 
-    function channel_sent_message() {
-        console.log(language_code);
+    function channel_sent_message(language_code) {
+        //console.log(language_code);
         if (language_code == 'en') {
             mess.channel.send(sent_message);
         } else {
