@@ -321,7 +321,7 @@ async function stats(_m) {
             }
 
             if (res == null) {
-                translate.run("user not found! Have they said anything to me yet?", _m.author.id,mongoURL,,client,true,_m)
+                translate.run("user not found! Have they said anything to me yet?", _m.author.id,mongoURL,null,client,true,_m)
                 //_m.reply("user not found! Have they said anything to me yet?");
                 //addUser(auth)
                 return;
