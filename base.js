@@ -147,7 +147,7 @@ client.on('message', async message => {
         else if (command == "help")
             help(message.author)
         else if (command = "language")
-            change_language(message.author.id, args, message)
+            change_language(message.author, args, message)
     }
 });
 
@@ -493,8 +493,6 @@ async function update_user(id, wins, losses, level, xp, games_left, cash) {
 
 function update_language(id, language, message) {
 
-    console.log("updating language")
-
     const c = new MongoClient(mongoURL, {
         useNewUrlParser: true
     });
@@ -504,7 +502,6 @@ function update_language(id, language, message) {
     };
 
     c.connect(function (err) {
-        console.log("updating language2")
         if (err)
             console.error(err);
 
@@ -513,7 +510,6 @@ function update_language(id, language, message) {
         const dbo = db.collection("user-data");
 
         dbo.findOne(query, async function (err, res) {
-            console.log("updating language3")
             if (err) {
                 console.log(err)
                 return;
@@ -521,14 +517,9 @@ function update_language(id, language, message) {
 
             if (res == null) {
                 //addUser(auth)
-                console.log("user not found")
                 return;
             }
 
-            console.log("updating language4")
-            console.log(language);
-
-            console.log("PARAM LANGUAGE" + language)
             dbo.updateOne(query, {
                 $set: {
                     langauge: language
