@@ -152,7 +152,7 @@ client.on('message', async message => {
 });
 
 async function restart_bot(time,author) {
-    client.user.setActivity(`Restarting in ${time}.`);
+    client.user.setActivity(`Restarting in ${time} minute(s).`);
 
     const message = `**Attention** Cards Against Discord will be restarting in approximately ${time} minutes.\r\nDo not leave the room, your stats will not be affected by the restart.`;
 
@@ -162,7 +162,10 @@ async function restart_bot(time,author) {
         for (var g = 0; g < currentRooms[i].members.length; g++) {
             var _tempuser = client.fetchUser(currentRooms[i].members[g]._id);
             userCount = userCount + 1;
-            translate.run(message, currentRooms[i].members[g]._id, mongoURL, null, null, true, _tempuser)
+            _tempuser.then(function (_user) {
+                translate.run(message, currentRooms[i].members[g]._id, mongoURL, null, null, true, _user)
+            });
+            //translate.run(message, currentRooms[i].members[g]._id, mongoURL, null, null, true, _tempuser)
             // _tempuser.then(function (_user) {
             //     translate.run(message,null,)
             //     _user.send(message);
@@ -182,7 +185,7 @@ function change_language(author, _args, message) {
     const code = ["zh", "en", "hi", "es", "ar", "ms", "ru", "bn", "pt", "fr"]
     const languages = ["中文", "English", "हिन्दी", "español", "جزائري", "Bahasa melayu", "Русский язык", "বাংলা", "português", "français"]
 
-    if(typeof _args[0] == undefined) {
+    if(typeof _args[0] == undefined || _args.length < 1 ) {
         const mess = `You didn't provide a language code!\r\nAvailable codes are: ${languageList}`
 
         translate.run(mess, message.author.id, mongoURL, null, client, false, message);
