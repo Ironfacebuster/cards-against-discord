@@ -186,6 +186,15 @@ function change_language(author, _args, message) {
     const languages = ["中文", "English", "हिन्दी", "español", "جزائري", "Bahasa melayu", "Русский язык", "বাংলা", "português", "français"]
 
     if(typeof _args[0] == undefined || _args.length < 1 ) {
+        var languageList = "";
+
+        for (var i = 0; i < 10; i++) {
+            if (i < 9)
+                languageList = languageList + languages[i] + ` (${code[i]}), `
+            else
+                languageList = languageList + languages[i] + ` (${code[i]}).`
+        }
+        
         const mess = `You didn't provide a language code!\r\nAvailable codes are: ${languageList}`
 
         translate.run(mess, message.author.id, mongoURL, null, client, false, message);
