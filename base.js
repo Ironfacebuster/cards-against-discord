@@ -90,7 +90,7 @@ client.on('message', async message => {
 
     //if(message.channel.type == "dm" && !mess.indexOf(prefix) && !message.author.bot)
 
-    if (mess.indexOf(prefix) == -1 || message.author.bot) {
+    if (mess.indexOf(prefix) == -1 || message.author.bot  || mess.indexOf(prefix) > 0) {
         if (message.channel.type == "dm") {
             room_chat(message.content.trim(), message);
             return;
@@ -111,7 +111,7 @@ client.on('message', async message => {
 
     if (message.channel.type == "dm") {
         if (message.author.id == ownerID && command == "restart") {
-            restart_bot(args[0])
+            restart_bot(args[0],message.author)
         }
 
         if (command == "create")
@@ -145,19 +145,23 @@ client.on('message', async message => {
         else if (command == "credits")
             credits(message);
         else if (command == "help")
-            help(message.author)
-        else if (command = "language")
+            help(message.author,message)
+        else if (command == "language")
             change_language(message.author, args, message)
     }
 });
 
-async function restart_bot(time) {
-    const message = `**Attention** Cards Against Discord will be restarting in approximately ${time} minutes.`;
+async function restart_bot(time,author) {
+    client.user.setActivity(`Restarting in ${time}.`);
 
+    const message = `**Attention** Cards Against Discord will be restarting in approximately ${time} minutes.\r\nDo not leave the room, your stats will not be affected by the restart.`;
+
+    var userCount = 0;
+    
     for (var i = currentRooms.length - 1; i >= 0; i--) {
         for (var g = 0; g < currentRooms[i].members.length; g++) {
             var _tempuser = client.fetchUser(currentRooms[i].members[g]._id);
-
+            userCount = userCount + 1;
             translate.run(message, currentRooms[i].members[g]._id, mongoURL, null, null, true, _tempuser)
             // _tempuser.then(function (_user) {
             //     translate.run(message,null,)
@@ -165,15 +169,26 @@ async function restart_bot(time) {
             // });
         }
     }
+
+    author.send(`${time} minute warning sent to ${userCount} users.`)
 }
 
-async function help(author) {
+async function help(author,_mess) {
+    _mess.reply("ok, sending you a command list!")
     author.send(helpMenu)
 }
 
 function change_language(author, _args, message) {
     const code = ["zh", "en", "hi", "es", "ar", "ms", "ru", "bn", "pt", "fr"]
     const languages = ["中文", "English", "हिन्दी", "español", "جزائري", "Bahasa melayu", "Русский язык", "বাংলা", "português", "français"]
+
+    if(typeof _args[0] == undefined) {
+        const mess = `You didn't provide a language code!\r\nAvailable codes are: ${languageList}`
+
+        translate.run(mess, message.author.id, mongoURL, null, client, false, message);
+
+        return;
+    }
 
     if (!code.includes(_args[0])) {
         var languageList = "";
@@ -1080,10 +1095,10 @@ async function submit_card(_author, _message, _args) {
 }
 
 async function logic() {
-    client.user.setActivity(`${client.users.size} users insult each other | cad help`, {
-        url: "https://www.twitch.tv/ironfacebuster",
-        type: "WATCHING"
-    });
+    // client.user.setActivity(`${client.users.size} users insult each other | cad help`, {
+    //     url: "https://www.twitch.tv/ironfacebuster",
+    //     type: "WATCHING"
+    // });
     //stage == -2 not started
     //stage == 0 show prompt
     //stage == 1 send message to pick white cards
