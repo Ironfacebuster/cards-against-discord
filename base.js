@@ -35,31 +35,60 @@ function loadCards() {
         console.log("CARDS NOT LOADED!");
 }
 
+var host = "**Host**\r\ncad start - starts the game\r\ncad create [opt. password] - creates a room with an optional password\r\ncad kick [user number] - kicks the user with that number on the scoreboard\r\n"
+var czar = "**Czar**\r\ncad submit [card number] - picks the specified card to win the round\r\n"
+var nonczar = "**Non-Czar**\r\ncad submit [card number] - submits the specified card to be judged by the czar\r\ncad cards - shows your cards\r\n"
+var other = "**Other**\r\ncad join [room code] [optional password] - joins the room with that room code (and password, if there is one)\r\ncad leave - leaves the room you're in\r\ncad scores - shows the scores of all the users in the same room as you\r\ncad reshuffle - reshuffle your hand, giving you new cards\r\ncad help - send the help menu"
 
+// const helpMenu = {
+//     "embed": {
+//         "title": "Cards Against Discord Help",
+//         "description": "Need some other help? Join the [support server.](https://discord.gg/zf9RJP4)",
+//         "fields": [{
+//                 "name": "DM Only",
+//                 "value": `${host + czar + nonczar + other}`
+//             },
+//             {
+//                 "name": "Non-DM",
+//                 "value": "cad language [language code] - change your language\r\ncad stats [opt. user mention] - shows the stats of a user\r\ncad credits - sends you the credits"
+//             }
+//         ]
+//     }
+// }
 
-const helpMenu = {
+const dmHelp = {
+    "embed": {
+        "title": "Cards Against Discord Help - DM Commands",
+        "description": "Need some other help? Join the [support server.](https://discord.gg/zf9RJP4)",
+        "fields": [{
+            "name": "DM Only",
+            "value": `${host + czar + nonczar + other}`
+        }]
+    }
+}
+
+const nondmHelp = {
+    "embed": {
+        "title": "Cards Against Discord Help - Guild Channel Commands",
+        "description": "Need some other help? Join the [support server.](https://discord.gg/zf9RJP4)",
+        "fields": [{
+            "name": "Guild Channel Commands",
+            "value": "cad language [language code] - change your language\r\ncad stats [opt. user mention] - shows the stats of a user\r\ncad credits - sends you the credits"
+        }]
+    }
+}
+
+const baseHelp = {
     "embed": {
         "title": "Cards Against Discord Help",
         "description": "Need some other help? Join the [support server.](https://discord.gg/zf9RJP4)",
         "fields": [{
-                "name": "Host",
-                "value": "cad start - starts the game\r\ncad create [opt. password] - creates a room with an optional password\r\ncad kick [user number] - kicks the user with that number on the scoreboard"
+                "name": "List all DM commands",
+                "value": "cad help dm"
             },
             {
-                "name": "Czar",
-                "value": "cad submit [card number] - picks the specified card to win the round"
-            },
-            {
-                "name": "Non-Czar",
-                "value": "cad submit [card number] - submits the specified card to be judged by the czar\r\ncad cards - shows your cards"
-            },
-            {
-                "name": "Other",
-                "value": "cad join [room code] [optional password] - joins the room with that room code (and password, if there is one)\r\ncad leave - leaves the room you're in\r\ncad scores - shows the scores of all the users in the same room as you\r\ncad reshuffle - reshuffle your hand, giving you new cards"
-            },
-            {
-                "name": "Non-DM",
-                "value": "cad language [language code] - change your language\r\ncad stats [opt. user mention] - shows the stats of a user\r\ncad credits - sends you the credits"
+                "name": "List all __NON__-DM commands",
+                "value": "cad help guild"
             }
         ]
     }
@@ -135,7 +164,7 @@ client.on('message', async message => {
         else if (command == "kick")
             kick_user(args[0], message.author.id, message);
         else if (command == "help")
-            help(message.author)
+            help(message.author, message, args, true)
     } else {
         /* if (command == "randomcard") {
              randomCard(args[0], message);
@@ -145,10 +174,10 @@ client.on('message', async message => {
         else if (command == "credits")
             credits(message);
         else if (command == "help")
-            help(message.author,message)
+            help(message.author, message, args, false)
         else if (command == "language")
             change_language(message.author, args, message)
-    }
+        }
 });
 
 async function restart_bot(time,author) {
@@ -176,9 +205,15 @@ async function restart_bot(time,author) {
     author.send(`${time} minute warning sent to ${userCount} users.`)
 }
 
-async function help(author,_mess) {
-    _mess.reply("ok, sending you a command list!")
-    author.send(helpMenu)
+async function help(author,_mess,args,isDM) {
+    if(!isDM)
+        _mess.reply("ok, sending you a command list!");
+
+    if(args.length < 1) author.send(baseHelp)
+    else if(args[0] == "dm") author.send(dmHelp)
+    else if (args[0] == "guild") author.send(nondmHelp)
+
+    //author.send(helpMenu)
 }
 
 function change_language(author, _args, message) {
