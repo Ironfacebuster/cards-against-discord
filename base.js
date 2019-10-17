@@ -59,7 +59,6 @@ var other = "**Other**\r\ncad join [room code] [optional password] - joins the r
 const dmHelp = {
     "embed": {
         "title": "Cards Against Discord Help - DM Commands",
-        "description": "Need some other help? Join the [support server.](https://discord.gg/zf9RJP4)",
         "fields": [{
             "name": "DM Only",
             "value": `${host + czar + nonczar + other}`
@@ -70,7 +69,6 @@ const dmHelp = {
 const nondmHelp = {
     "embed": {
         "title": "Cards Against Discord Help - Guild Channel Commands",
-        "description": "Need some other help? Join the [support server.](https://discord.gg/zf9RJP4)",
         "fields": [{
             "name": "Guild Channel Commands",
             "value": "cad language [language code] - change your language\r\ncad stats [opt. user mention] - shows the stats of a user\r\ncad credits - sends you the credits"
@@ -81,14 +79,16 @@ const nondmHelp = {
 const baseHelp = {
     "embed": {
         "title": "Cards Against Discord Help",
-        "description": "Need some other help? Join the [support server.](https://discord.gg/zf9RJP4)",
         "fields": [{
-                "name": "List all DM commands",
+                "name": "List all DM commands (create/join games, etc.)",
                 "value": "cad help dm"
             },
             {
-                "name": "List all __NON__-DM commands",
+                "name": "List all __NON__-DM commands (stats, language, etc.)",
                 "value": "cad help guild"
+            }, {
+                "name": "Need some other help?",
+                "value": "Join the [support server.](https://discord.gg/zf9RJP4)"
             }
         ]
     }
@@ -140,7 +140,9 @@ client.on('message', async message => {
 
     if (message.channel.type == "dm") {
         if (message.author.id == ownerID && command == "restart") {
-            restart_bot(args[0],message.author)
+            restart_bot(args[0],message.author);
+        } else if (message.author.id == ownerID && command == "listrooms") {
+            list_rooms(message.author);
         }
 
         if (command == "create")
@@ -177,8 +179,14 @@ client.on('message', async message => {
             help(message.author, message, args, false)
         else if (command == "language")
             change_language(message.author, args, message)
-        }
+        else if (command == "create" || command == "join" || command == "cards" || command == "start" || command == "submit" || command == "scores" || command == "reshuffle" || command == "kick")
+            does_not_work(message.author)
+    }
 });
+
+async function does_not_work (author) {
+    author.reply("sorry, this command only works in DMs!")
+}
 
 async function restart_bot(time,author) {
     client.user.setActivity(`Restarting in ${time} minute(s).`);
@@ -188,21 +196,29 @@ async function restart_bot(time,author) {
     var userCount = 0;
     
     for (var i = currentRooms.length - 1; i >= 0; i--) {
-        for (var g = 0; g < currentRooms[i].members.length; g++) {
-            var _tempuser = client.fetchUser(currentRooms[i].members[g]._id);
-            userCount = userCount + 1;
-            _tempuser.then(function (_user) {
-                translate.run(message, currentRooms[i].members[g]._id, mongoURL, null, null, true, _user)
-            });
-            //translate.run(message, currentRooms[i].members[g]._id, mongoURL, null, null, true, _tempuser)
-            // _tempuser.then(function (_user) {
-            //     translate.run(message,null,)
-            //     _user.send(message);
-            // });
+        if(currentRooms[i] != undefined) {
+            for (var g = 0; g < currentRooms[i].members.length; g++) {
+                var _tempuser = client.fetchUser(currentRooms[i].members[g]._id);
+                userCount = userCount + 1;
+                _tempuser.then(function (_user) {
+                    translate.run(message, currentRooms[i].members[g]._id, mongoURL, null, null, true, _user)
+                });
+                //translate.run(message, currentRooms[i].members[g]._id, mongoURL, null, null, true, _tempuser)
+                // _tempuser.then(function (_user) {
+                //     translate.run(message,null,)
+                //     _user.send(message);
+                // });
+            }
         }
     }
 
     author.send(`${time} minute warning sent to ${userCount} users.`)
+}
+
+async function list_rooms (author) {
+    for(var i = 0; i < currentRooms.length; i++){
+        author.reply(JSON.stringify("`" + currentRooms[i]) + "`");
+    }
 }
 
 async function help(author,_mess,args,isDM) {
@@ -494,7 +510,7 @@ function addUser(user) {
 //     "games_left": 0
 // }
 
-async function update_user(id, wins, losses, level, xp, games_left, cash) {
+function update_user(id, wins, losses, level, xp, games_left, cash) {
     const c = new MongoClient(mongoURL, {
         useNewUrlParser: true
     });
@@ -524,31 +540,23 @@ async function update_user(id, wins, losses, level, xp, games_left, cash) {
 
             var user = res;
 
-            // console.log(language);
+            const userMoney = user.cash.toString() == "NaN" ? 0 : Number.parseInt(user.cash);
 
-            if (language) {
-                dbo.updateOne(query, {
-                    $set: {
-                        langauge: language
-                    }
-                })
-            } else {
-                const w = Number.parseInt(Number(user.wins) + wins)
-                const l = Number.parseInt(Number(user.losses) + losses)
-                const x = Number.parseInt(Number(user.xp) + xp)
-                const gl = Number.parseInt(Number(user.games_left) + games_left)
-                const c = Number.parseInt(Number(user.cash) + cash)
+            const w = Number.parseInt(Number.parseInt(user.wins) + wins)
+            const l = Number.parseInt(Number.parseInt(user.losses) + losses)
+            const x = Number.parseInt(Number.parseInt(user.xp) + xp)
+            const gl = Number.parseInt(Number.parseInt(user.games_left) + games_left)
+            const c = Number.parseInt(Number.parseInt(userMoney) + cash)
 
-                dbo.updateOne(query, {
-                    $set: {
-                        wins: w,
-                        losses: l,
-                        xp: x,
-                        games_left: gl,
-                        cash: c
-                    }
-                })
-            }
+            dbo.updateOne(query, {
+                $set: {
+                    wins: w,
+                    losses: l,
+                    xp: x,
+                    games_left: gl,
+                    cash: c
+                }
+            })
         });
     });
 }
