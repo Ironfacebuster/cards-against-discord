@@ -185,7 +185,7 @@ client.on('message', async message => {
 });
 
 async function does_not_work (author) {
-    author.reply("sorry, this command only works in DMs!")
+    author.send("sorry, this command only works in DMs!")
 }
 
 async function restart_bot(time,author) {
@@ -217,7 +217,8 @@ async function restart_bot(time,author) {
 
 async function list_rooms (author) {
     for(var i = 0; i < currentRooms.length; i++){
-        author.reply(JSON.stringify("`" + currentRooms[i]) + "`");
+        var content = JSON.stringify("`" + currentRooms[i]) + "`";
+        author.send(content);
     }
 }
 
