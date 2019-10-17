@@ -185,7 +185,7 @@ client.on('message', async message => {
 });
 
 async function does_not_work (author) {
-    author.send("sorry, this command only works in DMs!")
+    author.send("Sorry, this command only works in DMs!")
 }
 
 async function restart_bot(time,author) {
