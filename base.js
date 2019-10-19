@@ -225,11 +225,11 @@ async function list_rooms (author) {
     var playerCount = "";
 
     for(var i = 0; i < currentRooms.length; i++){
-        roomCode = "`" + currentRooms[i].roomCode + "`";
-        password = "`" + currentRooms[i].password + "`";
-        playerCount = "`" + currentRooms[i].members.length + "` members";
-        idleCount = "`" + currentRooms[i].idle + "`";
-        currentStage = "`" + currentRooms[i].stage + "`";
+        roomCode = "`" + currentRooms[i].roomCode.toString() + "`";
+        password = "`" + currentRooms[i].password.toString() + "`";
+        playerCount = "`" + currentRooms[i].members.length.toString() + "` members";
+        idleCount = "`" + currentRooms[i].idle.toString() + "`";
+        currentStage = "`" + currentRooms[i].stage.toString() + "`";
 
         var content = `**Room Index ${i}**\r\nRoom Code: ` + roomCode + "\r\Mebers in Room: " + playerCount + "\r\nPassword: " + password + "\r\nIdle Count: " + idleCount + "\r\nCurrent Stage: " + currentRooms;
         author.send(content);
