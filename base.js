@@ -225,7 +225,7 @@ async function list_rooms (author) {
     var playerCount = "";
 
     for(var i = 0; i < currentRooms.length; i++){
-        roomCode = "`" + currentRooms[i].roomCode.toString() + "`";
+        roomCode = "`" + currentRooms[i].room_code.toString() + "`";
         password = "`" + currentRooms[i].password.toString() + "`";
         playerCount = "`" + currentRooms[i].members.length.toString() + "` members";
         idleCount = "`" + currentRooms[i].idle.toString() + "`";
