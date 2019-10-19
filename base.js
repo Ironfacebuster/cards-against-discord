@@ -180,12 +180,13 @@ client.on('message', async message => {
         else if (command == "language")
             change_language(message.author, args, message)
         else if (command == "create" || command == "join" || command == "cards" || command == "start" || command == "submit" || command == "scores" || command == "reshuffle" || command == "kick")
-            does_not_work(message.author)
+            does_not_work(message)
     }
 });
 
-async function does_not_work (author) {
-    author.send("Sorry, this command only works in DMs!")
+async function does_not_work (message) {
+    translate.run("Sorry, this command only works in DMs!", message.author.id, mongoURL,null,null,false,message);
+    //message.reply("sorry, this command only works in DMs!")
 }
 
 async function restart_bot(time,author) {
@@ -196,7 +197,7 @@ async function restart_bot(time,author) {
     var userCount = 0;
     
     for (var i = currentRooms.length - 1; i >= 0; i--) {
-        if(currentRooms[i] != undefined) {
+        if(typeof currentRooms[i] != 'undefined') {
             for (var g = 0; g < currentRooms[i].members.length; g++) {
                 var _tempuser = client.fetchUser(currentRooms[i].members[g]._id);
                 userCount = userCount + 1;
@@ -216,15 +217,26 @@ async function restart_bot(time,author) {
 }
 
 async function list_rooms (author) {
+    var roomCode = "";
+    var password = "";
+    var playerCount = "";
+
     for(var i = 0; i < currentRooms.length; i++){
-        var content = "`" + JSON.stringify(currentRooms[i]) + "`";
+        roomCode = "`" + currentRooms[i].roomCode + "`";
+        password = "`" + currentRooms[i].password + "`";
+        playerCount = "`" + currentRooms[i].members.length + "` members";
+        idleCount = "`" + currentRooms[i].idle + "`";
+        currentStage = "`" + currentRooms[i].stage + "`";
+
+        var content = `**Room Index ${i}**\r\nRoom Code: ` + roomCode + "\r\Mebers in Room: " + playerCount + "\r\nPassword: " + password + "\r\nIdle Count: " + idleCount + "\r\nCurrent Stage: " + currentRooms;
         author.send(content);
     }
 }
 
 async function help(author,_mess,args,isDM) {
     if(!isDM)
-        _mess.reply("ok, sending you a command list!");
+        translate.run("Ok, sending you a command list!", author.id, mongoURL,null,null,false,_mess);
+        //_mess.reply("ok, sending you a command list!");
 
     if(args.length < 1) author.send(baseHelp)
     else if(args[0] == "dm") author.send(dmHelp)
@@ -683,7 +695,7 @@ async function join_room(_roomcode, _author, _message, _password) {
                     }
                     _message.reply("Room joined.");
                 } else {
-                    if (_password.length > 0)
+                    if (typeof _password != 'undefined' && _password != null && _password.length > 0)
                         translate.run("Incorrect password.", _message.author.id, mongoURL, null, client, true, _message.author)
                     //_message.reply("Incorrect password.");
                     else
@@ -830,7 +842,9 @@ function generateRC(_count) {
 
     const letters = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNPQRSTUVWXYZ"
 
-    for (var i = 0; i < _count; i++) {
+    const finalCount = _count + Math.round(currentRooms.length/20);
+
+    for (var i = 0; i < finalCount; i++) {
         const randLet = letters.charAt(Math.round(Math.random() * (letters.length - 1))).toString();
         gen.push(randLet);
     }
@@ -918,21 +932,25 @@ async function start_room(_author, _message) {
     }
 
     if (_mem == -1) {
-        _message.reply("You're not in a room!");
+        translate.run("You're not in a room!", _message.author.id,mongoURL,null,null,true,_message);
+        //_message.reply("You're not in a room!");
     } else {
         if (currentRooms[_roomindex].host != _author.id.toString()) {
-            _message.reply("You're not the host!");
+            translate.run("You're not the host!", _message.author.id,mongoURL,null,null,true,_message);
+            //_message.reply("You're not the host!");
             return;
         }
 
         //change to 3 dear god please, the 2 is only for testing!!!!!
         if (currentRooms[_roomindex].members.length < 3) {
-            _message.reply("You know what they always say, less than 3 is boring, more than 3 is a party!\r\nIn other words, you need at least 3 people to start.");
+            translate.run("You need at least 3 people to start a game.", _message.author.id,mongoURL,null,null,true,_message);
+            //_message.reply("You know what they always say, less than 3 is boring, more than 3 is a party!\r\nIn other words, you need at least 3 people to start.");
             return;
         }
 
         if (currentRooms[_roomindex].stage != -2) {
-            _message.reply("The game's already started!")
+            translate.run("The game's already started!", _message.author.id,mongoURL,null,null,true,_message);
+            //_message.reply("The game's already started!")
             return;
         }
 
