@@ -196,13 +196,16 @@ async function restart_bot(time,author) {
 
     var userCount = 0;
     
-    for (var i = currentRooms.length - 1; i >= 0; i--) {
+    for (var i = 0; i < currentRooms.length; i++) {
         if(typeof currentRooms[i] != 'undefined') {
             for (var g = 0; g < currentRooms[i].members.length; g++) {
                 var _tempuser = client.fetchUser(currentRooms[i].members[g]._id);
                 userCount = userCount + 1;
+                var roomIndex = i;
+                var userIndex = g;
+
                 _tempuser.then(function (_user) {
-                    translate.run(message, currentRooms[i].members[g]._id, mongoURL, null, null, true, _user)
+                    translate.run(message, currentRooms[roomIndex].members[userIndex]._id, mongoURL, null, null, true, _user)
                 });
                 //translate.run(message, currentRooms[i].members[g]._id, mongoURL, null, null, true, _tempuser)
                 // _tempuser.then(function (_user) {
