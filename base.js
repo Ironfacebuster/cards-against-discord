@@ -223,15 +223,16 @@ async function list_rooms (author) {
     var roomCode = "";
     var password = "";
     var playerCount = "";
+    var currentStage = "";
 
     for(var i = 0; i < currentRooms.length; i++){
         roomCode = "`" + currentRooms[i].room_code.toString() + "`";
-        password = "`" + currentRooms[i].password.toString() + "`";
+        password = currentRooms[i].password.toString();
         playerCount = "`" + currentRooms[i].members.length.toString() + "` members";
         idleCount = "`" + currentRooms[i].idle.toString() + "`";
         currentStage = "`" + currentRooms[i].stage.toString() + "`";
 
-        var content = `**Room Index ${i}**\r\nRoom Code: ` + roomCode + "\r\Mebers in Room: " + playerCount + "\r\nPassword: " + password + "\r\nIdle Count: " + idleCount + "\r\nCurrent Stage: " + currentRooms;
+        var content = `**Room Index ${i}**\r\nRoom Code: ` + roomCode + "\r\nMembers in Room: " + playerCount + "\r\nPassword: " + password + "\r\nIdle Count: " + idleCount + "\r\nCurrent Stage: " + currentStage;
         author.send(content);
     }
 }
