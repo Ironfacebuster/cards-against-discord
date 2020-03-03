@@ -905,7 +905,7 @@ async function clean_up() {
                 }
 
                 if (currentRooms[_t].idle >= 24) {
-                    [arra[_t], arra[arra.length - 1]] = [arra[arra.length - 1], arra[_t]];
+                    [currentRooms[_t], currentRooms[currentRooms.length - 1]] = [currentRooms[currentRooms.length - 1], currentRooms[_t]];
                     currentRooms.pop();
                     _cleaned = _cleaned + 1;
                 }
