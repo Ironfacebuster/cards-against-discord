@@ -119,7 +119,7 @@ client.on('message', async message => {
 
     //if(message.channel.type == "dm" && !mess.indexOf(prefix) && !message.author.bot)
 
-    if (mess.indexOf(prefix) == -1 || message.author.bot  || mess.indexOf(prefix) > 0) {
+    if (mess.indexOf(prefix) == -1 || message.author.bot || mess.indexOf(prefix) > 0) {
         if (message.channel.type == "dm") {
             room_chat(message.content.trim(), message);
             return;
@@ -140,7 +140,7 @@ client.on('message', async message => {
 
     if (message.channel.type == "dm") {
         if (message.author.id == ownerID && command == "restart") {
-            restart_bot(args[0],message.author);
+            restart_bot(args[0], message.author);
         } else if (message.author.id == ownerID && command == "listrooms") {
             list_rooms(message.author);
         }
@@ -184,20 +184,20 @@ client.on('message', async message => {
     }
 });
 
-async function does_not_work (message) {
-    translate.run("Sorry, this command only works in DMs!", message.author.id, mongoURL,null,null,false,message);
+async function does_not_work(message) {
+    translate.run("Sorry, this command only works in DMs!", message.author.id, mongoURL, null, null, false, message);
     //message.reply("sorry, this command only works in DMs!")
 }
 
-async function restart_bot(time,author) {
+async function restart_bot(time, author) {
     client.user.setActivity(`Restarting in ${time} minute(s).`);
 
     const message = `**Attention** Cards Against Discord will be restarting in approximately ${time} minutes.\r\nDo not leave the room, your stats will not be affected by the restart.`;
 
     var userCount = 0;
-    
+
     for (var i = 0; i < currentRooms.length; i++) {
-        if(typeof currentRooms[i] != 'undefined') {
+        if (typeof currentRooms[i] != 'undefined') {
             for (var g = 0; g < currentRooms[i].members.length; g++) {
                 var _tempuser = client.fetchUser(currentRooms[i].members[g]._id);
                 userCount = userCount + 1;
@@ -219,13 +219,13 @@ async function restart_bot(time,author) {
     author.send(`${time} minute warning sent to ${userCount} users.`)
 }
 
-async function list_rooms (author) {
+async function list_rooms(author) {
     var roomCode = "";
     var password = "";
     var playerCount = "";
     var currentStage = "";
 
-    for(var i = 0; i < currentRooms.length; i++){
+    for (var i = 0; i < currentRooms.length; i++) {
         roomCode = "`" + currentRooms[i].room_code.toString() + "`";
         password = currentRooms[i].password.toString();
         playerCount = "`" + currentRooms[i].members.length.toString() + "` members";
@@ -237,13 +237,13 @@ async function list_rooms (author) {
     }
 }
 
-async function help(author,_mess,args,isDM) {
-    if(!isDM)
-        translate.run("Ok, sending you a command list!", author.id, mongoURL,null,null,false,_mess);
-        //_mess.reply("ok, sending you a command list!");
+async function help(author, _mess, args, isDM) {
+    if (!isDM)
+        translate.run("Ok, sending you a command list!", author.id, mongoURL, null, null, false, _mess);
+    //_mess.reply("ok, sending you a command list!");
 
-    if(args.length < 1) author.send(baseHelp)
-    else if(args[0] == "dm") author.send(dmHelp)
+    if (args.length < 1) author.send(baseHelp)
+    else if (args[0] == "dm") author.send(dmHelp)
     else if (args[0] == "guild") author.send(nondmHelp)
 
     //author.send(helpMenu)
@@ -253,7 +253,7 @@ function change_language(author, _args, message) {
     const code = ["zh", "en", "hi", "es", "ar", "ms", "ru", "bn", "pt", "fr"]
     const languages = ["中文", "English", "हिन्दी", "español", "جزائري", "Bahasa melayu", "Русский язык", "বাংলা", "português", "français"]
 
-    if(typeof _args[0] == undefined || _args.length < 1 ) {
+    if (typeof _args[0] == undefined || _args.length < 1) {
         var languageList = "";
 
         for (var i = 0; i < 10; i++) {
@@ -262,7 +262,7 @@ function change_language(author, _args, message) {
             else
                 languageList = languageList + languages[i] + ` (${code[i]}).`
         }
-        
+
         const mess = `You didn't provide a language code!\r\nAvailable codes are: ${languageList}`
 
         translate.run(mess, message.author.id, mongoURL, null, client, false, message);
@@ -289,7 +289,7 @@ function change_language(author, _args, message) {
 
     //update_user(author.id,0,0,0,0,0,0,_args[0]);
 
-    update_language(author.id,_args[0],message)
+    update_language(author.id, _args[0], message)
 
     //say
 }
@@ -846,7 +846,7 @@ function generateRC(_count) {
 
     const letters = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNPQRSTUVWXYZ"
 
-    const finalCount = _count + Math.round(currentRooms.length/20);
+    const finalCount = _count + Math.round(currentRooms.length / 20);
 
     for (var i = 0; i < finalCount; i++) {
         const randLet = letters.charAt(Math.round(Math.random() * (letters.length - 1))).toString();
@@ -896,22 +896,18 @@ async function clean_up() {
     if (Array.isArray(currentRooms) || currentRooms.length) {
         for (var _t = currentRooms.length - 1; _t >= 0; _t--) {
             if (currentRooms[_t] != null) {
-                if (currentRooms[_t].idle >= 24) {
-                    if (_t != currentRooms.length - 1) {
-                        [currentRooms[currentRooms.length - 1], currentRooms[_t]] = [currentRooms[_t], currentRooms[currentRooms.length - 1]];
-                    }
-                    currentRooms.pop();
-                    _cleaned = _cleaned + 1;
-                }
-
-                //console.log(currentRooms[_t]);
-
                 if (currentRooms[_t]) {
                     if (currentRooms[_t].members && currentRooms[_t].members.length <= 0)
                         currentRooms[_t].idle = currentRooms[_t].idle + 1;
                     else {
                         currentRooms[_t].idle = 0;
                     }
+                }
+
+                if (currentRooms[_t].idle >= 24) {
+                    [arra[_t], arra[arra.length - 1]] = [arra[arra.length - 1], arra[_t]];
+                    currentRooms.pop();
+                    _cleaned = _cleaned + 1;
                 }
             }
         }
@@ -936,24 +932,24 @@ async function start_room(_author, _message) {
     }
 
     if (_mem == -1) {
-        translate.run("You're not in a room!", _message.author.id,mongoURL,null,null,true,_message);
+        translate.run("You're not in a room!", _message.author.id, mongoURL, null, null, true, _message);
         //_message.reply("You're not in a room!");
     } else {
         if (currentRooms[_roomindex].host != _author.id.toString()) {
-            translate.run("You're not the host!", _message.author.id,mongoURL,null,null,true,_message);
+            translate.run("You're not the host!", _message.author.id, mongoURL, null, null, true, _message);
             //_message.reply("You're not the host!");
             return;
         }
 
         //change to 3 dear god please, the 2 is only for testing!!!!!
         if (currentRooms[_roomindex].members.length < 3) {
-            translate.run("You need at least 3 people to start a game.", _message.author.id,mongoURL,null,null,true,_message);
+            translate.run("You need at least 3 people to start a game.", _message.author.id, mongoURL, null, null, true, _message);
             //_message.reply("You know what they always say, less than 3 is boring, more than 3 is a party!\r\nIn other words, you need at least 3 people to start.");
             return;
         }
 
         if (currentRooms[_roomindex].stage != -2) {
-            translate.run("The game's already started!", _message.author.id,mongoURL,null,null,true,_message);
+            translate.run("The game's already started!", _message.author.id, mongoURL, null, null, true, _message);
             //_message.reply("The game's already started!")
             return;
         }
