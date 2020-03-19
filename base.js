@@ -166,41 +166,49 @@ client.on('message', async message => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
+                break;
             case "leave":
                 leave_room(message.author, message).catch(err => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
+                break;
             case "cards":
                 cards(message.author.id, message).catch(err => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
+                break;
             case "start":
                 start_room(message.author, message).catch(err => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
+                break;
             case "submit":
                 submit_card(message.author, message, args).catch(err => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
+                break;
             case "scores":
                 room_stats(message.author, message).catch(err => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
+                break;
             case "reshuffle":
                 new_cards(message.author.id, message).catch(err => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
+                break;
             case "kick":
                 kick_user(args[0], message.author.id, message).catch(err => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
+                break;
             case "help":
                 help(message.author, message, args, true)
                 break;
