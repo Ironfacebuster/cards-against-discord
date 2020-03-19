@@ -1572,4 +1572,8 @@ dbl.on('posted', () => {
     console.log('Server count updated.');
 })
 
-client.login(process.env.TOKEN);
+try {
+    client.login(process.env.TOKEN);
+} catch (err) {
+    console.log(`Error logging in:\r\n${err}`)
+}
