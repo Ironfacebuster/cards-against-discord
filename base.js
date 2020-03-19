@@ -121,7 +121,12 @@ client.on('message', async message => {
 
     if (mess.indexOf(prefix) == -1 || message.author.bot || mess.indexOf(prefix) > 0) {
         if (message.channel.type == "dm") {
-            room_chat(message.content.trim(), message);
+            try {
+                room_chat(message.content.trim(), message);
+            } catch (err) {
+                console.log(err)
+                message.reply(`error encountered: ${err}`)
+            }
             return;
         } else
             return;
@@ -135,7 +140,11 @@ client.on('message', async message => {
 
     //console.log(`COMMAND: ${command}`)
     //console.log(`ARGUMENTS: ${args}`)
-    check_user(message.author, message);
+    try {
+        check_user(message.author, message);
+    } catch (err) {
+        message.reply(`error encountered: ${err}`)
+    }
 
 
     if (message.channel.type == "dm") {
@@ -145,54 +154,68 @@ client.on('message', async message => {
             list_rooms(message.author);
         }
 
-        if (command == "create")
-            createRoom(message.author, message, args);
-        else if (command == "join")
-            join_room(args[0], message.author, message, args[1]);
-        else if (command == "leave")
-            leave_room(message.author, message);
-        // else if (command == "getrooms")
-        // message.reply(JSON.stringify(currentRooms));
-        else if (command == "cards")
-            cards(message.author.id, message);
-        else if (command == "start")
-            start_room(message.author, message);
-        else if (command == "submit")
-            submit_card(message.author, message, args);
-        else if (command == "scores")
-            room_stats(message.author, message);
-        else if (command == "reshuffle")
-            new_cards(message.author.id, message);
-        else if (command == "kick")
-            kick_user(args[0], message.author.id, message);
-        else if (command == "help")
-            help(message.author, message, args, true)
+        switch (command) {
+            case "create":
+                createRoom(message.author, message, args);
+                break;
+            case "join":
+                join_room(args[0], message.author, message, args[1]);
+                break;
+            case "leave":
+                leave_room(message.author, message);
+                break;
+            case "cards":
+                cards(message.author.id, message);
+                break;
+            case "start":
+                start_room(message.author, message);
+                break;
+            case "submit":
+                submit_card(message.author, message, args);
+                break;
+            case "scores":
+                room_stats(message.author, message);
+                break;
+            case "reshuffle":
+                new_cards(message.author.id, message);
+                break;
+            case "kick":
+                kick_user(args[0], message.author.id, message);
+                break;
+            case "help":
+                help(message.author, message, args, true)
+                break;
+        }
     } else {
-        /* if (command == "randomcard") {
-             randomCard(args[0], message);
-         } else */
-        if (command == "stats")
-            stats(message);
-        else if (command == "credits")
-            credits(message);
-        else if (command == "help")
-            help(message.author, message, args, false)
-        else if (command == "language")
-            change_language(message.author, args, message)
-        else if (command == "create" || command == "join" || command == "cards" || command == "start" || command == "submit" || command == "scores" || command == "reshuffle" || command == "kick")
+
+        switch (command) {
+            case "stats":
+                stats(message);
+                break;
+            case "credits":
+                credits(message);
+                break;
+            case "help":
+                help(message.author, message, args, false);
+                break;
+            case "language":
+                change_language(message.author, args, message);
+                break;
+        }
+
+        if (command == "create" || command == "join" || command == "cards" || command == "start" || command == "submit" || command == "scores" || command == "reshuffle" || command == "kick")
             does_not_work(message)
     }
 });
 
 async function does_not_work(message) {
     translate.run("Sorry, this command only works in DMs!", message.author.id, mongoURL, null, null, false, message);
-    //message.reply("sorry, this command only works in DMs!")
 }
 
 async function restart_bot(time, author) {
     client.user.setActivity(`Restarting in ${time} minute(s).`);
 
-    const message = `**Attention** Cards Against Discord will be restarting in approximately ${time} minutes.\r\nDo not leave the room, your stats will not be affected by the restart.`;
+    const message = `**Attention:** Cards Against Discord will be restarting in approximately ${time} minutes.\r\nDo not leave the room, your stats will not be affected by the restart.`;
 
     var userCount = 0;
 
@@ -207,11 +230,6 @@ async function restart_bot(time, author) {
                 _tempuser.then(function (_user) {
                     translate.run(message, currentRooms[roomIndex].members[userIndex]._id, mongoURL, null, null, true, _user)
                 });
-                //translate.run(message, currentRooms[i].members[g]._id, mongoURL, null, null, true, _tempuser)
-                // _tempuser.then(function (_user) {
-                //     translate.run(message,null,)
-                //     _user.send(message);
-                // });
             }
         }
     }
@@ -240,13 +258,15 @@ async function list_rooms(author) {
 async function help(author, _mess, args, isDM) {
     if (!isDM)
         translate.run("Ok, sending you a command list!", author.id, mongoURL, null, null, false, _mess);
-    //_mess.reply("ok, sending you a command list!");
 
-    if (args.length < 1) author.send(baseHelp)
-    else if (args[0] == "dm") author.send(dmHelp)
-    else if (args[0] == "guild") author.send(nondmHelp)
-
-    //author.send(helpMenu)
+    try {
+        if (args.length < 1) author.send(baseHelp)
+        else if (args[0] == "dm") author.send(dmHelp)
+        else if (args[0] == "guild") author.send(nondmHelp)
+    } catch (err) {
+        console.log(err)
+        author.send(`Error encountered: ${err}`)
+    }
 }
 
 function change_language(author, _args, message) {
@@ -302,37 +322,41 @@ function check_user(author, _message) {
     const auth = author;
     const _m = _message;
 
-    c.connect(function (err) {
-        if (err)
-            console.error(err);
+    try {
+        c.connect(function (err) {
+            if (err)
+                console.error(err);
 
-        const db = c.db("cad-storage");
+            const db = c.db("cad-storage");
 
-        const dbo = db.collection("user-data");
+            const dbo = db.collection("user-data");
 
-        // "_id": "",
-        // "id": "",
-        // "wins": 0,
-        // "losses": 0,
-        // "level": 0,
-        // "xp": 0,
-        // "games_left": 0
+            // "_id": "",
+            // "id": "",
+            // "wins": 0,
+            // "losses": 0,
+            // "level": 0,
+            // "xp": 0,
+            // "games_left": 0
 
-        var query = {
-            "id": auth.id
-        };
+            var query = {
+                "id": auth.id
+            };
 
-        dbo.findOne(query, async function (err, res) {
-            if (err) {
-                _m.reply("sorry, an error has occurred.");
-                return;
-            }
+            dbo.findOne(query, async function (err, res) {
+                if (err) {
+                    _m.reply("sorry, an error has occurred.");
+                    return;
+                }
 
-            if (res == null) {
-                addUser(auth);
-            }
+                if (res == null) {
+                    addUser(auth);
+                }
+            });
         });
-    });
+    } catch (err) {
+        _m.reply(`error encountered: ${err}`)
+    }
 }
 
 /*
@@ -497,24 +521,28 @@ function addUser(user) {
         useNewUrlParser: true
     });
 
-    c.connect(function (err) {
-        if (err)
-            console.error(err);
-
-        var data = create_player_data();
-        data.id = user.id;
-        data._id = user.id;
-
-        const db = c.db("cad-storage");
-
-        const dbo = db.collection("user-data");
-
-        dbo.insertOne(data, function (err) {
+    try {
+        c.connect(function (err) {
             if (err)
-                console.err(err);
+                console.error(err);
 
-        })
-    });
+            var data = create_player_data();
+            data.id = user.id;
+            data._id = user.id;
+
+            const db = c.db("cad-storage");
+
+            const dbo = db.collection("user-data");
+
+            dbo.insertOne(data, function (err) {
+                if (err)
+                    console.err(err);
+
+            })
+        });
+    } catch (err) {
+        console.log(`Error adding user:\r\n${err}`)
+    }
 }
 
 // {
@@ -536,46 +564,50 @@ function update_user(id, wins, losses, level, xp, games_left, cash) {
         "id": id
     };
 
-    c.connect(function (err) {
-        if (err)
-            console.error(err);
+    try {
+        c.connect(function (err) {
+            if (err)
+                console.error(err);
 
-        const db = c.db("cad-storage");
+            const db = c.db("cad-storage");
 
-        const dbo = db.collection("user-data");
+            const dbo = db.collection("user-data");
 
-        dbo.findOne(query, async function (err, res) {
-            if (err) {
-                console.log(err)
-                return;
-            }
-
-            if (res == null) {
-                //addUser(auth)
-                return;
-            }
-
-            var user = res;
-
-            const userMoney = user.cash.toString() == "NaN" ? 0 : Number.parseInt(user.cash);
-
-            const w = Number.parseInt(Number.parseInt(user.wins) + wins)
-            const l = Number.parseInt(Number.parseInt(user.losses) + losses)
-            const x = Number.parseInt(Number.parseInt(user.xp) + xp)
-            const gl = Number.parseInt(Number.parseInt(user.games_left) + games_left)
-            const c = Number.parseInt(Number.parseInt(userMoney) + cash)
-
-            dbo.updateOne(query, {
-                $set: {
-                    wins: w,
-                    losses: l,
-                    xp: x,
-                    games_left: gl,
-                    cash: c
+            dbo.findOne(query, async function (err, res) {
+                if (err) {
+                    console.log(err)
+                    return;
                 }
-            })
+
+                if (res == null) {
+                    //addUser(auth)
+                    return;
+                }
+
+                var user = res;
+
+                const userMoney = user.cash.toString() == "NaN" ? 0 : Number.parseInt(user.cash);
+
+                const w = Number.parseInt(Number.parseInt(user.wins) + wins)
+                const l = Number.parseInt(Number.parseInt(user.losses) + losses)
+                const x = Number.parseInt(Number.parseInt(user.xp) + xp)
+                const gl = Number.parseInt(Number.parseInt(user.games_left) + games_left)
+                const c = Number.parseInt(Number.parseInt(userMoney) + cash)
+
+                dbo.updateOne(query, {
+                    $set: {
+                        wins: w,
+                        losses: l,
+                        xp: x,
+                        games_left: gl,
+                        cash: c
+                    }
+                })
+            });
         });
-    });
+    } catch (err) {
+        console.log(`Error updating user:\r\n${err}`)
+    }
 }
 
 function update_language(id, language, message) {
@@ -588,34 +620,38 @@ function update_language(id, language, message) {
         "id": id
     };
 
-    c.connect(function (err) {
-        if (err)
-            console.error(err);
+    try {
+        c.connect(function (err) {
+            if (err)
+                console.error(err);
 
-        const db = c.db("cad-storage");
+            const db = c.db("cad-storage");
 
-        const dbo = db.collection("user-data");
+            const dbo = db.collection("user-data");
 
-        dbo.findOne(query, async function (err, res) {
-            if (err) {
-                console.log(err)
-                return;
-            }
-
-            if (res == null) {
-                //addUser(auth)
-                return;
-            }
-
-            dbo.updateOne(query, {
-                $set: {
-                    language: language
+            dbo.findOne(query, async function (err, res) {
+                if (err) {
+                    console.log(err)
+                    return;
                 }
-            })
 
-            translate.run("Your language has been changed.", id, mongoURL, null, client, false, message);
+                if (res == null) {
+                    //addUser(auth)
+                    return;
+                }
+
+                dbo.updateOne(query, {
+                    $set: {
+                        language: language
+                    }
+                })
+
+                translate.run("Your language has been changed.", id, mongoURL, null, client, false, message);
+            });
         });
-    });
+    } catch (err) {
+        console.log(`Error updating user's language:\r\n${err}`)
+    }
 }
 
 function credits(_m) {
@@ -702,8 +738,9 @@ async function join_room(_roomcode, _author, _message, _password) {
                     if (typeof _password != 'undefined' && _password != null && _password.length > 0)
                         translate.run("Incorrect password.", _message.author.id, mongoURL, null, client, true, _message.author)
                     //_message.reply("Incorrect password.");
-                    else
+                    else {
                         translate.run("This room has a password.", _message.author.id, mongoURL, null, client, true, _message.author)
+                    }
                     //_message.reply("This room has a password.");
                 }
             } else {
@@ -943,13 +980,13 @@ async function start_room(_author, _message) {
 
         //change to 3 dear god please, the 2 is only for testing!!!!!
         if (currentRooms[_roomindex].members.length < 3) {
-            translate.run("You need at least 3 people to start a game.", _message.author.id, mongoURL, null, null, true, _message);
+            translate.run("You need at least 3 people to start a game.", _message.author.id, mongoURL, null, null, true, _message.author);
             //_message.reply("You know what they always say, less than 3 is boring, more than 3 is a party!\r\nIn other words, you need at least 3 people to start.");
             return;
         }
 
         if (currentRooms[_roomindex].stage != -2) {
-            translate.run("The game's already started!", _message.author.id, mongoURL, null, null, true, _message);
+            translate.run("The game's already started!", _message.author.id, mongoURL, null, null, true, _message.author);
             //_message.reply("The game's already started!")
             return;
         }
@@ -1266,7 +1303,7 @@ async function logic() {
         if (currentRooms[_in].stage == -1) {
             var _tempuser = client.fetchUser(currentRooms[_in].host.toString());
             _tempuser.then(function (_user) {
-                translate.run(`Oops, since there are less than 3 people in this room, you can't continue playing!`, _user.id, mongoURL, null, client, true, _user);
+                translate.run("Type `cad start` to start the game when you have 3 or more players, and when everyone's ready.", _user.id, mongoURL, null, client, true, _user);
                 //_user.send("Type `cad start` to start the game when everyone's ready.");
             });
 
@@ -1507,7 +1544,7 @@ async function kick_user(kick_id, _author, _message) {
             // _user.send("Oh boy, you've been kicked. What'd you do this time?");
         });
 
-        translate.run("Oh boy, you've been kicked. What'd you do this time?", _message.author.id, mongoURL, null, client, true, _message.author)
+        translate.run("That user has been kicked.", _message.author.id, mongoURL, null, client, true, _message.author)
         //_message.reply("The user has been kicked.");
     }
 }

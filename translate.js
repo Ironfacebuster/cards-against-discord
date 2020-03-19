@@ -33,39 +33,60 @@ exports.run = (sent_message, _id, mongoURL, mongoClient, discordClient, isDM, me
             "id": id
         };
 
-        c.connect(function (err) {
-            if (err)
-                console.error(err);
+        try {
+            c.connect(function (err) {
+                if (err)
+                    console.error(err);
 
-            const db = c.db("cad-storage");
+                const db = c.db("cad-storage");
 
-            const dbo = db.collection("user-data");
+                const dbo = db.collection("user-data");
 
-            dbo.findOne(query, async function (err, res) {
-                if (err) {
-                    console.log(err)
-                    return;
-                }
+                dbo.findOne(query, async function (err, res) {
+                    if (err) {
+                        console.log(err)
+                        return;
+                    }
 
-                var user = res;
+                    var user = res;
 
-                var lan = "";
+                    if (user) {
+                        var lan = "";
 
-                if (user.language != null)
-                    lan = user.language;
-                else
-                    lan = 'en';
+                        if (user.language != null)
+                            lan = user.language;
+                        else
+                            lan = 'en';
 
-                if (isDM) {
-                    dm_sent_message(lan,mess);
-                } else {
-                    channel_sent_message(lan,mess);
-                }
+                        if (isDM) {
+                            try {
+                                dm_sent_message(lan, mess);
+                            } catch (err) {
+                                mess.send(`error encountered: ${err}`)
+                                console.log(err)
+                            }
+                        } else {
+                            try {
+                                channel_sent_message(lan, mess);
+                            } catch (err) {
+                                mess.author.send(`error encountered: ${err}`)
+                                console.log(err)
+                            }
+                        }
+                    } else {
+                        if(isDM) mess.send("You weren't registered before, but now you are! Your command has gone through, just in case you were worried.")
+                        else mess.reply (`you weren't registered before, but now you are! Your command has gone through, just in case you were worried.`)
+                    }
+                });
             });
-        });
+        } catch (err) {
+            if (isDM) mess.send(`error encountered: ${err}`)
+            else mess.author.send(`error encountered: ${err}`)
+            console.log(err)
+        }
     }
 
-    function dm_sent_message(language_code,_mess) {
+    function dm_sent_message(language_code, _mess) {
         //console.log(language_code);
         if (language_code == 'en') {
             _mess.send(sent_message);
@@ -73,7 +94,6 @@ exports.run = (sent_message, _id, mongoURL, mongoClient, discordClient, isDM, me
             translate(sent_message, {
                 to: language_code
             }).then(res => {
-                //console.log(res.text);
 
                 _mess.send(res.text);
 
@@ -83,7 +103,7 @@ exports.run = (sent_message, _id, mongoURL, mongoClient, discordClient, isDM, me
         }
     }
 
-    function channel_sent_message(language_code,_mess) {
+    function channel_sent_message(language_code, _mess) {
         //console.log(language_code);
         if (language_code == 'en') {
             _mess.channel.send(sent_message);
@@ -91,7 +111,6 @@ exports.run = (sent_message, _id, mongoURL, mongoClient, discordClient, isDM, me
             translate(sent_message, {
                 to: language_code
             }).then(res => {
-                //console.log(res.text);
 
                 _mess.channel.send(res.text);
 
