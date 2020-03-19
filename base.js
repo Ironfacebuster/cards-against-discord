@@ -220,10 +220,7 @@ client.on('message', async message => {
                 help(message.author, message, args, false);
                 break;
             case "language":
-                change_language(message.author, args, message).catch(err => {
-                    console.log(err)
-                    message.author.send(`error encountered:\r\n${err}`)
-                })
+                change_language(message.author, args, message)
         }
 
         if (command == "create" || command == "join" || command == "cards" || command == "start" || command == "submit" || command == "scores" || command == "reshuffle" || command == "kick")
