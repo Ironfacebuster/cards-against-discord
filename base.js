@@ -156,32 +156,51 @@ client.on('message', async message => {
 
         switch (command) {
             case "create":
-                createRoom(message.author, message, args);
+                createRoom(message.author, message, args).catch(err => {
+                    console.log(err)
+                    message.author.send(`error encountered:\r\n${err}`)
+                })
                 break;
             case "join":
-                join_room(args[0], message.author, message, args[1]);
-                break;
+                join_room(args[0], message.author, message, args[1]).catch(err => {
+                    console.log(err)
+                    message.author.send(`error encountered:\r\n${err}`)
+                })
             case "leave":
-                leave_room(message.author, message);
-                break;
+                leave_room(message.author, message).catch(err => {
+                    console.log(err)
+                    message.author.send(`error encountered:\r\n${err}`)
+                })
             case "cards":
-                cards(message.author.id, message);
-                break;
+                cards(message.author.id, message).catch(err => {
+                    console.log(err)
+                    message.author.send(`error encountered:\r\n${err}`)
+                })
             case "start":
-                start_room(message.author, message);
-                break;
+                start_room(message.author, message).catch(err => {
+                    console.log(err)
+                    message.author.send(`error encountered:\r\n${err}`)
+                })
             case "submit":
-                submit_card(message.author, message, args);
-                break;
+                submit_card(message.author, message, args).catch(err => {
+                    console.log(err)
+                    message.author.send(`error encountered:\r\n${err}`)
+                })
             case "scores":
-                room_stats(message.author, message);
-                break;
+                room_stats(message.author, message).catch(err => {
+                    console.log(err)
+                    message.author.send(`error encountered:\r\n${err}`)
+                })
             case "reshuffle":
-                new_cards(message.author.id, message);
-                break;
+                new_cards(message.author.id, message).catch(err => {
+                    console.log(err)
+                    message.author.send(`error encountered:\r\n${err}`)
+                })
             case "kick":
-                kick_user(args[0], message.author.id, message);
-                break;
+                kick_user(args[0], message.author.id, message).catch(err => {
+                    console.log(err)
+                    message.author.send(`error encountered:\r\n${err}`)
+                })
             case "help":
                 help(message.author, message, args, true)
                 break;
@@ -190,8 +209,10 @@ client.on('message', async message => {
 
         switch (command) {
             case "stats":
-                stats(message);
-                break;
+                stats(message).catch(err => {
+                    console.log(err)
+                    message.author.send(`error encountered:\r\n${err}`)
+                })
             case "credits":
                 credits(message);
                 break;
@@ -199,8 +220,10 @@ client.on('message', async message => {
                 help(message.author, message, args, false);
                 break;
             case "language":
-                change_language(message.author, args, message);
-                break;
+                change_language(message.author, args, message).catch(err => {
+                    console.log(err)
+                    message.author.send(`error encountered:\r\n${err}`)
+                })
         }
 
         if (command == "create" || command == "join" || command == "cards" || command == "start" || command == "submit" || command == "scores" || command == "reshuffle" || command == "kick")
