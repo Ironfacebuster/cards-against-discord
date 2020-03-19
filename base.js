@@ -829,7 +829,7 @@ async function cards(id, _message) {
         temp_user = client.fetchUser(id);
 
         temp_user.then(function (user) {
-            translate.run("You're not in a room!", temp_user.id, mongoURL, null, client, true, user)
+            translate.run("You're not in a room!", user.id, mongoURL, null, client, true, user)
             //user.send("You're not in a room!");
         });
     }
@@ -861,7 +861,7 @@ async function leave_room(_author, _message) {
             if (currentRooms[_roomindex].members[g]._id != _author.id) {
                 var _tempuser = client.fetchUser(currentRooms[_roomindex].members[g]._id);
                 _tempuser.then(function (_user) {
-                    translate.run(`${_author.username} has left your room.`, _author.id, mongoURL, null, client, true, _user)
+                    translate.run(`${_author.username} has left your room.`, _user.id, mongoURL, null, client, true, _user)
                     //_user.send(`${_author.username} has left your room.`);
                 });
             }
@@ -969,11 +969,11 @@ async function start_room(_author, _message) {
     }
 
     if (_mem == -1) {
-        translate.run("You're not in a room!", _message.author.id, mongoURL, null, null, true, _message);
+        translate.run("You're not in a room!", _message.author.id, mongoURL, null, null, true, _message.author);
         //_message.reply("You're not in a room!");
     } else {
         if (currentRooms[_roomindex].host != _author.id.toString()) {
-            translate.run("You're not the host!", _message.author.id, mongoURL, null, null, true, _message);
+            translate.run("You're not the host!", _message.author.id, mongoURL, null, null, true, _message.author);
             //_message.reply("You're not the host!");
             return;
         }
@@ -1026,21 +1026,6 @@ async function createRoom(_author, _message, args) {
         _new = create_room(generateRC(4), _author.id.toString(), _author.id.toString(), args[0].toString());
     else
         _new = create_room(generateRC(4), _author.id.toString(), _author.id.toString(), "");
-
-    //_new.room_code = generateRC(4);
-    //_new.stage = -1;
-    //_new.czar = _author.id.toString();
-    //_new.host = _author.id.toString();
-
-    //console.log(args);
-
-    //if (args.length > 0 && args[0].length > 0)
-    // _new.password = args[0];
-    //else
-    // _new.password="";
-    //add creator to room
-
-    //console.log("558: " + _new.password);
 
     currentRooms.push(_new);
     translate.run("Room created with code `" + _new.room_code + "`", _message.author.id, mongoURL, null, client, true, _message.author)
@@ -1131,7 +1116,7 @@ async function submit_card(_author, _message, _args) {
     }
 
     if (_mem == -1) {
-        translate.run("You're not currently in a game.", _message.author.id, mongoURL, null, client, true, _message.author)
+        translate.run("You're not currently in a room.", _message.author.id, mongoURL, null, client, true, _message.author)
         // _message.reply("You're not currently in a game.");
     } else {
         //console.log("ARG: " + _args);
@@ -1206,10 +1191,7 @@ async function submit_card(_author, _message, _args) {
 }
 
 async function logic() {
-    // client.user.setActivity(`${client.users.size} users insult each other | cad help`, {
-    //     url: "https://www.twitch.tv/ironfacebuster",
-    //     type: "WATCHING"
-    // });
+
     //stage == -2 not started
     //stage == 0 show prompt
     //stage == 1 send message to pick white cards
