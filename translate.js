@@ -22,89 +22,108 @@ const MongoClient = require('mongodb').MongoClient;
 
 exports.run = (sent_message, _id, mongoURL, mongoClient, discordClient, isDM, mess) => {
 
-    getUser(_id).catch(err => {
-        console.log(err)
-        if (isDM) mess.send(`error encountered:\r\n${err}`)
-        else mess.author.send(`error encountered:\r\n${err}`)
-    })
+    if (isDM) {
+        try {
+            mess.send(sent_message);
+        } catch (err) {
+            mess.send(`error encountered: ${err}`)
+            console.error(err);
+        }
+    } else {
+        try {
+            mess.channel.send(sent_message);
+        } catch (err) {
+            mess.author.send(`error encountered: ${err}`)
+            console.error(err);
+        }
+    }
 
-    async function getUser(id) {
-        const c = new MongoClient(mongoURL, {
-            useNewUrlParser: true
-        });
+    /*
 
-        var query = {
-            "id": id
-        };
+        getUser(_id).catch(err => {
+            console.log(err)
+            if (isDM) mess.send(`error encountered:\r\n${err}`)
+            else mess.author.send(`error encountered:\r\n${err}`)
+        })
 
-        c.connect(function (err) {
-            if (err)
-                console.error(err);
+        async function getUser(id) {
+            const c = new MongoClient(mongoURL, {
+                useNewUrlParser: true
+            });
 
-            const db = c.db("cad-storage");
+            var query = {
+                "id": id
+            };
 
-            const dbo = db.collection("user-data");
+            c.connect(function (err) {
+                if (err)
+                    console.error(err);
 
-            dbo.findOne(query, async function (err, res) {
-                if (err) {
-                    console.log(err)
-                    return;
-                }
+                const db = c.db("cad-storage");
 
-                var user = res;
+                const dbo = db.collection("user-data");
 
-                if (user) {
-                    var lan = 'en';
-
-                    if (user.language != null)
-                        lan = user.language;
-
-                    if (isDM) {
-                        dm_sent_message(lan, mess);
-                    } else {
-                        channel_sent_message(lan, mess);
+                dbo.findOne(query, async function (err, res) {
+                    if (err) {
+                        console.log(err)
+                        return;
                     }
-                } else {
-                    if (isDM) mess.send("You weren't registered before, but now you are! Your command has gone through, just in case you were worried.")
-                    else mess.reply(`you weren't registered before, but now you are! Your command has gone through, just in case you were worried.`)
-                }
-            });
-        });
-    }
 
-    function dm_sent_message(language_code, _mess) {
-        //console.log(language_code);
-        if (language_code == 'en') {
-            _mess.send(sent_message);
-        } else {
-            translate(sent_message, {
-                to: language_code
-            }).then(res => {
+                    var user = res;
 
-                _mess.send(res.text);
+                    if (user) {
+                        var lan = 'en';
 
-            }).catch(err => {
-                _mess.end(`error encountered: ${err}`)
-                console.error(err);
+                        if (user.language != null)
+                            lan = user.language;
+
+                        if (isDM) {
+                            dm_sent_message(lan, mess);
+                        } else {
+                            channel_sent_message(lan, mess);
+                        }
+                    } else {
+                        if (isDM) mess.send("You weren't registered before, but now you are! Your command has gone through, just in case you were worried.")
+                        else mess.reply(`you weren't registered before, but now you are! Your command has gone through, just in case you were worried.`)
+                    }
+                });
             });
         }
-    }
 
-    function channel_sent_message(language_code, _mess) {
-        //console.log(language_code);
-        if (language_code == 'en') {
-            _mess.channel.send(sent_message);
-        } else {
-            translate(sent_message, {
-                to: language_code
-            }).then(res => {
+        function dm_sent_message(language_code, _mess) {
+            //console.log(language_code);
+            if (language_code == 'en') {
+                _mess.send(sent_message);
+            } else {
+                translate(sent_message, {
+                    to: language_code
+                }).then(res => {
 
-                _mess.channel.send(res.text);
+                    _mess.send(res.text);
 
-            }).catch(err => {
-                _mess.author.end(`error encountered: ${err}`)
-                console.error(err);
-            });
+                }).catch(err => {
+                    _mess.send(`error encountered: ${err}`)
+                    console.error(err);
+                });
+            }
         }
-    }
+
+        function channel_sent_message(language_code, _mess) {
+            //console.log(language_code);
+            if (language_code == 'en') {
+                _mess.channel.send(sent_message);
+            } else {
+                translate(sent_message, {
+                    to: language_code
+                }).then(res => {
+
+                    _mess.channel.send(res.text);
+
+                }).catch(err => {
+                    _mess.author.send(`error encountered: ${err}`)
+                    console.error(err);
+                });
+            }
+        }
+        */
 }
