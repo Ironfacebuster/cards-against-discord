@@ -3,20 +3,14 @@ const fs = require('fs');
 var shuffle = require('shuffle-array');
 const MongoClient = require('mongodb').MongoClient;
 
-const prefix = "cad ";
+const prefix = "cad ", blackLocation = "CARDS/BLACK_CARDS.json", whiteLocation = "CARDS/WHITE_CARDS.json"
 
-const blackLocation = "CARDS/BLACK_CARDS.json"
-const whiteLocation = "CARDS/WHITE_CARDS.json"
-
-const blackCards = JSON.parse(fs.readFileSync(blackLocation, 'utf8'));
-const whiteCards = JSON.parse(fs.readFileSync(whiteLocation, 'utf8'));
+const blackCards = JSON.parse(fs.readFileSync(blackLocation, 'utf8')), whiteCards = JSON.parse(fs.readFileSync(whiteLocation, 'utf8'));
 
 let translate = require(`./translate.js`);
 //translate.run()
 
-const mongoURL = process.env.URL;
-
-const ownerID = "161570878348328960";
+const mongoURL = process.env.URL, ownerID = "161570878348328960";
 
 var currentRooms = [];
 
@@ -160,58 +154,58 @@ client.on('message', async message => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
-                break;
+                break
             case "join":
                 join_room(args[0], message.author, message, args[1]).catch(err => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
-                break;
+                break
             case "leave":
                 leave_room(message.author, message).catch(err => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
-                break;
+                break
             case "cards":
                 cards(message.author.id, message).catch(err => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
-                break;
+                break
             case "start":
                 start_room(message.author, message).catch(err => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
-                break;
+                break
             case "submit":
                 submit_card(message.author, message, args).catch(err => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
-                break;
+                break
             case "scores":
                 room_stats(message.author, message).catch(err => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
-                break;
+                break
             case "reshuffle":
                 new_cards(message.author.id, message).catch(err => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
-                break;
+                break
             case "kick":
                 kick_user(args[0], message.author.id, message).catch(err => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
-                break;
+                break
             case "help":
                 help(message.author, message, args, true)
-                break;
+                break
         }
     } else {
 
@@ -221,12 +215,13 @@ client.on('message', async message => {
                     console.log(err)
                     message.author.send(`error encountered:\r\n${err}`)
                 })
+                break
             case "credits":
                 credits(message);
-                break;
+                break
             case "help":
                 help(message.author, message, args, false);
-                break;
+                break
             case "language":
                 change_language(message.author, args, message)
         }
