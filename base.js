@@ -559,7 +559,7 @@ function addUser(user) {
 
             dbo.insertOne(data, function (err) {
                 if (err)
-                    console.err(err);
+                    console.error(err);
 
             })
         });
