@@ -3,14 +3,18 @@ const fs = require('fs');
 var shuffle = require('shuffle-array');
 const MongoClient = require('mongodb').MongoClient;
 
-const prefix = "cad ", blackLocation = "CARDS/BLACK_CARDS.json", whiteLocation = "CARDS/WHITE_CARDS.json"
+const prefix = "cad ",
+    blackLocation = "CARDS/BLACK_CARDS.json",
+    whiteLocation = "CARDS/WHITE_CARDS.json"
 
-const blackCards = JSON.parse(fs.readFileSync(blackLocation, 'utf8')), whiteCards = JSON.parse(fs.readFileSync(whiteLocation, 'utf8'));
+const blackCards = JSON.parse(fs.readFileSync(blackLocation, 'utf8')),
+    whiteCards = JSON.parse(fs.readFileSync(whiteLocation, 'utf8'));
 
 let translate = require(`./translate.js`);
 //translate.run()
 
-const mongoURL = process.env.URL, ownerID = "161570878348328960";
+const mongoURL = process.env.URL,
+    ownerID = "161570878348328960";
 
 var currentRooms = [];
 
@@ -52,27 +56,30 @@ var other = "**Other**\r\ncad join [room code] [optional password] - joins the r
 
 const dmHelp = {
     "embed": {
+        "description":"Want to support the development of CAD? You can do so here: [YGOLG's Patreon](https://www.patreon.com/ygolg)",
         "title": "Cards Against Discord Help - DM Commands",
         "fields": [{
             "name": "DM Only",
             "value": `${host + czar + nonczar + other}`
-        }]
+        }],
     }
 }
 
 const nondmHelp = {
     "embed": {
         "title": "Cards Against Discord Help - Guild Channel Commands",
+        "description":"Want to support the development of CAD? You can do so here: [YGOLG's Patreon](https://www.patreon.com/ygolg)",
         "fields": [{
             "name": "Guild Channel Commands",
             "value": "cad language [language code] - change your language\r\ncad stats [opt. user mention] - shows the stats of a user\r\ncad credits - sends you the credits"
-        }]
+        }],
     }
 }
 
 const baseHelp = {
     "embed": {
         "title": "Cards Against Discord Help",
+        "description":"Want to support the development of CAD? You can do so here: [YGOLG's Patreon](https://www.patreon.com/ygolg)",
         "fields": [{
                 "name": "List all DM commands (create/join games, etc.)",
                 "value": "cad help dm"
