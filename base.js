@@ -56,7 +56,7 @@ var other = "**Other**\r\ncad join [room code] [optional password] - joins the r
 
 const dmHelp = {
     "embed": {
-        "description":"Want to support the development of CAD? You can do so here: [YGOLG's Patreon](https://www.patreon.com/ygolg)",
+        "description": "Want to support the development of CAD? You can do so here: [YGOLG's Patreon](https://www.patreon.com/ygolg)",
         "title": "Cards Against Discord Help - DM Commands",
         "fields": [{
             "name": "DM Only",
@@ -68,7 +68,7 @@ const dmHelp = {
 const nondmHelp = {
     "embed": {
         "title": "Cards Against Discord Help - Guild Channel Commands",
-        "description":"Want to support the development of CAD? You can do so here: [YGOLG's Patreon](https://www.patreon.com/ygolg)",
+        "description": "Want to support the development of CAD? You can do so here: [YGOLG's Patreon](https://www.patreon.com/ygolg)",
         "fields": [{
             "name": "Guild Channel Commands",
             "value": "cad language [language code] - change your language\r\ncad stats [opt. user mention] - shows the stats of a user\r\ncad credits - sends you the credits"
@@ -79,7 +79,7 @@ const nondmHelp = {
 const baseHelp = {
     "embed": {
         "title": "Cards Against Discord Help",
-        "description":"Want to support the development of CAD? You can do so here: [YGOLG's Patreon](https://www.patreon.com/ygolg)",
+        "description": "Want to support the development of CAD? You can do so here: [YGOLG's Patreon](https://www.patreon.com/ygolg)",
         "fields": [{
                 "name": "List all DM commands (create/join games, etc.)",
                 "value": "cad help dm"
@@ -95,7 +95,9 @@ const baseHelp = {
     }
 }
 
-const client = new discord.Client();
+const client = new discord.Client({
+    autoReconnect: true
+});
 
 client.on('ready', () => {
     console.log("BOT READY.");
@@ -106,6 +108,11 @@ client.on('ready', () => {
     });
 
     loadCards();
+});
+
+client.on('error', error => {
+    console.error('The WebSocket encountered an error:', error);
+    client.destroy()
 });
 
 client.on('guildCreate', () => {
